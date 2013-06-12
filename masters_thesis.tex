@@ -1,0 +1,207 @@
+\documentclass[letterpaper,12pt,titlepage,oneside,final]{book}
+\newcommand{\package}[1]{\textbf{#1}} % package names in bold text
+\newcommand{\cmmd}[1]{\textbackslash\texttt{#1}} % command name in tt font 
+\newcommand{\href}[1]{#1} % does nothing, but defines the command so the
+\usepackage{ifthen}
+\newboolean{PrintVersion}
+\setboolean{PrintVersion}{false} 
+\usepackage{amsmath,amssymb,amstext,mathtools,amsfonts,amsthm} % Lots of math symbols and environments
+\usepackage{bm}
+\usepackage[pdftex]{graphicx} % For including graphics N.B. pdftex graphics driver 
+\usepackage[pdftex,letterpaper=true,pagebackref=false]{hyperref} % with basic options
+		% N.B. pagebackref=true provides links back from the References to the body text. This can cause trouble for printing.
+\hypersetup{
+    plainpages=false,       % needed if Roman numbers in frontpages
+    pdfpagelabels=true,     % adds page number as label in Acrobat's page count
+    bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={uWaterloo\ LaTeX\ Thesis\ Template},    % title: CHANGE THIS TEXT!
+%    pdfauthor={Author},    % author: CHANGE THIS TEXT! and uncomment this line
+%    pdfsubject={Subject},  % subject: CHANGE THIS TEXT! and uncomment this line
+%    pdfkeywords={keyword1} {key2} {key3}, % list of keywords, and uncomment this line if desired
+    pdfnewwindow=true,      % links in new window
+    colorlinks=true,        % false: boxed links; true: colored links
+    linkcolor=blue,         % color of internal links
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+\ifthenelse{\boolean{PrintVersion}}{   % for improved print quality, change some hyperref options
+\hypersetup{	% override some previously defined hyperref options
+%    colorlinks,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,%
+    urlcolor=black}
+}{} % end of ifthenelse (no else)
+\setlength{\marginparwidth}{0pt} % width of margin notes
+\setlength{\marginparsep}{0pt} % width of space between body text and margin notes
+\setlength{\evensidemargin}{0.125in} % Adds 1/8 in. to binding side of all 
+\setlength{\oddsidemargin}{0.125in} % Adds 1/8 in. to the left of all pages
+\setlength{\textwidth}{6.375in} % assuming US letter paper (8.5 in. x 11 in.) and 
+\raggedbottom
+\setlength{\parskip}{\medskipamount}
+\renewcommand{\baselinestretch}{1} % this is the default line space setting
+\let\origdoublepage\cleardoublepage
+\newcommand{\clearemptydoublepage}{%
+\clearpage{\pagestyle{empty}\origdoublepage}}
+\let\cleardoublepage\clearemptydoublepage
+
+%======================================================================
+%   L O G I C A L    D O C U M E N T -- the content of your thesis
+%======================================================================
+\begin{document}
+
+% For a large document, it is a good idea to divide your thesis
+% into several files, each one containing one chapter.
+% To illustrate this idea, the "front pages" (i.e., title page,
+% declaration, borrowers' page, abstract, acknowledgements,
+% dedication, table of contents, list of tables, list of figures,
+% nomenclature) are contained within the file "uw-ethesis-frontpgs.tex" which is
+% included into the document by the following statement.
+%----------------------------------------------------------------------
+% FRONT MATERIAL
+%----------------------------------------------------------------------
+%\input{thesis_preamble}
+
+%----------------------------------------------------------------------
+% MAIN BODY
+%----------------------------------------------------------------------
+% Because this is a short document, and to reduce the number of files
+% needed for this template, the chapters are not separate
+% documents as suggested above, but you get the idea. If they were
+% separate documents, they would each start with the \chapter command, i.e, 
+% do not contain \documentclass or \begin{document} and \end{document} commands.
+%======================================================================
+\chapter{Introduction}
+\begin{itemize}
+	\item Brief introduction to the topic
+\end{itemize}
+%======================================================================
+THIS IS THE BEGINNING
+
+
+
+%-------------------------------------------------------------------------------
+%
+%  NUMERICAL STUFF AND BOUSSINESSQ STUFF
+%
+%-------------------------------------------------------------------------------
+\chapter{Numerical Stuff and Introductionary Theory}
+\begin{itemize}
+\item introduction to the boussinesq approximation 
+\item In this section I should introduce the spectral method and the numerical scheme
+\item Dealiasing tests 
+\item  diffusion test
+\end{itemize}
+\section{Boussinesq approximation}
+
+The equations can be written in the dimensional from as (add derivation, Kundu? Batchelor? Others?)
+
+\begin{align}
+\frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot \nabla \bm{u} = -\frac{1}{\rho_{0}}\nabla p - \frac{\rho g}{\rho_{0}}\hat{\bm{e}}_{z} + \nu \nabla^{2}\bm{u} \label{boussinesq1}\\
+\nabla \cdot \bm{u} =0 \label{boussinesq2}\\
+\frac{\partial \rho}{\partial t} + \bm{u}\cdot \nabla \rho = \kappa \nabla^{2}\rho - \frac{\partial \bar{\rho}}{\partial z} w\label{boussinesq3}
+\end{align}
+where we have the following dimensional variables
+\begin{itemize}
+\item $\textbf{u}(x,y,z)=(u(x,y,z),v(x,y,z),w(x,y,z))$ is the velocity field in the $x,y,z$-directions directions respectively,
+\item $p(x,y,z)$ is the pressure field,
+\item $\rho(x,y,z)$ is a perturbation density,
+\item $\rho_{0}$ is a constant reference density,
+\item $\bar{\rho}$ is ... ? ,
+\item $g$ is the gravitational constant,
+\item $\nu$ is the constant kinematic velocity ,
+\item $\kappa$ is the constant molecular diffusivity.
+\end{itemize}
+Equations (\ref{boussinesq1})-(\ref{boussinesq3}) are a set of five coupled partial differential equations for the unknowns $\textbf{u},p,\rho$. Herein, we will refer to equation (\ref{boussinesq1}) as the velocity equations, equation (\ref{boussinesq2}) as the continuity equation, and equation (\ref{boussinesq3}) as the density equation. 
+
+Maybe go onto non-dimensionalisation? 
+
+We take the above equations (Ref) as the starting point for our simulations. 
+
+
+%-------------------------------------------------------------------------------
+%
+%   LINEAR THEORY 
+%
+%-------------------------------------------------------------------------------
+\chapter{Linear stuff} 
+\begin{itemize}
+	\item derivation of the linear equations
+	\item 
+\end{itemize} 
+
+\chapter{Nonlinear Stuff}
+
+
+\chapter{Conclusions}
+
+
+\appendix
+
+% Add a title page before the appendices and a line in the Table of Contents
+\chapter*{APPENDICES}
+\addcontentsline{toc}{chapter}{APPENDICES}
+%======================================================================
+\chapter[PDF Plots From Matlab]{Matlab Code for Making a PDF Plot}
+\label{AppendixA}
+% Tip 4: Example of how to get a shorter chapter title for the Table of Contents 
+%======================================================================
+\section{Using the GUI}
+Properties of Matab plots can be adjusted from the plot window via a graphical interface. Under the Desktop menu in the Figure window, select the Property Editor. You may also want to check the Plot Browser and Figure Palette for more tools. To adjust properties of the axes, look under the Edit menu and select Axes Properties.
+
+To set the figure size and to save as PDF or other file formats, click the Export Setup button in the figure Property Editor.
+
+\section{From the Command Line} 
+All figure properties can also be manipulated from the command line. Here's an example: 
+\begin{verbatim}
+x=[0:0.1:pi];
+hold on % Plot multiple traces on one figure
+plot(x,sin(x))
+plot(x,cos(x),'--r')
+plot(x,tan(x),'.-g')
+title('Some Trig Functions Over 0 to \pi') % Note LaTeX markup!
+legend('{\it sin}(x)','{\it cos}(x)','{\it tan}(x)')
+hold off
+set(gca,'Ylim',[-3 3]) % Adjust Y limits of "current axes"
+set(gcf,'Units','inches') % Set figure size units of "current figure"
+set(gcf,'Position',[0,0,6,4]) % Set figure width (6 in.) and height (4 in.)
+cd n:\thesis\plots % Select where to save
+print -dpdf plot.pdf % Save as PDF
+\end{verbatim}
+
+%----------------------------------------------------------------------
+% END MATERIAL
+%----------------------------------------------------------------------
+
+% B I B L I O G R A P H Y
+% -----------------------
+
+% The following statement selects the style to use for references.  It controls the sort order of the entries in the bibliography and also the formatting for the in-text labels.
+\bibliographystyle{plain}
+% This specifies the location of the file containing the bibliographic information.  
+% It assumes you're using BibTeX (if not, why not?).
+\cleardoublepage % This is needed if the book class is used, to place the anchor in the correct page,
+                 % because the bibliography will start on its own page.
+                 % Use \clearpage instead if the document class uses the "oneside" argument
+\phantomsection  % With hyperref package, enables hyperlinking from the table of contents to bibliography             
+% The following statement causes the title "References" to be used for the bibliography section:
+\renewcommand*{\bibname}{References}
+
+% Add the References to the Table of Contents
+\addcontentsline{toc}{chapter}{\textbf{References}}
+
+\bibliography{uw-ethesis}
+% Tip 5: You can create multiple .bib files to organize your references. 
+% Just list them all in the \bibliogaphy command, separated by commas (no spaces).
+
+% The following statement causes the specified references to be added to the bibliography% even if they were not 
+% cited in the text. The asterisk is a wildcard that causes all entries in the bibliographic database to be included (optional).
+\nocite{*}
+
+\end{document}
