@@ -1,0 +1,10 @@
+
+Transition to turbulence
+
+start off with linear stability (our work and BC)
+
+go to transition (Augier, Waite, and others)
+
+secondary mechanisms (Augier, Deloncle, etc...)
+
+full on stratified turbulence
