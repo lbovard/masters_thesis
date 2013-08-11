@@ -81,3 +81,38 @@ Now we consider solving the equation in Fourier space. Taking the Fourier transf
 \frac{\partial \hat{u}}{\partial t} + \widehat{c(x)\frac{\partial u}{\partial x}}=0
 \end{align}
 
+\section{Navier-Stokes in Fourier Space}
+We now turn to the formulation of the Navier-Stokes equations in a Fourier domain. The Fourier domain provides a convenient formulation to analyse the underlying mechanisms of turbulence, as we shall see. Recall that in the Fourier domain, derviatives become multiplcation of wavenumbers which converts the spatial parts of the Navier-Stokes equations into algebraic equations. 
+
+To demonstrate the formulation in Fourier space, let us cast the standard Navier-Stokes equations into Fourier space. 
+\begin{align}
+\frac{\partial \textbf{u}}{\partial t} + \textbf{u}\cdot\nabla\textbf{u} = -\nabla p + \nabla^{2}\textbf{u}, \qquad \nabla\cdot\textbf{u}=0
+\end{align}
+where we have taken $\rho_{0},\nu=1$ for convenience as they do not change the overall result. Taking the Fourier transform of the above equation is straight-forward for all terms except the advection term $\textbf{u}\cdot\nabla\textbf{u}$, which we postpone for now.
+
+In Fourier space, we can also exploit the following observation to eliminate the pressure term, thus saving the need to solve a Poisson equation at each time-step. The incompressibility condition becomes $\textbf{k}\cdot\hat{\textbf{u}}(\textbf{k},t)=0$ in Fourier space. Geometrically, this means that the vectors $\textbf{k}$ and $\hat{\textbf{u}}$ are orthogonal. To see this define a $\textbf{k}$-plane and a $\hat{\textbf{u}}$-plane. The defining equation of a plane is $ax+by+cz=d$ with the normal vector $\textbf{n}=(a,b,c)$. Here the normal vectors are $\textbf{k}$ and $\hat{\textbf{u}}$. Thus if the normal vectors are orthogonal, the planes are orthogonal.
+
+This realisation tells us that vectors that are proportional to \uhatm are orthogonal to vectors that are proportional to \kvecm. Thus writing out the Navier-Stokes equations
+\begin{align}
+\frac{\partial \uhat}{\partial t} + \text{FT}(\textbf{u}\cdot\nabla\textbf{u}) = - \kvec\hat{p} - k^{2}\uhat
+\end{align}
+now take the dot product with \kvecm and using the orthogonality condition we obtain
+\begin{align}
+\kvec\cdot\text{FT}(\textbf{u}\cdot\nabla\textbf{u}) + k^{2}\hat{p}=0
+\end{align}
+This result is unsurprising, since all we have done is take the divergence of the Navier-Stokes equations, which in Fourier space corresponds to taking the dot product with respect to \kvecm. But using this observation we can avoid the need for solving the pressure altogether. Clearly the pressure term is orthogonal to the $\uhat$-plane. But what about the advection term? It can be thought of a vector that is pointing in some direction inbetween the planes of \kvec and \uhatm. By projecting the advection term into the $\uhat$-plane, we would have a set of equations that are independent of the pressure completely.
+
+Consider the following projection operator
+\begin{align}
+P_{ij}(\kvec) = \delta_{ij} - \frac{k_{i}k_{j}}{k^{2}}
+\end{align}
+where we are using Einstein summation notation. Demonstrate that $\hat{u}_{j}P_{ij} = \hat{u}_{i}$ and so on. Thus if we apply $P_{ij}$ to NS we would get the Fourier transform version with no pressure. If we wanted to recover pressure we could use above.  Add discussion of the $\textbf{u}\cdot\nabla\textbf{u} = \omega\times \textbf{u} - \nabla \textbf{u}^{2}/2$ derivation. 
+
+Another advantage of the Fourier formuation is the ability to exactly integrate the diffusion term. Let us denote the advective projective term as $F(\hat{u})$ and we have
+\begin{align}
+\frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat = F(\uhat) 
+\end{align}
+where the left-hand side has been explicitly written out. Written in this form, the common trick of writing a product as a derivative is observed since
+\begin{align}
+ \frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat= e^{-\nu k^{2}t}\frac{\partial \uhat e^{\nu k^{2}t}}{\partial t} 
+\end{align}
