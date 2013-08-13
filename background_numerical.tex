@@ -82,32 +82,71 @@ Now we consider solving the equation in Fourier space. Taking the Fourier transf
 \end{align}
 
 \section{Navier-Stokes in Fourier Space}
+\subsection{Fourier Transformed Navier-Stokes}
 We now turn to the formulation of the Navier-Stokes equations in a Fourier domain. The Fourier domain provides a convenient formulation to analyse the underlying mechanisms of turbulence, as we shall see. Recall that in the Fourier domain, derviatives become multiplcation of wavenumbers which converts the spatial parts of the Navier-Stokes equations into algebraic equations. 
 
 To demonstrate the formulation in Fourier space, let us cast the standard Navier-Stokes equations into Fourier space. 
 \begin{align}
-\frac{\partial \textbf{u}}{\partial t} + \textbf{u}\cdot\nabla\textbf{u} = -\nabla p + \nabla^{2}\textbf{u}, \qquad \nabla\cdot\textbf{u}=0
+\frac{\partial \textbf{u}}{\partial t} + \textbf{u}\cdot\nabla\textbf{u} = -\frac{1}{\rho_{0}}\nabla p + \nu\nabla^{2}\textbf{u}, \qquad \nabla\cdot\textbf{u}=0
 \end{align}
-where we have taken $\rho_{0},\nu=1$ for convenience as they do not change the overall result. Taking the Fourier transform of the above equation is straight-forward for all terms except the advection term $\textbf{u}\cdot\nabla\textbf{u}$, which we postpone for now.
+Taking the Fourier transform of the above equation is straight-forward for all terms except the advection term $\textbf{u}\cdot\nabla\textbf{u}$, which we postpone for now.
 
 In Fourier space, we can also exploit the following observation to eliminate the pressure term, thus saving the need to solve a Poisson equation at each time-step. The incompressibility condition becomes $\textbf{k}\cdot\hat{\textbf{u}}(\textbf{k},t)=0$ in Fourier space. Geometrically, this means that the vectors $\textbf{k}$ and $\hat{\textbf{u}}$ are orthogonal. To see this define a $\textbf{k}$-plane and a $\hat{\textbf{u}}$-plane. The defining equation of a plane is $ax+by+cz=d$ with the normal vector $\textbf{n}=(a,b,c)$. Here the normal vectors are $\textbf{k}$ and $\hat{\textbf{u}}$. Thus if the normal vectors are orthogonal, the planes are orthogonal.
 
 This realisation tells us that vectors that are proportional to \uhatm are orthogonal to vectors that are proportional to \kvecm. Thus writing out the Navier-Stokes equations
 \begin{align}
-\frac{\partial \uhat}{\partial t} + \text{FT}(\textbf{u}\cdot\nabla\textbf{u}) = - \kvec\hat{p} - k^{2}\uhat
+\frac{\partial \uhat}{\partial t} + \mathcal{F}(\textbf{u}\cdot\nabla\textbf{u}) = -\frac{1}{\rho_{0}} \kvec\hat{p} - \nu k^{2}\uhat\label{NS_fourier_1}
 \end{align}
 now take the dot product with \kvecm and using the orthogonality condition we obtain
 \begin{align}
-\kvec\cdot\text{FT}(\textbf{u}\cdot\nabla\textbf{u}) + k^{2}\hat{p}=0
+\kvec\cdot\mathcal{F}(\textbf{u}\cdot\nabla\textbf{u}) + \frac{1}{\rho_{0}}k^{2}\hat{p}=0\label{pressure_fourier_1}
 \end{align}
-This result is unsurprising, since all we have done is take the divergence of the Navier-Stokes equations, which in Fourier space corresponds to taking the dot product with respect to \kvecm. But using this observation we can avoid the need for solving the pressure altogether. Clearly the pressure term is orthogonal to the $\uhat$-plane. But what about the advection term? It can be thought of a vector that is pointing in some direction inbetween the planes of \kvec and \uhatm. By projecting the advection term into the $\uhat$-plane, we would have a set of equations that are independent of the pressure completely.
+This result is unsurprising, since all we have done is take the divergence of the Navier-Stokes equations, which in Fourier space corresponds to taking the dot product with respect to $\kvec$. But using this observation we can avoid the need for solving the pressure altogether. Clearly the pressure term is orthogonal to the $\uhat$-plane. But what about the advection term? It can be thought of a vector that is pointing in some direction inbetween the planes of \kvec and \uhatm. By projecting the advection term into the $\uhat$-plane, we would have a set of equations that are independent of the pressure completely.
 
-Consider the following projection operator
+\subsection{Projection Tensor}
+In order to project the Navier-Stokes equations onto the $\uhat$-plane, we define the following projection operator
 \begin{align}
-P_{ij}(\kvec) = \delta_{ij} - \frac{k_{i}k_{j}}{k^{2}}
+\textbf{P}=P_{ij}(\kvec) = \delta_{ij} - \frac{k_{i}k_{j}}{k^{2}}
 \end{align}
-where we are using Einstein summation notation. Demonstrate that $\hat{u}_{j}P_{ij} = \hat{u}_{i}$ and so on. Thus if we apply $P_{ij}$ to NS we would get the Fourier transform version with no pressure. If we wanted to recover pressure we could use above.  Add discussion of the $\textbf{u}\cdot\nabla\textbf{u} = \omega\times \textbf{u} - \nabla \textbf{u}^{2}/2$ derivation. 
+where we are using Einstein summation notation \cite{lesieur,wald}. It is straight forward to verify that $P_{ij}P_{jk}=P_{ik}$ or in matrix notation $\textbf{P}^{2}=\textbf{P}$, in other words the projection tensor is idempotent. Idepotence is a defining feature of projection operators \cite{MeyerLinAlg}. It is straightforward to verify that $k_{j}P_{ij}=0$ and $\hat{u}_{j}P_{ij}=\hat{u}_{i}$. These simple observations confirm that the projection tensor projects a vector onto the $\uhat$-plane. 
 
+Applying $P_{ij}$ to (\ref{NS_fourier_1}) we obtain the following 
+\begin{align}
+\frac{\partial \uhat}{\partial t} + \textbf{P}\mathcal{F}(\textbf{u}\cdot\nabla\textbf{u}) =  -\nu k^{2}\uhat\label{NS_fourier_2}
+\end{align}
+where $\textbf{P}$ is acting on the Fourier transform of the advection term. In order to compute the Fourier transform of the advection term, we note that 
+\begin{align}
+\textbf{u}\cdot\nabla\textbf{u} = u_{j}\frac{\partial u_{i}}{\partial x_{j}} = \frac{\partial (u_{i}u_{j})}{\partial x_{j}}
+\end{align}
+where the incompressibility condition has been used to bring the velocity inside the derivative. Thus we are able to write
+\begin{align}
+\mathcal{F}(\textbf{u}\cdot\nabla\textbf{u})=ik_{j}\int_{\textbf{p}+\textbf{q}=\kvec}d\kvec\hat{u}_{i}(\textbf{p})\hat{u}_{j}(\textbf{q})
+\end{align}
+and hence we can finally write out the Navier-Stokes equations in Fourier space as \cite{lesieur}
+\begin{align}
+\frac{\partial \hat{u}_{i}}{\partial t} + iP_{ij}k_{m}\int_{\textbf{p}+\textbf{q}=\kvec}d\kvec\hat{u}_{j}(\textbf{p})\hat{u}_{m}(\textbf{q})=  -k^{2}\hat{u}_{i}\label{NS_fourier_3}
+\end{align}
+
+\subsection{Numerical Formulation of NS in Fourier}
+Although we have eliminated the pressure completely, we still have an integral term in the equation. To formulate this problem numerically, we make the following observation that is useful in pseudo-spectral methods \cite{lesieur,orszag1972}.
+
+Recall the following identity (Kundu, Acheson)
+\begin{align}
+\textbf{u}\cdot\nabla\textbf{u} = \bm{\omega}\times \textbf{u} - \frac{1}{2}\nabla \textbf{u}^{2}
+\end{align}
+When we apply the projection operator $\textbf{P}$ to the above equation, the $\nabla \textbf{u}^{2}$ term will vanish since it is orthogonal to the $\uhat$-plane. For the cross product between the vorticity and velocity, we use the methods discussed above from dealiasing. Thus to evaluate the cross product term, we assume we have the Fourier transform of the vorticity and velocity $\hat{\bm{\omega}},\uhat$ and re-write the cross product term as
+\begin{align}
+\mathcal{F}(\bm{\omega}\times \textbf{u}) = \mathcal{F}(\mathcal{F}^{-1}(\hat{\bm{\omega}})\times\mathcal{F}^{-1}(\uhat))
+\end{align}
+Using this result we can reformulate the Navier-Stokes equations into a form to be solved numerically using a spectral method
+\begin{align}
+\frac{\partial \uhat}{\partial t} = \textbf{P}(\kvec)\mathcal{F}(\mathcal{F}^{-1}(\hat{\bm{\omega}})\times\mathcal{F}^{-1}(\uhat))-k^{2}\uhat
+\end{align}
+where the $\mathcal{F},\mathcal{F}^{-1}$ can be evaluated by FFTs, as discussed above.
+
+This reformulation of the Navier-Stokes equations into Fourier space simplifies numerical calculations immensely and provides many advantages over the real space formulation. The absence of the pressure term means that there is no Poisson equation to be solved at each time-step for the pressure. If one did want the pressure, one can solve (\ref{pressure_fourier_1}) for $\hat{p}$. In addition there is no need to enforce a divergence free solution\footnote{Except possibily at the initial time step, see Section 3.} as the equations are formulated by definition to satisfy divergence free condition. The only additional technical difficulty is evaluating the vorticity, but this can easily be handled because of the simple structure of the curl. 
+
+\subsection{Integrating Factor}
 Another advantage of the Fourier formuation is the ability to exactly integrate the diffusion term. Let us denote the advective projective term as $F(\hat{u})$ and we have
 \begin{align}
 \frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat = F(\uhat) 
@@ -116,3 +155,9 @@ where the left-hand side has been explicitly written out. Written in this form, 
 \begin{align}
  \frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat= e^{-\nu k^{2}t}\frac{\partial \uhat e^{\nu k^{2}t}}{\partial t} 
 \end{align}
+
+\subsection{Concluding Remarks (rename)}
+Although we have done all our manipulations in Fourier space, we could have equally well formulated the above equations in real space. The idea of projecting the velocity field onto the $\uhat$-plane is motivated by the Helmholtz decomposition. This decomposition states, for any $C^{2}$ vector field in a bounded region of $\mathbb{R}^{3}$, we can decompose the vector field into a divergence-free and curl-free component. The divergence free part corresponds to taking the divegence of the Navier-Stokes equations which would yield the Poisson equation for the pressure. Taking the curl of the Navier-Stokes equation - which we define to be the vorticity - would yield the vorticity equation which does not have a pressure term. 
+
+\section{Hyperviscosity}
+blah blah hyperviscosity
