@@ -95,18 +95,22 @@ In Fourier space, we can also exploit the following observation to eliminate the
 
 This realisation tells us that vectors that are proportional to \uhatm are orthogonal to vectors that are proportional to \kvecm. Thus writing out the Navier-Stokes equations
 \begin{align}
-\frac{\partial \uhat}{\partial t} + \mathcal{F}(\textbf{u}\cdot\nabla\textbf{u}) = -\frac{1}{\rho_{0}} \kvec\hat{p} - \nu k^{2}\uhat\label{NS_fourier_1}
+\frac{\partial \uhat}{\partial t} + \mathcal{F}(\textbf{u}\cdot\nabla\textbf{u}) = -\frac{1}{\rho_{0}} \kvec\hat{p} - \nu k^{2}\uhat\label{NS_fourier_1},
 \end{align}
-now take the dot product with \kvecm and using the orthogonality condition we obtain
+take the dot product with \kvecm and using the orthogonality condition we obtain
 \begin{align}
-\kvec\cdot\mathcal{F}(\textbf{u}\cdot\nabla\textbf{u}) + \frac{1}{\rho_{0}}k^{2}\hat{p}=0\label{pressure_fourier_1}
+\kvec\cdot\mathcal{F}(\textbf{u}\cdot\nabla\textbf{u}) + \frac{1}{\rho_{0}}k^{2}\hat{p}=0\label{pressure_fourier_1}.
 \end{align}
-This result is unsurprising, since all we have done is take the divergence of the Navier-Stokes equations, which in Fourier space corresponds to taking the dot product with respect to $\kvec$. But using this observation we can avoid the need for solving the pressure altogether. Clearly the pressure term is orthogonal to the $\uhat$-plane. But what about the advection term? It can be thought of a vector that is pointing in some direction inbetween the planes of \kvec and \uhatm. By projecting the advection term into the $\uhat$-plane, we would have a set of equations that are independent of the pressure completely.
+Isolating for pressure and substituting back into (\ref{NS_fourier_1}) we obtain
+\begin{align}
+\frac{\partial \uhat}{\partial t} + \mathcal{F}(\textbf{u}\cdot\nabla\textbf{u})(\textbf{1}-\frac{\kvec\kvec}{k^{2}})= - \nu k^{2}\uhat\label{NS_fourier_2}.
+\end{align}
+This result is unsurprising, since all we have done is take the divergence of the Navier-Stokes equations, which in Fourier space corresponds to taking the dot product with respect to $\kvec$. But using this observation we can avoid the need for solving the pressure altogether because the pressure term is orthogonal to the $\uhat$-plane. But what about the advection term? As can be seen in (\ref{NS_fourier_2}), it has this factor $\textbf{1} - \kvec\kvec/k^{2}$ multiplying it. This term represents a projection into the $\uhat$-plane. The advection term can thought of a vector that is pointing in some direction inbetween the planes of $\kvec$ and $\uhat$. By projecting the advection term into the $\uhat$-plane, we would have a set of equations that are independent of the pressure completely.
 
 \subsection{Projection Tensor}
 In order to project the Navier-Stokes equations onto the $\uhat$-plane, we define the following projection operator
 \begin{align}
-\textbf{P}=P_{ij}(\kvec) = \delta_{ij} - \frac{k_{i}k_{j}}{k^{2}}
+\textbf{P}=\textbf{1} - \frac{\kvec\kvec}{k^{2}} = P_{ij}(\kvec) = \delta_{ij} - \frac{k_{i}k_{j}}{k^{2}}
 \end{align}
 where we are using Einstein summation notation \cite{lesieur,wald}. It is straight forward to verify that $P_{ij}P_{jk}=P_{ik}$ or in matrix notation $\textbf{P}^{2}=\textbf{P}$, in other words the projection tensor is idempotent. Idepotence is a defining feature of projection operators \cite{MeyerLinAlg}. It is straightforward to verify that $k_{j}P_{ij}=0$ and $\hat{u}_{j}P_{ij}=\hat{u}_{i}$. These simple observations confirm that the projection tensor projects a vector onto the $\uhat$-plane. 
 
@@ -128,7 +132,7 @@ and hence we can finally write out the Navier-Stokes equations in Fourier space 
 \end{align}
 
 \subsection{Numerical Formulation of NS in Fourier}
-Although we have eliminated the pressure completely, we still have an integral term in the equation. To formulate this problem numerically, we make the following observation that is useful in pseudo-spectral methods \cite{lesieur,orszag1972}.
+Although we have eliminated the pressure completely, we still have an integral term in the equation. To formulate this problem numerically, we make the following observation that is useful in spectral methods \cite{lesieur,orszag1972}.
 
 Recall the following identity (Kundu, Acheson)
 \begin{align}
@@ -155,9 +159,31 @@ where the left-hand side has been explicitly written out. Written in this form, 
 \begin{align}
  \frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat= e^{-\nu k^{2}t}\frac{\partial \uhat e^{\nu k^{2}t}}{\partial t} 
 \end{align}
+Thus we can re-write the Navier-Stokes equations as 
+\begin{align}
+\frac{\partial \uhat e^{\nu k^{2}t}}{\partial t} = e^{\nu k^{2}t}F(\uhat)
+\end{align}
+For notational convenience, let us write that $g(t) = e^{\nu k^{2}t}$ and the note the following trivial identities
+\begin{align}
+g(t\pm\dt) = g(t)g(\pm\dt),\qquad g(0) = 1, \qquad g(t)^{-1} = g(-t).\label{int_fact_ident}
+\end{align}
+With this notation the Navier-Stokes equations become
+\begin{align}
+\frac{\partial (\uhat g(t))}{\partial t} = g(t)F(\uhat).
+\end{align}
+ Now let us solve the above system using an Adams-Bashforth 2nd order time-stepping scheme. Initially we obtain
+\begin{align}
+\uhat^{n+1}g(t_{n}+\dt) = \uhat^{n}g(t_{n}) + \frac{3}{2}\dt g(t_{n})F(\uhat^{n}) - \frac{1}{2}\dt g(t_{n-1})F(\uhat^{n-1}).
+\end{align}
+Using the identities in (\ref{int_fact_ident}) the scheme reduces to
+\begin{align}
+\uhat^{n+1} = g(-\dt)\uhat^{n} + \frac{3}{2}\dt g(-\dt)F(\uhat^{n}) - \frac{1}{2}\dt g(-2\dt)F(\uhat^{n-1}),
+\end{align}
+and the diffusion term has been reduced to a multiplication by a constant factor $g(-\alpha\dt)$.
+
+\subsection{Hyperviscosity}
+blah blah hyperviscosity
 
 \subsection{Concluding Remarks (rename)}
 Although we have done all our manipulations in Fourier space, we could have equally well formulated the above equations in real space. The idea of projecting the velocity field onto the $\uhat$-plane is motivated by the Helmholtz decomposition. This decomposition states, for any $C^{2}$ vector field in a bounded region of $\mathbb{R}^{3}$, we can decompose the vector field into a divergence-free and curl-free component. The divergence free part corresponds to taking the divegence of the Navier-Stokes equations which would yield the Poisson equation for the pressure. Taking the curl of the Navier-Stokes equation - which we define to be the vorticity - would yield the vorticity equation which does not have a pressure term. 
 
-\section{Hyperviscosity}
-blah blah hyperviscosity
