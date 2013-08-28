@@ -182,7 +182,19 @@ Using the identities in (\ref{int_fact_ident}) the scheme reduces to
 and the diffusion term has been reduced to a multiplication by a constant factor $g(-\alpha\dt)$.
 
 \subsection{Hyperviscosity}
-blah blah hyperviscosity
+Hyperviscosity is a method of simulating higher Reynolds number flow by replacing the diffusion term with higher derivatives. In the Fourier picture, the diffusion term is $-\nu k^{2}\uhat$. The diffusion timescale $\tau_{d}$ is given by the inverse of $\nu k^{2}$. This implies that the longest wavelengths (smallest $k$) have very long diffusive time-scales while the shortest wavelengths (larger $k$) have very short diffusive time-scales. This picture makes physical sense since viscosity plays a role at the very small scales. As we decrease the viscosity $\nu$ the time-scales of all scales increases. Numerically, we decrease the viscosity too much, resolution of the smallest scales becomes critical and can lead to unwanted grid-scale effects. Thus, in order to decrease the diffusive time-scales of all wavelengths we can instead vary the power of the wave number. For example, going from $k^{2}$ to $k^{4}$ the time-scales of the various wavelengths would decrease. This is illustrated in Figure (blah)
+
+We can only have even powers of $k$ since odd powers of $k$ correspond to dispersion. 
+
+In order to do this numerically, we scale by the maximum wavenumber $k_{max}$. We want the diffusive timescales of the smallest scales to be the same for both the regular viscosity and the hyperviscosity. That is we want
+\begin{align}
+\nu k_{max}^{2} = \nu_{i}k_{max}^{i},
+\end{align}
+where $i$ is an even integer. Solving for $\nu_{i}$ then gives the following replacement
+\begin{align}
+\nu k^{2} \Rightarrow \nu k_{max}^{2-i}k^{i}.
+\end{align}
+Throughout this thesis, we will use $i=4$. 
 
 \subsection{Concluding Remarks (rename)}
 Although we have done all our manipulations in Fourier space, we could have equally well formulated the above equations in real space. The idea of projecting the velocity field onto the $\uhat$-plane is motivated by the Helmholtz decomposition. This decomposition states, for any $C^{2}$ vector field in a bounded region of $\mathbb{R}^{3}$, we can decompose the vector field into a divergence-free and curl-free component. The divergence free part corresponds to taking the divegence of the Navier-Stokes equations which would yield the Poisson equation for the pressure. Taking the curl of the Navier-Stokes equation - which we define to be the vorticity - would yield the vorticity equation which does not have a pressure term. 
