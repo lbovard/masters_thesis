@@ -206,11 +206,17 @@ and we can obtain the largest growth rate by the formula
 \begin{align}
 \sigma = \lim_{t\rightarrow\infty}\frac{1}{2}\frac{d\ln E}{dt}\label{sigma1},
 \end{align}
-where $\sigma$ is the real growth rate of the mode and $E$ is the kinetic energy $\frac{1}{2}(u^{2}+v^{2}+w^{2})$. To evaluate $\sigma$, we compute the average value of the growth rate beginning at $t=20$, after the initial transient behaviour has died out and the leading mode dominants, from the time series of $\sigma$  produced by (\ref{sigma1}) until the end time $t=100$. In the case of an oscillatory growth rate, as considered in \cite{bc1999}, we drop the assumption that $\sigma$ is real and instead compute the growth rate from
+where $\sigma$ is the real growth rate of the mode and $E$ is the kinetic energy $\frac{1}{2}(u^{2}+v^{2}+w^{2})$. This follows directly from the exponential behaviour of the leading eigenmode. The energy behaves as
+\begin{align}
+E \sim \frac{3}{2}C(x,y)^{2}e^{2\sigma t} \Rightarrow \ln E = \ln(3C^{2}/2) + 2\sigma t
+\end{align}
+and upon taking the time derivative of both sides yields the desired result. To obtain the energy, we use Parseval's theorem which relates the real space energy to the sum of the squares of the Fourier coefficients. Thus the total kinetic energy (domain averaged?) is obtained by summing the squares of the Fourier transform of the velocities over all wavenumbers. 
+
+To evaluate $\sigma$, we compute the average value of the growth rate from the time series. Initially, there is transient behaviour where the various modes are all growing and none dominant (add figure of time series). After $t=20$, after the initial transient behaviour has died out and the leading mode dominants in all the cases observed. In the case of an oscillatory growth rate, as considered in \cite{bc1999}, we drop the assumption that $\sigma$ is real and instead compute the growth rate from
 \begin{align}
 \sigma_{r} = \lim_{t\rightarrow \infty} \frac{1}{2T}\ln\left(\frac{E(t+T)}{E(t)}\right)\label{sigma2},
 \end{align}
-where $T$ is the period of the oscillatory mode. The imaginary growth rate is given as $\sigma_{i}=2\pi/T$. As above, we compute $\sigma$ from the time series beginning at $t=20$, however we first measure the period $T$ from roughly 10 oscillations, and then compute the average.  
+where $T$ is the period of the oscillatory mode. (add figure of oscillatory growth rates). The imaginary growth rate is given as $\sigma_{i}=2\pi/T$. As above, we compute $\sigma$ from the time series beginning at $t=20$, however we first measure the period $T$ from roughly 10 oscillations, and then compute the average.  
 
 For our simulations a grid size of $L=9$ with $N=512$ points was used with timestep $\Delta t=0.000950$ for $F_{h}=0.2,Re=2000,5000,10000$ and $\Delta t=0.000375$ for all the other simulations. Unlike Billant and Chomaz\cite{bc2000c} we did not restart each simulation with the previous eigenmode because we used a parallel approach for evaluating multiple $k_{z}$ simultaneously. We investigate a range of Froude and Reynolds number and a wide range of $k_{z}$ from $1$ to $200$ depending on the Froude and Reynolds number. This wavenumber range incorporates the scale of the zigzag instability down to the viscous damping scale. We take $Sc=1$ for all simulations.  
 
