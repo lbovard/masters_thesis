@@ -1,69 +1,102 @@
-\chapter{Numerical Stuff and Introductionary Theory}
-\begin{itemize}
-\item introduction to the boussinesq approximation 
-\item In this section I should introduce the spectral method and the numerical scheme
-\item Dealiasing tests 
-\item  diffusion test
-\item hyperviscosity
-\end{itemize}
-\section{Boussinesq approximation}
+\chapter{Numerical Background}
+%\begin{itemize}
+%\item introduction to the boussinesq approximation 
+%\item In this section I should introduce the spectral method and the numerical scheme
+%\item Dealiasing tests 
+%\item  diffusion test
+%\item hyperviscosity
+%\end{itemize}
 
-The equations can be written in the dimensional from as (add derivation, Kundu? Batchelor? Others?)
+In this chapter we discuss the numerical techniques and methods used in this thesis. In this thesis we use the spectral method to numerically solve the Navier-Stokes equations. Spectral methods provide a convenient and quick way to compute derivatives of sufficiently well-behaved periodic functions. In situations involving periodicity, they provide an advantage over other methods of evaluating derivatives, such as finite difference, as derivatives can be compued in $\mathcal{O}(n\log n)$ instead of the typical $\mathcal{O}(n^{2})$ of finite difference. A complete overview of spectral methods is beyond the scope of this thesis and we only discuss the key features needed for numerical work. Comprehensive reviews of spectral methods are provided in many books, e.g. Trefethen \cite{trefethen_spectral}, Boyd \cite{boyd2001}, and (spectral method in fluids book). 
 
+FIX nlogn vs n2 to n. Spectral methords use FFT to reduce n2 to nlogn while fd. uses n but accuracy. 
+
+\section{Spectral Methods Motivation}
+Spectral methods have their origins in the Fourier transform. Let us denote the Fourier transform, $\mathcal{F}$, of $f(x)$ as $\mathcal{F}(f(x)) = \hat{f}(k)$, given by
 \begin{align}
-\frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot \nabla \bm{u} = -\frac{1}{\rho_{0}}\nabla p - \frac{\rho g}{\rho_{0}}\hat{\bm{e}}_{z} + \nu \nabla^{2}\bm{u} \label{boussinesq1}\\
-\nabla \cdot \bm{u} =0 \label{boussinesq2}\\
-\frac{\partial \rho}{\partial t} + \bm{u}\cdot \nabla \rho = \kappa \nabla^{2}\rho - \frac{\partial \bar{\rho}}{\partial z} w\label{boussinesq3}
-\end{align}
-where we have the following dimensional variables
-\begin{itemize}
-\item $\textbf{u}(x,y,z)=(u(x,y,z),v(x,y,z),w(x,y,z))$ is the velocity field in the $x,y,z$-directions directions respectively,
-\item $p(x,y,z)$ is the pressure field,
-\item $\rho(x,y,z)$ is a perturbation density,
-\item $\rho_{0}$ is a constant reference density,
-\item $\bar{\rho}$ is ... ? ,
-\item $g$ is the gravitational constant,
-\item $\nu$ is the constant kinematic velocity ,
-\item $\kappa$ is the constant molecular diffusivity.
-\end{itemize}
-Equations (\ref{boussinesq1})-(\ref{boussinesq3}) are a set of five coupled partial differential equations for the unknowns $\textbf{u},p,\rho$. Herein, we will refer to equation (\ref{boussinesq1}) as the velocity equations, equation (\ref{boussinesq2}) as the continuity equation, and equation (\ref{boussinesq3}) as the density equation. 
-
-Maybe go onto non-dimensionalisation? 
-
-There is a difference between the linear and nonlinear equations (MIke's code uses a slightly modified version of Boussinesq that uses temperature) 
-We take the above equations (Ref) as the starting point for our simulations. 
-
-\section{Spectral Methods}
-In this thesis we use the spectral method to evaluate the derivatives. Some more background. Spectral methods are based off the following observation. Let us denote the Fourier transform of $f(x)$ as $\hat{f}(k)$, given by
-\begin{align}
-\hat{f}(k) = \int_{-\infty}^{\infty}dxe^{-ikx}f(x)
+\mathcal{F}(f(x)) = \hat{f}(k) = \int_{-\infty}^{\infty}dxe^{-ikx}f(x)
 \end{align}
 Now consider the Fourier transform of the derivative $df/dx$. 
 \begin{align}
-\int_{-\infty}^{\infty}dxe^{-ikx}\frac{df}{dx}=e^{-ikx}f(x)\bigg|_{-\infty}^{\infty} + ik\int_{-\infty}^{\infty}dxe^{-ikx}f(x)= ik\hat{f}(k)
+\mathcal{F}\left(\frac{df}{dx}\right)= \int_{-\infty}^{\infty}dxe^{-ikx}\frac{df}{dx}=e^{-ikx}f(x)\bigg|_{-\infty}^{\infty} + ik\int_{-\infty}^{\infty}dxe^{-ikx}f(x)= ik\hat{f}(k)
 \end{align}
-and thus the Fourier transform of a derivative is just $ik$ times the Fourier transform of $f(x)$. We have assumed here that $f(x)$ vanishes sufficiently quickly at infinity. For most applications of the Fourier transform, this assumption is valid. In this thesis, all functions considered will vanish quickly enough although see section below. (add bit about decay?). In general, it is easy to show that the Fourier transform of $d^{n}f/dx^{n}$ is $(ik)^{n}\hat{f}(k)$. 
+and thus the Fourier transform of a derivative is just $ik$ times the Fourier transform of $f(x)$. An important assumption here that $f(x)$ vanishes sufficiently quickly at infinity otherwise the $e^{-ikx}f(x)$ term is non-negligible. For most applications of the Fourier transform, but not all,  this assumption is valid. In this thesis, all functions considered will vanish sufficiently so that this term is negligible. For a rigorous treatment of when this situation occurs, consult any book on Fourier methods. With this result in hand, it is easy to show via induction that the Fourier transform of $d^{n}f/dx^{n}$ is $(ik)^{n}\hat{f}(k)$. Hence, once we have the Fourier transform $\hat{f}(k)$, the $n$-th derivative is obtained by computing the inverse Fourier transform
+\begin{align}
+\frac{d^{n}f}{dx^{n}} = \frac{1}{2\pi} \int_{-\infty}^{\infty}dx e^{ikx}(ik)^{n}\hat{f}(k)
+\end{align}
 
-Computationally, if we have a quick way to evalute $\hat{f}(k)$ from $f(x)$ and $f(x)$ from $\hat{f}(k)$, then the $n^{\text{th}}$ derivative is easy to compute and results from multiplying by the simple pre-factor $(ik)^{n}$. 
+Computationally, if we have a quick way to evaluate $\hat{f}(k)$ from $f(x)$ and $f(x)$ from $\hat{f}(k)$, then the $n^{\text{th}}$ derivative is easy to compute and results from multiplying by the simple pre-factor $(ik)^{n}$. 
 
-blah blah FFT. Discuss that here.
-
+\section{FFT and Spectral Derivatives} 
+More discussion on the FFT here. Basic definition. Some examples of spectral differentiation from Trefethen.
 
 \section{Dealiasing} 
-An important consideration in transforming between physical and Fourier space is the problem of aliasing.
+In the previous section we demonstrated that spectral differentiation can produce very accurate results in only $\mathcal{O}(N\log N)$ operations. However, we have only considered the spectral derivative of a single function $f(x)$, the question naturally arises about what happens if we have two functions, say $f(x)g(x)$, (reword this sentence). Consider the following general non-linear PDE, (add in Durran ref)
+\begin{align}
+\frac{\partial \psi}{\partial t} + F(\psi) = 0
+\end{align}
+where $F(\psi)$ is some general nonlinear function. Follow Durran, let us consider a series expansion of the form
+\begin{align}
+\psi(x,t)\approx \phi(x,t) = \sum_{k=1}^{N}a_{k}(t)\varphi_{k}(x)
+\end{align}
+where $\varphi_{k}$ is some basis function that we are interested in expanding the solution in. Some examples of such functions might be complex exponentials, Bessel functions, or spherical harmonics, however in general we will not be able to find the eigenfunctions that provide the natural basis to seek a series expansion. Thus, we are interested in not finding the correct $\varphi_{k}$ but instead focus picking a basis and appropriately choosing $a_{k}(t)$ to minimise the error. However we choose to evaluate this error leads to different methods of solving the problem. Here we consider the Galerkin approximation. It requires that the residual, 
+\begin{align}
+R(\phi) = \frac{\partial \phi}{\partial t} + F(\phi),
+\end{align}
+to be orthogonal to the basis functions $\varphi_{k}$, i.e.
+\begin{align}
+\int_{S}R(\phi(x))\varphi_{k}(x)dx = 0 \qquad k=1,\ldots,N.
+\end{align}
+By requiring the above integral to be minimised, and choosing orthogonal basis functions, it can be shown\cite{durran} that the resulting system of ODEs for the above is
+\begin{align}
+\frac{d a_{k}}{dt} = -\frac{1}{M_{k,k}}\int_{S}\left[F\left(\sum_{n=1}^{N}a_{n}\varphi_{n}\right)\varphi_{k}\right]dx \qquad k=1,\ldots,N
+\end{align}
+where $M_{k,k}=\langle \varphi_{k},\varphi_{k}\rangle$. This method is called the spectral method and differences from finite element methods by requiring an orthogonal basis. 
 
-Explain what it is! Blah blah wavenumbers meet and cross and cause problems.
+Now let use the spectral method to solve the 1D advection equation with variable windspeed,
+\begin{align}
+\frac{\partial\phi}{\partial t} + c(x,t)\frac{\partial \phi}{\partial x} =0
+\end{align}
+Let us expand out $\phi(x,t)$ as the sum of $N=2K+1$ Fourier modes
+\begin{align}
+\phi(x_{j},t)= \sum_{n=K}^{K}a_{n}(t)e^{inx_{j}}
+\end{align}
+plugging this into the above yields
+\begin{align}
+\frac{d a_{k}}{dt} = -\frac{i}{2\pi}\sum_{n=-K}^{K}na_{n}\int_{-\pi}^{\pi}c(x,t)e^{i(n-k)x}dx \qquad k=-K,\ldots,K
+\end{align}
+Expanding out $c(x,t)$ as a Fourier series we obtain
+\begin{align} 
+\frac{d a_{k}}{dt} = -\frac{i}{2\pi}\sum_{n=-K}^{K}\sum_{m=-K}^{K}na_{n}c_{m}\int_{-\pi}^{\pi}e^{i(n+m-k)x}dx \qquad k=-K,\ldots,K
+\end{align}
+and upon using the orthogonality of the integral, we obtain
+\begin{align}
+\frac{da_{k}}{dt} = -\sum_{\substack{m+n=k\\ |m|,|n|\le K}} inc_{m}a_{n}
+\end{align}
+where we require that $n+m=k$ and $|n|,|m|\le K$. If we want to evaluted this sum directly, we would need to evalute $\mathcal{O}(N^{2})$ operations due to the double sum required to evalute the convolution.
 
-Add derivation from Durran on this.
+HERE GOES THE EXPLANATION OF THE CONVOLUTION SUM EVALUATION USING FFTS. 
 
-In the code we use a 2/3s rule however others have used other rules. To determine 
+Collectively this method is known as the spectral method. 
 
-\section{1D Example} 
+A closely related, but different method is known as, somewhat confusingly, as the pseudospectral method.  In this case, instead of enforcing that the residual is orthogonal to the basis functions, we instead choose a collocation method, i.e.
+\begin{align}
+R(\phi(k\dx)) = 0 \qquad k=1,\ldots,N
+\end{align}
+
+It is important to realise that the spectral and pseudospectral method are two very different approaches that yield very similar algorithms to solving the same problem. Both make use of the FFT as a convenient and quick way to evaluate derivatives. In a sense, the pseudospectral method is the spectral method with no dealiasing on evaluating the convolution sum. 
+
+An important consideration in transforming between physical and Fourier space is the problem of aliasing.  Add derivation based on Durran / Mike's notes + matlab example In the code we use a 2/3s rule however others have used other rules. Put in results from linear + nonlinear simulations here?
+
+Discuss dealiasing of linear and nonlinear code as well. Show plots. 
+\section{Timestepping and Examples}
+Explain time-stepping and do two examples, 1D solution from Trefethen and 2D NS solver.  
+
 In this section we demonstrate the differences between solving PDEs in real space vs Fourier space. Consider the following one dimensional wave equation\cite{trefethen_spectral}
 \begin{align}
 \frac{\partial u}{\partial t} + c(x)\frac{\partial u}{\partial x} = 0,\qquad c(x)=\frac{1}{5}+\sin^{2}(x-1), \qquad u(x,0)=e^{-100(x-1)^{2}}, x\in[0,2\pi], t>0
 \end{align}
-where we are solving on a periodic domain. The physical interpretation of this equation is the simple one dimensional advection of a velocity field $u(x,t)$ by the fixed field $c(x)$. To illustrate issues relating to the spectral method, we will solve this problem in two ways: first we solve in the physical domain to demonstrate the idea of spectral differentiation and second to solve it in Fourier space to demonstrate the issues of dealiasing.
+where we are solving on a periodic domain. The physical interpretation of this equation is the simple one dimensional advection of a velocity field $u(x,t)$ by the fixed field $c(x)$. To evalute the advection term, we use a spectral method with 2/3s dealiasing. As discussed in the previous section, there is still non-standard terminology throughout the literature regrading the names of the various methods of using FFTs. Trefethen, for exaple, calls pseudospectral methods, 'collocation methods'. 
 
 For a time-stepping scheme, we use a second-order Adams-Bashforth\cite{durran} scheme. Re-writing wave-equation as
 \begin{align}
@@ -73,7 +106,7 @@ the Adams-Bashforth scheme is
 \begin{align}
 u^{n+1} = u^{n} + \frac{\dt}{2}[3F(u^{n})-F(u^{n-1})]
 \end{align}
-Since the Adams-Bashforth scheme uses a previous time-step, we will use forward Euler for the first time-step. To evalute $F(u)$ we will use the spectral differentiation, as discussed above. 
+Since the Adams-Bashforth scheme uses a previous time-step, we will use forward Euler for the first time-step. To evaluate $F(u)$ we will use the spectral differentiation, as discussed above. 
 Figures go here.
 
 Now we consider solving the equation in Fourier space. Taking the Fourier transform we obtain
@@ -83,7 +116,7 @@ Now we consider solving the equation in Fourier space. Taking the Fourier transf
 
 \section{Navier-Stokes in Fourier Space}
 \subsection{Fourier Transformed Navier-Stokes}
-We now turn to the formulation of the Navier-Stokes equations in a Fourier domain. The Fourier domain provides a convenient formulation to analyse the underlying mechanisms of turbulence, as we shall see. Recall that in the Fourier domain, derviatives become multiplcation of wavenumbers which converts the spatial parts of the Navier-Stokes equations into algebraic equations. 
+We now turn to the formulation of the Navier-Stokes equations in a Fourier domain. The Fourier domain provides a convenient formulation to analyse the underlying mechanisms of turbulence, as we shall see. Recall that in the Fourier domain, derivatives become multiplication of wavenumbers which converts the spatial parts of the Navier-Stokes equations into algebraic equations. 
 
 To demonstrate the formulation in Fourier space, let us cast the standard Navier-Stokes equations into Fourier space. 
 \begin{align}
@@ -105,14 +138,14 @@ Isolating for pressure and substituting back into (\ref{NS_fourier_1}) we obtain
 \begin{align}
 \frac{\partial \uhat}{\partial t} + \mathcal{F}(\textbf{u}\cdot\nabla\textbf{u})(\textbf{1}-\frac{\kvec\kvec}{k^{2}})= - \nu k^{2}\uhat\label{NS_fourier_2}.
 \end{align}
-This result is unsurprising, since all we have done is take the divergence of the Navier-Stokes equations, which in Fourier space corresponds to taking the dot product with respect to $\kvec$. But using this observation we can avoid the need for solving the pressure altogether because the pressure term is orthogonal to the $\uhat$-plane. But what about the advection term? As can be seen in (\ref{NS_fourier_2}), it has this factor $\textbf{1} - \kvec\kvec/k^{2}$ multiplying it. This term represents a projection into the $\uhat$-plane. The advection term can thought of a vector that is pointing in some direction inbetween the planes of $\kvec$ and $\uhat$. By projecting the advection term into the $\uhat$-plane, we would have a set of equations that are independent of the pressure completely.
+This result is unsurprising, since all we have done is take the divergence of the Navier-Stokes equations, which in Fourier space corresponds to taking the dot product with respect to $\kvec$. But using this observation we can avoid the need for solving the pressure altogether because the pressure term is orthogonal to the $\uhat$-plane. But what about the advection term? As can be seen in (\ref{NS_fourier_2}), it has this factor $\textbf{1} - \kvec\kvec/k^{2}$ multiplying it. This term represents a projection into the $\uhat$-plane. The advection term can thought of a vector that is pointing in some direction in-between the planes of $\kvec$ and $\uhat$. By projecting the advection term into the $\uhat$-plane, we would have a set of equations that are independent of the pressure completely.
 
 \subsection{Projection Tensor}
 In order to project the Navier-Stokes equations onto the $\uhat$-plane, we define the following projection operator
 \begin{align}
 \textbf{P}=\textbf{1} - \frac{\kvec\kvec}{k^{2}} = P_{ij}(\kvec) = \delta_{ij} - \frac{k_{i}k_{j}}{k^{2}}
 \end{align}
-where we are using Einstein summation notation \cite{lesieur,wald}. It is straight forward to verify that $P_{ij}P_{jk}=P_{ik}$ or in matrix notation $\textbf{P}^{2}=\textbf{P}$, in other words the projection tensor is idempotent. Idepotence is a defining feature of projection operators \cite{MeyerLinAlg}. It is straightforward to verify that $k_{j}P_{ij}=0$ and $\hat{u}_{j}P_{ij}=\hat{u}_{i}$. These simple observations confirm that the projection tensor projects a vector onto the $\uhat$-plane. 
+where we are using Einstein summation notation \cite{lesieur,wald}. It is straight forward to verify that $P_{ij}P_{jk}=P_{ik}$ or in matrix notation $\textbf{P}^{2}=\textbf{P}$, in other words the projection tensor is idempotent. Idempotence is a defining feature of projection operators \cite{MeyerLinAlg}. It is straightforward to verify that $k_{j}P_{ij}=0$ and $\hat{u}_{j}P_{ij}=\hat{u}_{i}$. These simple observations confirm that the projection tensor projects a vector onto the $\uhat$-plane. 
 
 Applying $P_{ij}$ to (\ref{NS_fourier_1}) we obtain the following 
 \begin{align}
@@ -148,10 +181,10 @@ Using this result we can reformulate the Navier-Stokes equations into a form to 
 \end{align}
 where the $\mathcal{F},\mathcal{F}^{-1}$ can be evaluated by FFTs, as discussed above.
 
-This reformulation of the Navier-Stokes equations into Fourier space simplifies numerical calculations immensely and provides many advantages over the real space formulation. The absence of the pressure term means that there is no Poisson equation to be solved at each time-step for the pressure. If one did want the pressure, one can solve (\ref{pressure_fourier_1}) for $\hat{p}$. In addition there is no need to enforce a divergence free solution\footnote{Except possibily at the initial time step, see Section 3.} as the equations are formulated by definition to satisfy divergence free condition. The only additional technical difficulty is evaluating the vorticity, but this can easily be handled because of the simple structure of the curl. 
+This reformulation of the Navier-Stokes equations into Fourier space simplifies numerical calculations immensely and provides many advantages over the real space formulation. The absence of the pressure term means that there is no Poisson equation to be solved at each time-step for the pressure. If one did want the pressure, one can solve (\ref{pressure_fourier_1}) for $\hat{p}$. In addition there is no need to enforce a divergence free solution\footnote{Except possibly at the initial time step, see Section 3.} as the equations are formulated by definition to satisfy divergence free condition. The only additional technical difficulty is evaluating the vorticity, but this can easily be handled because of the simple structure of the curl. 
 
 \subsection{Integrating Factor}
-Another advantage of the Fourier formuation is the ability to exactly integrate the diffusion term. Let us denote the advective projective term as $F(\hat{u})$ and we have
+Another advantage of the Fourier formulation is the ability to exactly integrate the diffusion term. Let us denote the advective projective term as $F(\hat{u})$ and we have
 \begin{align}
 \frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat = F(\uhat) 
 \end{align}
@@ -197,5 +230,4 @@ where $i$ is an even integer. Solving for $\nu_{i}$ then gives the following rep
 Throughout this thesis, we will use $i=4$. 
 
 \subsection{Concluding Remarks (rename)}
-Although we have done all our manipulations in Fourier space, we could have equally well formulated the above equations in real space. The idea of projecting the velocity field onto the $\uhat$-plane is motivated by the Helmholtz decomposition. This decomposition states, for any $C^{2}$ vector field in a bounded region of $\mathbb{R}^{3}$, we can decompose the vector field into a divergence-free and curl-free component. The divergence free part corresponds to taking the divegence of the Navier-Stokes equations which would yield the Poisson equation for the pressure. Taking the curl of the Navier-Stokes equation - which we define to be the vorticity - would yield the vorticity equation which does not have a pressure term. 
-
+Although we have done all our manipulations in Fourier space, we could have equally well formulated the above equations in real space. The idea of projecting the velocity field onto the $\uhat$-plane is motivated by the Helmholtz decomposition. This decomposition states, for any $C^{2}$ vector field in a bounded region of $\mathbb{R}^{3}$, we can decompose the vector field into a divergence-free and curl-free component. The divergence free part corresponds to taking the divergence of the Navier-Stokes equations which would yield the Poisson equation for the pressure. Taking the curl of the Navier-Stokes equation - which we define to be the vorticity - would yield the vorticity equation which does not have a pressure term.
