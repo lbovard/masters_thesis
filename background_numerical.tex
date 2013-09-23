@@ -7,14 +7,14 @@
 %\item hyperviscosity
 %\end{itemize}
 
-In this chapter we discuss the numerical techniques and methods used in this thesis. In this thesis we use the spectral method to numerically solve the Navier-Stokes equations. Spectral methods provide a convenient and quick way to compute derivatives of sufficiently well-behaved periodic functions. In situations involving periodicity, they provide an advantage over other methods of evaluating derivatives, such as finite difference, as derivatives can be compued in $\mathcal{O}(n\log n)$ instead of the typical $\mathcal{O}(n^{2})$ of finite difference. A complete overview of spectral methods is beyond the scope of this thesis and we only discuss the key features needed for numerical work. Comprehensive reviews of spectral methods are provided in many books, e.g. Trefethen \cite{trefethen_spectral}, Boyd \cite{boyd2001}, and (spectral method in fluids book). 
+In this chapter we discuss the numerical techniques and methods used in this thesis. In this thesis we use the spectral method to numerically solve the Navier-Stokes equations. Spectral methods provide a convenient and quick way to compute derivatives of sufficiently well-behaved periodic functions. In evaluating derivatives of smooth periodic functions, spectral methods provide an advantage over other methods of evaluating derivatives, such as finite difference, as the derivatives can be computed to much great accuracy, often 10 digits, in exchange for only a relatively modest increase in complexity. Specifically, finite difference methods run in $\mathcal{O}(N)$ but the error tends to be on the order of $\mathcal{O}(N^{-1})$ while spectral methods run in $\mathcal{O}(n\log n)$ but the errors are on the order of $\mathcal{O}(N^{-p})$ when the function is $C^{p}$. A complete overview of spectral methods is beyond the scope of this thesis and we only discuss the key features needed for numerical work. Comprehensive reviews of spectral methods are provided in many books, e.g. Trefethen \cite{trefethen_spectral}, Boyd \cite{boyd2001}, and (spectral method in fluids book). 
 
 FIX nlogn vs n2 to n. Spectral methords use FFT to reduce n2 to nlogn while fd. uses n but accuracy. 
 
 \section{Spectral Methods Motivation}
 Spectral methods have their origins in the Fourier transform. Let us denote the Fourier transform, $\mathcal{F}$, of $f(x)$ as $\mathcal{F}(f(x)) = \hat{f}(k)$, given by
 \begin{align}
-\mathcal{F}(f(x)) = \hat{f}(k) = \int_{-\infty}^{\infty}dxe^{-ikx}f(x)
+\mathcal{F}(f(x)) = \hat{f}(k) = \int_{-\infty}^{\infty}dxe^{-ikx}f(x)\label{fouriertransform}
 \end{align}
 Now consider the Fourier transform of the derivative $df/dx$. 
 \begin{align}
@@ -25,37 +25,71 @@ and thus the Fourier transform of a derivative is just $ik$ times the Fourier tr
 \frac{d^{n}f}{dx^{n}} = \frac{1}{2\pi} \int_{-\infty}^{\infty}dx e^{ikx}(ik)^{n}\hat{f}(k)
 \end{align}
 
-Computationally, if we have a quick way to evaluate $\hat{f}(k)$ from $f(x)$ and $f(x)$ from $\hat{f}(k)$, then the $n^{\text{th}}$ derivative is easy to compute and results from multiplying by the simple pre-factor $(ik)^{n}$. 
+Computationally, if we have a quick way to evaluate $\hat{f}(k)$ from $f(x)$ and $f(x)$ from $\hat{f}(k)$, then the $n$th derivative is easy to compute: compute $\hat{f}(k)$, multiply by $(ik)^{n}$, invert $(ik)^{n}\hat{f}(k)$. The operation to quickly compute the Fourier transform is called, rather unsurprisingly, the fast Fourier transform, also commonly known as the FFT. 
 
 \section{FFT and Spectral Derivatives} 
 More discussion on the FFT here. Basic definition. Some examples of spectral differentiation from Trefethen.
 
+Let us now investigate how we can quickly compute the Fourier transform. In analogue to the Fourier transform, we define the discrete Fourier transform\footnote{Note that there is no universal standard on where to put the factors of $N$ and $2\pi$.}
+\begin{align}
+\hat{v}_{k} = \frac{2\pi}{N}\sum_{j=1}^{N} e^{-ikx_{j}}v_{j},\qquad k=-\frac{N}{2}+1,\ldots,\frac{N}{2}
+\end{align}
+and the inverse Fourier transform 
+\begin{align}
+v_{j} = \frac{1}{2\pi}\sum_{k=-N/2+1}^{N/2} e^{ikx_{j}}\hat{v}_{k}, \qquad j=1,\ldots, N
+\end{align}
+Note that the range of the wavenumbers is from $-N/2+1$ not $-N/2$ due to the $2\pi$ periodicity so wavenumbers $-N/2$ are equivalent to $N/2$ and we do not want to count this wavenubmer twice. 
+
+From the definitions of the DFT and inverse DFT, we can see a close analogy to the continuous Fourier and inverse Fourier transforms. Analagously, it can be shown \cite{trefethen_spectral} that these are the correct discrete analogies. Thus if $v_{j}$ are the samples of some function, by compute the DCT $\hat{v}_{k}$, multiplying by $ik$ and computing the inverse DFT will produce the derivative of the sampled function $v'_{j}$. However, there is some subtleness involved in treating the wavenumber $N/2$, but to make a long story short, we simply set it to $0$ and for details see \cite{trefethen_spectral}.  
+
+Our goal has still not been reached because we are still left with computer $\mathcal{O}(N^{2})$ terms. This is where the development of the FFT comes into play.  
+
+The algorithm to compute the FFT is a divide and conquer algorithm. The basic idea is to notice that computing the discrete Fourier transform can be divded into even and odd terms. From there, which can be computed independently of each other. Thus assuming $N$ is a power of two, we have two new discrete Fourier transform problems of size $N/2$. Each other those problems can themselves be decomposed into problems of size $N/4$. Repeating this process recursively we are able to divide the computation of the DFT into $\mathcal{O}(\log N)$ problems. Computing the DFT of each problem takes roughly $\mathcal{O}(N)$ and thus the total running time is on the order of $\mathcal{O}(N\log N)$. This is only a brief overview of the result for the case of $N$ being a power of two. In this simple case, it is easy to prove rigorously from the recursion relationship that the running time is $\mathcal{O}(N\log N)$ using the Master theorem (cite CLRS). 
+
+The derivation and implementation of the FFT for general values of $N$ is an interesting and complicated question that has sparked a lot of research into the best way to decompose the problem. Additionally, the actual implementation details can differ depending on the value of $N$, the type of computer, and the type of data being considered. It is beyond the scope of the thesis to discuss any sorts of details and further details technical and hardware details can be found in (cite that FFT implementation book) and implementation details can be found in (cite FFTW manual).
+
+For exaple, we follow \cite{trefethen_spectral} and demonstrate spectral differentiation using a simple example. Put the result here. 
+
+As we can see, when the original function is sufficiently smooth and periodic, the accuracy of the derivative is very good and is far superior to that of finite difference methods. A complete discussion of the specific smoothness and accuracy is contained in Chapter 4 of \cite{trefethen_spectral}.
 \section{Dealiasing} 
-In the previous section we demonstrated that spectral differentiation can produce very accurate results in only $\mathcal{O}(N\log N)$ operations. However, we have only considered the spectral derivative of a single function $f(x)$, the question naturally arises about what happens if we have two functions, say $f(x)g(x)$, (reword this sentence). Consider the following general non-linear PDE, (add in Durran ref)
+In the previous section we demonstrated that spectral differentiation can produce very accurate results in only $\mathcal{O}(N\log N)$ operations. However, we have only considered the spectral derivative of a single function $f(x)$, the question naturally arises about what happens if we have more general expressions, for example advection like terms in the Navier-Stokes equations 
+\begin{align}
+u\frac{\partial u}{\partial x} + v\frac{\partial u}{\partial y} +w\frac{\partial u}{\partial z}
+\end{align}
+where we now have a product of a function and a derivative. Such terms are known as a convolution and require a more careful treatment. In this section, we introduce two closely related methods for evaluating expressions of the above form, the spectral method and the pseudospectral method. For this we carefull follow the treatment of Durran \cite{durran}. 
+
+Consider the following general 1D non-linear PDE
 \begin{align}
 \frac{\partial \psi}{\partial t} + F(\psi) = 0
 \end{align}
-where $F(\psi)$ is some general nonlinear function. Follow Durran, let us consider a series expansion of the form
+where $F(\psi)$ is some general nonlinear function. Consider seeking a series expansion of the form
 \begin{align}
 \psi(x,t)\approx \phi(x,t) = \sum_{k=1}^{N}a_{k}(t)\varphi_{k}(x)
 \end{align}
-where $\varphi_{k}$ is some basis function that we are interested in expanding the solution in. Some examples of such functions might be complex exponentials, Bessel functions, or spherical harmonics, however in general we will not be able to find the eigenfunctions that provide the natural basis to seek a series expansion. Thus, we are interested in not finding the correct $\varphi_{k}$ but instead focus picking a basis and appropriately choosing $a_{k}(t)$ to minimise the error. However we choose to evaluate this error leads to different methods of solving the problem. Here we consider the Galerkin approximation. It requires that the residual, 
+where $\varphi_{k}$ is some basis function that we are interested in expanding the solution in. Some examples of such functions might be complex exponentials, Bessel functions, or spherical harmonics, however, in general,  we will not be able to find the eigenfunctions that provide the natural basis to seek a series expansion. Without the proper basis functions, it is clear that the approximate solution will never exactly solve the original PDE and we have to determine a way to minimise the error. For many problems, there is often some degree of symmtery so choosing a certain basis makes sense. For example, a problem within a box, it makes sense to choose complex exponentials as a base or if the problem is based on a sphere, spherical harmonics are a natural choice. Thus, we are interested in not finding the correct $\varphi_{k}$ but instead focus picking a basis and appropriately choosing $a_{k}(t)$ to minimise the residual, 
 \begin{align}
 R(\phi) = \frac{\partial \phi}{\partial t} + F(\phi),
 \end{align}
-to be orthogonal to the basis functions $\varphi_{k}$, i.e.
+in some way.  
+
+How we choose to evaluate this error leads to different methods of solving the problem. Right now we consider the so-called "spectral method" which is a special case of a very general technique called Galerkin approximation.  The spectral method requires the residual be orthogonal to the basis functions $\varphi_{k}$, i.e.
 \begin{align}
 \int_{S}R(\phi(x))\varphi_{k}(x)dx = 0 \qquad k=1,\ldots,N.
 \end{align}
-By requiring the above integral to be minimised, and choosing orthogonal basis functions, it can be shown\cite{durran} that the resulting system of ODEs for the above is
+For the special case of the spectral method, we require that the basis functions be orthogonal. If this restriction is relaxed the resulting method is known as the finite element method. 
+
+By requiring the above integral to be minimised, it can be shown\cite{durran} that the resulting system of ODEs for the above is
 \begin{align}
 \frac{d a_{k}}{dt} = -\frac{1}{M_{k,k}}\int_{S}\left[F\left(\sum_{n=1}^{N}a_{n}\varphi_{n}\right)\varphi_{k}\right]dx \qquad k=1,\ldots,N
 \end{align}
-where $M_{k,k}=\langle \varphi_{k},\varphi_{k}\rangle$. This method is called the spectral method and differences from finite element methods by requiring an orthogonal basis. 
-
-Now let use the spectral method to solve the 1D advection equation with variable windspeed,
+where $M_{k,k}=\langle \varphi_{k},\varphi_{k}\rangle$. For our work, we are interested in a specific case of basis functions, $\varphi_{k}(x)=e^{ikx}$ and the inner product to be the standard inner product for complex functions
 \begin{align}
-\frac{\partial\phi}{\partial t} + c(x,t)\frac{\partial \phi}{\partial x} =0
+\int_{S}g(x)h^{*}(x)dx=0 
+\end{align}
+
+Using the above, let use the spectral method to solve the 1D advection equation with variable windspeed,
+\begin{align}
+\frac{\partial\phi}{\partial t} + c(x,t)\frac{\partial \phi}{\partial x} =0, F(\phi) = c(x,t)\frac{\partial \phi}{\partial x}
 \end{align}
 Let us expand out $\phi(x,t)$ as the sum of $N=2K+1$ Fourier modes
 \begin{align}
@@ -73,11 +107,37 @@ and upon using the orthogonality of the integral, we obtain
 \begin{align}
 \frac{da_{k}}{dt} = -\sum_{\substack{m+n=k\\ |m|,|n|\le K}} inc_{m}a_{n}
 \end{align}
-where we require that $n+m=k$ and $|n|,|m|\le K$. If we want to evaluted this sum directly, we would need to evalute $\mathcal{O}(N^{2})$ operations due to the double sum required to evalute the convolution.
+where we require that $n+m=k$ and $|n|,|m|\le K$. If we want to evaluted this sum directly, we would need to evalute $\mathcal{O}(K^{2})$ operations due to the double sum required to evalute the convolution. Historically, this was a barrier for spectral methods because even though they provided accurate results, this $\mathcal{O}(K^{2})$ bottleneck did not allow for larger numerical simulations, where $\mathcal{O}(K)$ finite differences method could. (ref)
 
-HERE GOES THE EXPLANATION OF THE CONVOLUTION SUM EVALUATION USING FFTS. 
+In order to get around this bottleneck, we can turn the $\mathcal{O}(K^{2})$ to $\mathcal{O}(K\log K)$, however we do this at the cost of additional processing. The general idea is as follows: transform the Fourier coefficients to real space in $\mathcal{O}(K\log K)$, multiply the two terms together at each grid point in $\mathcal{O}(K)$, and transform back to Fourier space in $\mathcal{O}(K\log K)$. The resulting algorithm is $\mathcal{O}(K\log K)$. However, if we were to implement this naively, errors would arise, due to the phenomena of aliasing. 
 
-Collectively this method is known as the spectral method. 
+Aliasing is an effect that is common. An exagerated example, known as the wagon wheel effect (Wikipedia) is when an object appears to be stationary but is really moving. For example, imagine a camera that takes a picture every second of a turbine, but the turbine is moving at 10 revolutions per second. For someone looking at the shots from the camera, they would claim the turbine isn't moving. If the turbine is moving slightly faster, say 10.1 revolutions per second, the camera would show that the turbine is moving, albeit rather slowly. If it were moving slightly slower, say 9.9 revolutions per second, the camera would show the turbine moving backwards.
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{aliassine.pdf}
+\caption{Different sine curves that fit the same set of data points. THis is an example of aliasing. Source http://en.wikipedia.org/wiki/File:AliasingSines.svg}
+\end{center}
+\label{aliassine}
+\end{figure}
+Mathematically, we can see a similar phenomena by sampling a sine wave. Consider Figure~\ref{aliassine} which has 11 points. The short wavelength red sine curve samples these points with a short wavelength while a longer wavelength blue curve also samples, despite being non-existant in the actual data. The goal is to minimise this effect. 
+
+To illustrate this consider two functions $f(x),g(x)$ and we want to compute the Fourier coefficients so that
+\begin{align}
+f(x)g(x) = \sum_{m=-K}^{K} p_{k}e^{ikx}
+\end{align}
+and we can expand $f(x),g(x)$ as Fourier series
+\begin{align}
+f(x) = \sum_{m=-K}^{K}a_{m}e^{imx}, \qquad g(x) = \sum_{n=-K}^{K}b_{n}e^{inx}
+\end{align}
+The above algorithm states that we convert the Fourier coefficients $a_{m},b_{n}$ to real space and multiply. Suppose that in real space the spacing between the grid points is
+\begin{align}
+x_{j} = \frac{2\pi j}{2N+1}
+\end{align}
+however how do we choose $N$? Naively, it seems logical to set that $N=K$ so that both real and Fourier space have the same number of co-efficients. This naive choice leads to aliasing error and instead we must choose $N>K$ to avoid this aliasing error. To get intuition for why, aliasing error arises when two poorly resolved waves are multiplied together and produce a longer wavelength wave, as discussed above in Figure~\ref{aliassine}. We can avoid this if all short wavelengths are resolved properly. (insert figure 6.2 Durran).
+
+To find the optimal value of $N$, consider the case in Figure. When we multiply two short wavelengths, we choose two large values of $k$, recalling that large $k$ is short wavelengths and small $k$ are long wavelengths. Also recall that multiplication of waves is addition of wavenumbers. Thus the resulting wavenumber 
 
 A closely related, but different method is known as, somewhat confusingly, as the pseudospectral method.  In this case, instead of enforcing that the residual is orthogonal to the basis functions, we instead choose a collocation method, i.e.
 \begin{align}
@@ -149,7 +209,7 @@ where we are using Einstein summation notation \cite{lesieur,wald}. It is straig
 
 Applying $P_{ij}$ to (\ref{NS_fourier_1}) we obtain the following 
 \begin{align}
-\frac{\partial \uhat}{\partial t} + \textbf{P}\mathcal{F}(\textbf{u}\cdot\nabla\textbf{u}) =  -\nu k^{2}\uhat\label{NS_fourier_2}
+\frac{\partial \uhat}{\partial t} + \textbf{P}\mathcal{F}(\textbf{u}\cdot\nabla\textbf{u}) =  -\nu k^{2}\uhat\label{NS_fourier_3}
 \end{align}
 where $\textbf{P}$ is acting on the Fourier transform of the advection term. In order to compute the Fourier transform of the advection term, we note that 
 \begin{align}
