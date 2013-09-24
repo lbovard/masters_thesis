@@ -1,12 +1,13 @@
 *.aux
+*.svg
 *.lof
+masters_thesis.pdf
 *.log
 *.lot
 *.out
 *.toc
 *.blg
 *.swp
-*.pdf
 *.tex~
 *.bbl
 uw-ethesis*
