@@ -170,6 +170,26 @@ with a Gaussian initial condition. We solve the above with an RK4 scheme, but th
 
 Discuss dealiasing of linear and nonlinear code as well. Show plots. 
 \section{Timestepping and Examples}
+When we choose a time-stepping scheme, the stability of the scheme is important to know. The stability region tells us when we can except our solution to not blow up. To do this we define the ampltitude A to be
+\begin{align}
+A = \frac{\phi_{n+1}}{\phi_{n}}
+\end{align}
+for the Adams-Bashforth scheme we have 
+\begin{align}
+\phi_{n+1} = \phi_{n} + \frac{\dt}{2}(3F(\phi_{n}) - F(\phi_{n-1}))
+\end{align}
+and stability is defined to be 
+\begin{align}
+|A|^{2} \le 1
+\end{align}
+since $A$ can potentially be complex. The reasoning from this equation arises from rearranging the above so that $\phi_{n+1}=A\phi_{n}$. If $|A|\le 1$ then the solution is not growing in time. If $|A|>1$ then at each time-step the solution is being multiplied by a number greater then one, hence it is growing. 
+
+To investigate the stability region, the following equation is used\cite{durran}
+\begin{align}
+\frac{d\phi}{dt} =  (\lambda + i\omega)\phi
+\end{align}
+where $\lambda,\omega$ are real numbers.  
+
 More complete discussion of time-stepping to be included. 
 
 In this section we demonstrate the differences between solving PDEs in real space vs Fourier space. Consider the following one dimensional wave equation\cite{trefethen_spectral}
@@ -187,8 +207,14 @@ the Adams-Bashforth scheme is
 u^{n+1} = u^{n} + \frac{\dt}{2}[3F(u^{n})-F(u^{n-1})]
 \end{align}
 Since the Adams-Bashforth scheme uses a previous time-step, we will use forward Euler for the first time-step. To evaluate $F(u)$ we will use the spectral differentiation, as discussed above. 
-Figures go here.
-
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{spectral_example.pdf}
+\caption{Spectral solution to the advection equation with variable windspeed. Figure is a reproduced version of Output 6 of Trefethen \cite{trefethen_spectral}}
+\end{center}
+\label{spectral_example}
+\end{figure}
+Fig.~\ref{spectral_example} demonstrates the solution to the above advection equation using spectral methods. As can be observed, the solution is very smooth and evolves very clearly for only $N=128$. (add more)
 
 Add 2D NS solver example??
 
@@ -293,8 +319,15 @@ Using the identities in (\ref{int_fact_ident}) the scheme reduces to
 and the diffusion term has been reduced to a multiplication by a constant factor $g(-\alpha\dt)$.
 
 \subsection{Hyperviscosity}
-Hyperviscosity is a method of simulating higher Reynolds number flow by replacing the diffusion term with higher derivatives. In the Fourier picture, the diffusion term is $-\nu k^{2}\uhat$. The diffusion timescale $\tau_{d}$ is given by the inverse of $\nu k^{2}$. This implies that the longest wavelengths (smallest $k$) have very long diffusive time-scales while the shortest wavelengths (larger $k$) have very short diffusive time-scales. This picture makes physical sense since viscosity plays a role at the very small scales. As we decrease the viscosity $\nu$ the time-scales of all scales increases. Numerically, we decrease the viscosity too much, resolution of the smallest scales becomes critical and can lead to unwanted grid-scale effects. Thus, in order to decrease the diffusive time-scales of all wavelengths we can instead vary the power of the wave number. For example, going from $k^{2}$ to $k^{4}$ the time-scales of the various wavelengths would decrease. This is illustrated in Figure (blah)
+Hyperviscosity is a method of simulating higher Reynolds number flow by replacing the diffusion term with higher derivatives. In the Fourier picture, the diffusion term is $-\nu k^{2}\uhat$. The diffusion timescale $\tau_{d}$ is given by the inverse of $\nu k^{2}$. This implies that the longest wavelengths (smallest $k$) have very long diffusive time-scales while the shortest wavelengths (larger $k$) have very short diffusive time-scales. This picture makes physical sense since viscosity plays a role at the very small scales. As we decrease the viscosity $\nu$ the time-scales of all scales increases. Numerically, we decrease the viscosity too much, resolution of the smallest scales becomes critical and can lead to unwanted grid-scale effects. Thus, in order to decrease the diffusive time-scales of all wavelengths we can instead vary the power of the wave number. For example, going from $k^{2}$ to $k^{4}$ the time-scales of the various wavelengths would decrease. This is illustrated in Fig~\ref{hyper_vis_example}.
 
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{hyper_vis_example.pdf}
+\caption{The inverse diffusion times, $1/\tau_{d}$, of the wavenumbers for the regular viscosity, blue, and the hyperviscosity case, red. The hyperviscosity inverse diffusion times are lower then the regular viscosity case, corresponding to longer diffusion times. This has the effect of simulating larger Reynolds numbers. Note that at $k_{max}$ the two cases coincide.}
+\end{center}
+\label{hyper_vis_example}
+\end{figure}
 We can only have even powers of $k$ since odd powers of $k$ correspond to dispersion. 
 
 In order to do this numerically, we scale by the maximum wavenumber $k_{max}$. We want the diffusive timescales of the smallest scales to be the same for both the regular viscosity and the hyperviscosity. That is we want
