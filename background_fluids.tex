@@ -218,24 +218,59 @@ We have mentioned two dimenionless numbers in stratified flow, the Reynolds numb
 For reference, we reproduce the Boussinesq equations here
 
 \begin{align}
-\frac{\partial \textbf{u}_{h}'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla'_{h}\textbf{u}_{h}'+u_{z}'\frac{\partial \textbf{u}_{h}'}{\partial z'} &= -\frac{1}{\rho_{0}}\nabla'_{h}p' + \nu \nabla'^{2}\textbf{u}_{h}\label{scaling_horz},\\
-\frac{\partial u_{z}'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla'_{h}u_{z}'+u_{z}'\frac{\partial u_{z}'}{\partial z'} &= -\frac{1}{\rho_{0}}\frac{\partial p'}{\partial z'} - \frac{\rho' g}{\rho_{0}} + \nu \nabla'^{2}u_{z},\label{scaling_vert}\\
-\nabla'_{h}\cdot\textbf{u}_{h}' + \frac{\partial u_{z}'}{\partial z'} &=0,\label{scaling_cont}\\
-\frac{\partial \rho'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla_{h}'\rho' + u_{z}'\frac{\partial \rho'}{\partial z'} + \frac{\partial \rho}{\partial z'}u_{z}'&=D\nabla^{2}\rho ',\label{scaling_moment}
+\frac{\partial \textbf{u}_{h}'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla'_{h}\textbf{u}_{h}'+u_{z}'\frac{\partial \textbf{u}_{h}'}{\partial z'} &= -\frac{1}{\rho_{0}}\nabla'_{h}p' + \nu \nabla'^{2}\textbf{u}_{h},\\
+\frac{\partial u_{z}'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla'_{h}u_{z}'+u_{z}'\frac{\partial u_{z}'}{\partial z'} &= -\frac{1}{\rho_{0}}\frac{\partial p'}{\partial z'} - \frac{\rho' g}{\rho_{0}} + \nu \nabla'^{2}u_{z},\\
+\nabla'_{h}\cdot\textbf{u}_{h}' + \frac{\partial u_{z}'}{\partial z'} &=0,\\
+\frac{\partial \rho'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla_{h}'\rho' + u_{z}'\frac{\partial \rho'}{\partial z'} + \frac{\partial \rho}{\partial z'}u_{z}'&=D\nabla^{2}\rho ',
 \end{align}
 where the primed quantities denote the dimenional quantities. 
 
-(Add this above). An observation from both experimental and numerical results of stratified flow considered here is that the flow is predominantly horizontal but has strong vertical variability. 
+(Add this above). An observation from both experimental and numerical results of stratified flow considered here is that the flow is predominantly horizontal but has strong vertical variability. This difference in the vertical and horizontal directions suggests defining two length scales, the horizontal length scale $L_{h}$ and the vertical length scale $L_{v}$. Associated with this seperation we introduce the horizontal velocity scale $U$ and the vertical velocity scale $V$. The resulting scaling is
+\begin{align}
+x'=L_{h}x,\qquad y' =L_{h}y, \qquad z'=L_{v}z, \qquad \textbf{u}_{h}' = U\textbf{u}, \qquad u_{z}' = Vu_{z}
+\end{align}
+We also define another useful quantity that plays an important role in the scaling of stratified flows, the aspect ratio
+\begin{align}
+\delta = \frac{L_{v}}{L_{h}}.
+\end{align}
+For the time scale, we choose the advective time scale (add Riley, BC ref) so that 
+\begin{align}
+t' = \frac{L_{h}}{U}t
+\end{align}
 
-The scaling argument of RWML is 
 \begin{align}
 \textbf{u}_{h}' = U\textbf{u}_{h}, u_{z}' = U\frac{F_{h}^{2}}{\delta}u_{z}, \rho' = \frac{U^{2}\rho_{0}}{gL_{v}}\rho'', p' = \rho_{0}U^{2}p, x'=L_{h}x, y'=L_{h}y, z'=L_{v}z, t'=\frac{L_{h}}{U}t
 \end{align}
-This scaling now leads to the following set of equations (7.4-7.7) of Riley-Lindborg. Note that $F_{v}=F_{h}/\delta$. Lilly was the first to write these equations down although he assumed anistorophy, i.e. $\delta=1$. Let us now investigate the limit of strong stratification, i.e. $F_{h}\rightarrow 0$ but let us leave the behaviour of $F_{h}/\delta$ undetermined. This results in (7.8-7.11) of Riley-Lindborg.
+This scaling now leads to the following set of equations (cite RL)
+\begin{align}
+\frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h}+\frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \textbf{u}_{h}}{\partial z} &= -\nabla_{h}p + \frac{1}{\Re}\left(\nabla^{2}_{h}\textbf{u}_{h}+\frac{1}{\alpha^{2}}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}}\right),\\
+F_{h}^{2}\left(\frac{\partial u_{z}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}u_{z}+\frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial u_{z}}{\partial z}\right) &= -\frac{\partial p}{\partial z} - \rho + \frac{F_{h}^{2}}{\Re}\left(\frac{1}{\alpha^{2}}\frac{\partial u_{z}}{\partial z^{2}} + \nabla^{2}_{h}u_{z}\right)\\
+\nabla_{h}\cdot\textbf{u}_{h} + \frac{F_{h}^{2}}{\alpha^{2}}\frac{\partial u_{z}}{\partial z} &=0,\\
+\frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho + \frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \rho}{\partial z} &= u_{z} + \frac{1}{\Re Sc}\left(\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} + \nabla^{2}_{h}\rho\right)
+\end{align} 
+where 
+\begin{align}
+\Re = \frac{UL_{h}}{\nu}, \qquad F_{h} = \frac{U}{L_{h}N},\qquad Sc = \frac{\nu}{D}
+\end{align}
+Lilly was the first to write these equations down although he assumed istrophy, i.e. $\delta=1$. 
 
-Now RWML scaling assumed that as $F_{h}\rightarrow 0$ then so does $F_{h}/\delta$. Thus the resulting equations are 
+Let us now investigate the limit of strong stratification, i.e. $F_{h}\rightarrow 0$ but let us leave the behaviour of $F_{h}/\delta$ undetermined. Additionally, let us consider $\Re\gg 1$ so, for the purposes of the scale analysis, ignore them. This results in the following equations 
+\begin{align}
+\frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h}+\frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \textbf{u}_{h}}{\partial z} &= -\nabla_{h}p + \frac{1}{\Re}\frac{1}{\alpha^{2}}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}},\\
+0&= -\frac{\partial p}{\partial z} - \rho  \\
+\nabla_{h}\cdot\textbf{u}_{h}+ \frac{F_{h}^{2}}{\alpha^{2}}\frac{\partial u_{z}}{\partial z} &=0\\
+\frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho + \frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \rho}{\partial z} &= u_{z} + \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
+\end{align} 
+It was initially assumed that as $F_{h}\rightarrow 0$ then so does $F_{h}/\delta$. Thus the resulting equations are 
+\begin{align}
+\frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h} &= -\nabla_{h}p + \frac{1}{\Re}\frac{1}{\alpha^{2}}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}},\\
+0&= -\frac{\partial p}{\partial z} - \rho  \\
+\nabla_{h}\cdot\textbf{u}_{h} &=0\\
+\frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho &= \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
+\end{align} 
 
-These equations have been well known in the atmosopheric modelling community. Notice that these equations have been somewhat decoupled. This led Lilly to conjecture that stratified turbulence in the strong stratification limit will obey 2D turbulence. (add link to review of 2D turbulence). 2D turbulence exhibits an inverse energy cascade however this has not been observed in stratified turbulence (cite).
+
+These equations have been well known in the atmosopheric modelling community. Notice that these equations have been This led Lilly to conjecture that stratified turbulence in the strong stratification limit will obey 2D turbulence. (add link to review of 2D turbulence). 2D turbulence exhibits an inverse energy cascade however this has not been observed in stratified turbulence (cite).
 
 
 Building on the work of RMWL, BC modified the argument suggesting that in the limit of strong stratifications that instead $F_{h}/\delta\rightarrow 1$ as $F_{h}\rightarrow 1$. This scaling analysis leads to $L_{v} \sim U/N$ which is the result obtained for the zigzag instability.
