@@ -268,13 +268,17 @@ It was initially assumed that as $F_{h}\rightarrow 0$ then so does $F_{h}/\delta
 \nabla_{h}\cdot\textbf{u}_{h} &=0\\
 \frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho &= \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
 \end{align} 
-
-
-These equations have been well known in the atmosopheric modelling community. Notice that these equations have been This led Lilly to conjecture that stratified turbulence in the strong stratification limit will obey 2D turbulence. (add link to review of 2D turbulence). 2D turbulence exhibits an inverse energy cascade however this has not been observed in stratified turbulence (cite).
+These equations have been well known in the atmosopheric modelling community. Notice that in these resulting equations, the horizontal and vertical velocities have become almost completely decoupled. They are not completely decoupled because there is still depenedence through the pressure term. However this decoupling led Lilly to conjecture that stratified turbulence in the strong stratification limit will obey 2D turbulence. (add link to review of 2D turbulence). 2D turbulence exhibits an inverse energy cascade however this has not been observed in stratified turbulence (cite).
 
 
 Building on the work of RMWL, BC modified the argument suggesting that in the limit of strong stratifications that instead $F_{h}/\delta\rightarrow 1$ as $F_{h}\rightarrow 1$. This scaling analysis leads to $L_{v} \sim U/N$ which is the result obtained for the zigzag instability.
 
+\begin{align}
+\frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h}+}}u_{z}\frac{\partial \textbf{u}_{h}}{\partial z} &= -\nabla_{h}p + \frac{1}{\Re}\frac{1}{\alpha^{2}}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}},\\
+0&= -\frac{\partial p}{\partial z} - \rho  \\
+\nabla_{h}\cdot\textbf{u}_{h}+ \frac{F_{h}^{2}}{\alpha^{2}}\frac{\partial u_{z}}{\partial z} &=0\\
+\frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho + \frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \rho}{\partial z} &= u_{z} + \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
+\end{align} 
 \subsection{Stratified Turbulence} 
 In this final section of background a few results from stratified turbulence that are releveant to the zigzag instability are discussed. A complete discussion of the generation of and full blown stratified turbuelence is beyond the scope of these this thesis and instead we refer the reader to a recent review of recent theoretical, numerical, and experimental results by Riley and Lindborg. 
 
