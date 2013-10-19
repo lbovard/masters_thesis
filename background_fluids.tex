@@ -1,10 +1,10 @@
 \chapter{Fluids Background}
 \section{Boussinesq approximation}
 
+The Navier-Stokes equations are the mathematical equations that govern the evolution of fluid flow. In the context of the ocean and atmosphere, the Navier-Stokes equations, along with an equation of state, provide good models of the evolution of fluid flow e.g. Batchelor \cite{batchelor}. For our purposes, however, these equations are too general and an approximation, called the Boussinesq approximation, can be made which results in a simplified version of the Navier-Stokes equations.
 
-The equations can be written in the dimensional from as (add derivation, Kundu? Batchelor? Others?)
 
-\begin{align}
+\begin{align} 
 \frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot \nabla \bm{u} = -\frac{1}{\rho_{0}}\nabla p - \frac{\rho g}{\rho_{0}}\hat{\bm{e}}_{z} + \nu \nabla^{2}\bm{u} \label{boussinesq1}\\
 \nabla \cdot \bm{u} =0 \label{boussinesq2}\\
 \frac{\partial \rho}{\partial t} + \bm{u}\cdot \nabla \rho = \kappa \nabla^{2}\rho - \frac{\partial \bar{\rho}}{\partial z} w\label{boussinesq3}
@@ -88,7 +88,7 @@ Expanding $\psi'$ as a complex exponential and denoting $\phi$ as the amplitude 
 \begin{align}
 (D^{2}-\alpha^{2})^{2}\phi = (i\alpha \Re)(U-c)(D^{2}-\alpha^{2})\phi -(i\alpha \Re)U''\phi
 \end{align}
-along with the appropriate boundary conditions. This equation is known as the Orr-Sommerfeld equation and has a rich history in the development of fluid mechanics. A comprehensive review of the various methods of solving this equation, WKB theory, asymptotics, perturbation theory, and so, is contained in \cite{drazinreid} (van Dyke). 
+along with the appropriate boundary conditions. This equation is known as the Orr-Sommerfeld equation and has a rich history in the development of fluid mechanics. A comprehensive discussion of the various methods of solving this equation and others like it using techniques such as WKB theory, asymptotics, and perturbation theory, is contained in \cite{drazinreid,vandyke,benderorszag}.
 
 This simple derivation has resulted in a single equation with three unknowns $\alpha,c,Re$ and by choosing different $Re$ and $\alpha$, we can determine a criteria for $c$. Although much work has been done at the beginning of the 20th century to derive approximate solutions to the Orr-Sommerfeld equation, numerically it is very easy to solve. We can reformulate the above equation as a generalised eigenvalue problem for a given parallel shear flow and solve the problem rather easily on a computer\cite{trefethen_spectral}.
 
@@ -115,20 +115,21 @@ y(x) = \frac{e^{x/\epsilon}-1}{e^{1/\epsilon}-1}.
 \end{align}
 In this equation, we cannot set $\epsilon=0$ because that results in a singular limit. Thus regardless of how small we choose $\epsilon$, there will be a thin layer, called the boundary layer, which is essential to the fluid flow. For a discussion of techniques in singular perturbation theory in terms of the linear stability of the Navier-Stokes equations see \cite{drazinreid}. (van Dyke). Hence, even though it seems reasonable to neglect the diffusion term to study turbulence, it is not as a promising avenue as one might first expect. In one sense, this singular limit of the Navier-Stokes equations contributes to making turbulence a very difficult problem to investigate analytically and numerically. 
 
+Finally, the experimental investigation into instability of fluids and the transition to turbulence produces very appealing images which really illustrate the beauty of fluid dynamics and the reader is recommended to peruse the coffee table book by Van Dyke \cite{vandykealbum} which illustrates many images from experiments of the classical results in stability theory. 
 
-\section{A Brief History of Vortex Instabilties}
+\section{The Zigzag Instability}
+\subsection{A Brief History of Vortex Instabilties}
 
-The origin of vortex instabilities begins with Lord Kelvin who in 1880 studied perturbations to columnar vortices and determined that they were stable. For the next hundred or so years, the theory of vortex instability was quiet until the field was re-ignited by the investigations Crow\cite{crow1970}. Motivated by engineering applications, Crow was an aeronautical engineer, he discovered that for long wavelength perturbations of a pair of counter-rotating vortices that there was a symmetric deformation of the vortices. This worked extended a few years later by Widnall et. al \cite{widnall1974} to small wavelength perturbations. Further investigations into small wavelength perturbations were carried out by numerous others\cite{moore1975,tsai1976} (add in ref 3-7 bc1999) however these studies only considerd vortex filaments (define). It was noticed in these studies that the streamlines of the vortex became elliptical. Following through, Pierrehumbert\cite{pierrehumbert1986} investigated the simple case of a single 2D vortex subject to a constant 3D pertubation. Further work was done by Bayly \cite{bayly1986} and Waleffe\cite{waleffe1990}.
+The origin of vortex instabilities begins with Lord Kelvin who in 1880 studied perturbations to columnar vortices and determined that they were stable. For the next 90 years, the theory of vortex instability remained relatively quiet until the field was re-ignited by the investigations Crow \cite{crow1970}. Motivated by engineering applications, Crow was an aeronautical engineer, he discovered that for long wavelength perturbations of a pair of counter-rotating vortices that there was a symmetric deformation of the vortices. This worked extended a few years later by Widnall et. al \cite{widnall1974} to small wavelength perturbations. Further investigations into small wavelength perturbations were carried out by numerous others e.g. \cite{moore1975,tsai1976}. It was noticed in these studies that the streamlines of the vortex became elliptical when perturbed. Motivated by this, Pierrehumbert \cite{pierrehumbert1986} investigated the simple case of a single 2D elliptical vortex subject to a constant 3D pertubation. Extensions to this elliptical model were done by Bayly \cite{bayly1986} and Waleffe \cite{waleffe1990} and led to this instability being called the elliptical instability. A complete and detailed history of the elliptical instability, including derivations and results of the above papers and nonlinear investigations, is presented in the review by Kerswell \cite{kerswell2002}. 
 
-Something about the work of the japanese guys + experimental results. 
+\subsection{Discovery of the Zigzag Instability}
+Experiments into this elliptical instability by Leweke and Williamson \cite{leweke1998} led Billant, Brancher, and Chomaz \cite{bc1999} to investigate the stability of a three dimensional vortex pair. Following up this work, Billant and Chomaz added in the effects of stratification and discovered a new type of instability at small scales that was distinct from the elliptical instability. They labeled this new instability the ``zigzag instability" due to its zigzag-like structure, as we shall see below. In a series of three papers they investigated experimentally\cite{bc2000a}, theoretically\cite{bc2000b}, and numerically \cite{bc2000c} the evolution of a pair of columnar vortices in a stratified tank.
 
-A complete and detailed history of the elliptical instability, including derivations and results of the above papers and nonlinear investigations, is presented in the review by Kerswell\cite{kerswell2002}.
-\section{Zigzag Instability}
-Motivated by the work above (cite), Billant and Chomaz investigate experimentally\cite{bc2000a}, theoretically\cite{bc2000b}, and numerically \cite{bc2000c} the evolution of a apair of columnar vortices in a stratified tank.
+First Billant and Chomaz investigated the zigzag instability experimentally \cite{bc2000a}. To do this, they investigated a columnar vortex pair created by a pair of flaps in a tank of stratified fluid. We now briefly discuss their experimental procedure since it provides important motivation for the resulting numerical study. 
 
-First Billant and Chomaz investigated the zigzag instability experimentally. To do this, they investigated a columnar vortex pair in a stratified fluid and investigated the evolution of the resulting flow. We now briefly discuss their experimental procedure since it provides important motivation for the resulting numerical study. 
+In order to study the effects of stratification on the evolution of vortices, they first needs to create the vortices. To do this, they used a pair of motor-controlled flaps whose initial angle and closing time could be controlled precisely by a computer. When the flaps were closed, a pair of counter-rotating vortices was produced. They found that the important determining factor in the creation of the vortices was the angle of the flaps. If the angle was too small, additional vortices created when the flaps finally stopped closing were being advected by the dipole and causing spurious instability. For large angles fluid that was initially inbetween the flaps was being injected in the flow and again causing spurious oscillations. In order to balance out these effects, an angle of $14^{\circ}$ was chosen. Additionally, to enforce the emergence of the zigzag instability, tape was applied to the flaps in order to force certain wavenumbers of the evolving flow, see Figure 8 of \cite{bc2000a} for the importance of forcing. 
 
-In order to study the effects of stratification on the evolution of vortices, they first needs to create the vortices. To do this, they used a pair of motor-controlled flaps whose initial angle and closing time could be controlled precisely by a computer. When the flaps were closed, a pair of counter-rotating vortices was produced. They found that the important determining factor in the creation of the vortices was the angle of the flaps. If the angle was too small, additional vortices created when the flaps finally stopped closing were being advected by the dipole and causing spurious instability. For large angles fluid that was initially inbetween the flaps was being injected in the flow and again causing spurious oscillations. In order to balance out these effects, an angle of $14^{\circ}$ was chosen. After fixing the seperation angle they found that by varying the closing time of the flaps, the velocity of the pair of vortices could be changed. Interestingly, the decay of the vortices, roughly $90$s, was independent of the closing time of the flaps. This variation in the velocity determined the experimental parameters for the experiment.
+After fixing the seperation angle they found that by varying the closing time of the flaps, the velocity of the pair of vortices could be changed. Interestingly, the decay of the vortices, roughly $90$s, was independent of the closing time of the flaps. This variation in the velocity determined the experimental parameters for the experiment. 
 
 The two important dimensional parameters in this experiment were the horizontal Froude number 
 \begin{align}
@@ -138,21 +139,28 @@ and the Reynolds numbers
 \begin{align}
 \Re= \frac{UR}{\nu}
 \end{align}
-where $U$ is the propagating velocity of the dipole as above, $R$ is the riadus of the dipole, $\nu$ is the viscosity of the tank, and $N$ is the buoyancy frequency. Here the viscosity $\nu$ and the radius $R$ were fixed by experimental conditions and could not be varied. Thus the only parameters that could be varied were $N$ and $U$. Since the Froude number was more difficult to vary, as changing it required draining and refilling the tank, the velocity was the only parameter that could be reasonably varied. Since $U$ shows up in both dimenionless numbers, changing $U$ resulted in the changing of both numbers, i.e. they are directly related by the following relationship
+where $U$ is the propagating velocity of the dipole as above, $R$ is the riadus of the dipole, $\nu$ is the viscosity of the tank, and $N$ is the buoyancy frequency. Here the viscosity $\nu$ and the radius $R$ were fixed by experimental conditions and could not be varied. Thus the only parameters that could be varied were $N$ and $U$. Since the buoyancy frequency was more difficult to vary, as changing it required draining and refilling the tank, only four stratifications were considered ranging from $N=1.26 \text{ rad s}^{-1}$ to $N=1.97 \text { rad s}^{-1}$. Thus the parameter that was easy to control was the initial velocity $U$. Because $U$ shows up in both dimenionless numbers, changing $U$ resulted in the changing of both numbers, i.e. they are directly related by the following relationship 
 \begin{align}
 \Re = F_{h}\frac{NR^{2}}{\nu}
-\end{align}
+\end{align} 
+and for the given stratification numbers the ranges for the Froude number were between $0.10 - 0.23$ and for the Reynolds number $200-450$.
 
-To determine a theoretical model of the dipole, they computed the FFT of the measured vorticity in order to determine the streamfunction. They found that there was a linear fit between the vorticity $\omega$ and the streamfunction $\psi$ such that $\omega = -k^{2}\psi$ where $k^{2}=1.15$ which, as we will show below, corresponds to a Lamb-Chaplygin dipole. 
+To determine a theoretical model of the dipole, they computed the FFT of the measured vorticity in order to determine the streamfunction. They found that there was a linear fit between the vorticity $\omega$ and the streamfunction $\psi$ such that $\omega = k^{2}\psi$ where $k^{2}=1.15 \text{cm}^{-2}$  which, as we will show below, corresponds to a columnar Lamb-Chaplygin dipole.
 
-Add in result about using tape to excite most important mode and vertical orientation. 
+(put in Figure 10 of BC 2000a)
 
-A discussion of the theoretical paper will go here.
+With all this set-up, Billant and Chomaz demonstrated the existence of new instability which they labeled as the zigzag instability. The name is motivated by the resulting structure, as demonstrated in Figure above. 
 
-A discussion of the numerical paper will go here.
+BC also confirmed the results of the Japanese guys because they found that below $F_{h}=0.22$ the elliptical instability was suppressed by stratification. 
+
+Now that Billant and Chomaz had experimentally observed this new instability which occured when $F_{h}<0.22$ they provided a theoretical account of the zigzag instability starting from the Bousinessq equations \cite{bc2000b}. In this very technical paper, they investigated the limit where $F_{h,v} = U/L_{h,v}N \ll 1$ and found that the zigzag motion was accounted for by combination of translation and rotation. Additionally, they also found that the zigzag stability should behave as $F_{v} \sim \mathcal{O}(1)$, i.e. $L_{v} \sim U/N$, known as the buoyancy length scale. This derivation of the buoyancy length scale should be treated with some concern since Billant and Chomaz assumed that $F_{v}\ll 1$ and showed that $F_{v}\sim \mathcal{O}(1)$. Despite this, the buoyancy length scale  has proven to be a very important number in stratified fluid flow and we will discuss this important quantity more below.
+
+In the final paper, Billant and Chomaz conducted a numerical linear stability analysis of the zigzag instability \cite{bc2000c}.
 
 
-\section{Formulation of Problem}
+\section{Formulation of the Linear Problem}
+In this thesis, we extend the results of Billant and Chomaz \cite{bc2000c} to length scales smaller then the buoyancny length scale $U/N$. 
+
 We consider the non-dimensional Boussinesq approximation to the Navier-Stokes equations in Cartesian co-ordinates (ref from intro)
 \begin{align}
 \frac{D\bm{u}}{Dt} = -\nabla p - \rho'\hat{\bm{e}}_{z} + \frac{1}{Re}\nabla^{2} \bm{u},\\
@@ -187,7 +195,7 @@ and the corresponding vertical vorticity $\omega_{z0}=\nabla_{h}^{2}\psi_{0}$
 0 & r>1,
 \end{dcases}
 \end{align}
-where $J_{0},J_{1}$ are the zero and first order Bessel functions, $\mu_{1}\approx 3.38317$ is the first root of $J_{1}$, and $\nabla_{h}$ is the horizontal Laplacian. The basic state velocity is purely horizontal and is given by $\bm{u}_{h0}=\nabla_{h}\psi_{0}\times\hat{\bm{e}}_{z}$.
+where $J_{0},J_{1}$ are the zero and first order Bessel functions, $\mu_{1}\approx 3.8317$ is the first root of $J_{1}$, and $\nabla_{h}$ is the horizontal Laplacian. The basic state velocity is purely horizontal and is given by $\bm{u}_{h0}=\nabla_{h}\psi_{0}\times\hat{\bm{e}}_{z}$. Recall that in the previous section, Billant and Chomaz found experimentally that $\omega = k^{2}\psi$ where $k=1.15$. Here we have that $\omega_{z0}=\mu_{1}^{2}\psi_{0}$. If we consider the dimensional version, we would have that $k^{2} = \mu_{1}^{2}/R^{2}$ where $R=3.6$ cm. This gives $k^{2} = 1.13 \text{ cm}^{-2}$ which corresponds very well with the experimental value of $1.15$.
 
 Let us now discuss the derivation of this result, which was first written down by Lamb and investigated further, independently, by Chaplygin. Although Lamb was the first to write down the above solution to the Euler equations, he did not provide any motiviation for the derivation beyond it being an exact solution of the 2D steady Euler equations. However, a decade later, Lamb provided a slightly more in depth derivation motivating somewhat the study of this dipole. Independently, in Russia, Chaplygin provided a complete derivation and motivation for studying this dipole, although it remained unknown outside of Russia. Following \cite{meleshko1994} we repeat the key points of Chaplygin's argument. 
 
@@ -274,7 +282,7 @@ These equations have been well known in the atmosopheric modelling community. No
 Building on the work of RMWL, BC modified the argument suggesting that in the limit of strong stratifications that instead $F_{h}/\delta\rightarrow 1$ as $F_{h}\rightarrow 1$. This scaling analysis leads to $L_{v} \sim U/N$ which is the result obtained for the zigzag instability.
 
 \begin{align}
-\frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h}+}}u_{z}\frac{\partial \textbf{u}_{h}}{\partial z} &= -\nabla_{h}p + \frac{1}{\Re}\frac{1}{\alpha^{2}}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}},\\
+\frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h}+u_{z}\frac{\partial \textbf{u}_{h}}{\partial z} &= -\nabla_{h}p + \frac{1}{\Re}\frac{1}{\alpha^{2}}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}},\\
 0&= -\frac{\partial p}{\partial z} - \rho  \\
 \nabla_{h}\cdot\textbf{u}_{h}+ \frac{F_{h}^{2}}{\alpha^{2}}\frac{\partial u_{z}}{\partial z} &=0\\
 \frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho + \frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \rho}{\partial z} &= u_{z} + \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
