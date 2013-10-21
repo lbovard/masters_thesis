@@ -1,5 +1,5 @@
 \chapter{Fluids Background}
-\section{Boussinesq approximation}
+\section{Boussinesq approximation (to be finished)}
 
 The Navier-Stokes equations are the mathematical equations that govern the evolution of fluid flow. In the context of the ocean and atmosphere, the Navier-Stokes equations, along with an equation of state, provide good models of the evolution of fluid flow e.g. Batchelor \cite{batchelor}. For our purposes, however, these equations are too general and an approximation, called the Boussinesq approximation, can be made which results in a simplified version of the Navier-Stokes equations.
 
@@ -28,7 +28,7 @@ There is a difference between the linear and nonlinear equations (MIke's code us
 We take the above equations (Ref) as the starting point for our simulations. 
 
 \section{Linear Stability Analysis}
-The stability of flows has a long and rich history within fluid dynamics. The classic experiment into the stability of fluid flow is that of  Reynolds \cite{reynolds1883}. In this experiment, Reynolds injected dye into the laminar flow through a pipe. By varying the velocity of the flow through the pipe Reynolds observed various effects. If the velocity was sufficiently low, Reynolds was able to observe ``a beautiful straight line through the tube". At slightly higher velocities, the straight line behaviour remained near the initial part of the pipe but further down ``the streak would shift about the tube, but there was no appearance of sinuosity". By increasing the velocity significantly, the dye would again initially remain straight near the initial part of the tube, but instead of shifting about the tube ``the colour band would all at once mix up with the surrounding water, and fill the rest of the tube with a mass of coloured water". 
+The stability of flows has a long and rich history within fluid dynamics. The classic experiment into the stability of fluid flow is that of  Reynolds \cite{reynolds1883}. In this experiment, Reynolds injected dye into the laminar flow through a pipe. By varying the velocity of the flow through the pipe Reynolds observed various effects. If the velocity was sufficiently low, Reynolds was able to observe ``a beautiful straight line through the tube". At slightly higher velocities, the straight line behaviour remained near the initial part of the pipe but further down ``the streak would shift about the tube, but there was no appearance of sinuosity". By increasing the velocity significantly, the dye would again initially remain straight near the initial part of the tube, but instead of shifting about the tube ``the colour band would all at once mix up with the surrounding water, and fill the rest of the tube with a mass of coloured water". (add image from Acheson)
 
 What Reynolds observed was the transition and breakdown of a flow into turbulence. Through careful observation, he determined that the dimensionless quantity that governed the behaviour of the flow was the Reynolds number 
 \begin{align}
@@ -36,7 +36,7 @@ Re =\frac{UL}{\nu},
 \end{align}
 a number which, as discussed above represents the ratio between the inertial and viscous terms in the Navier-Stokes equations. Reynolds found that if $Re<13000$ then the flow would remain stable. 
 
-The natural question to ask is to whether we can predict such numbers analytically or numerically. Given this information, one would be able to, given a set of circumstances, determine what sort of behaviour the fluid might exhibit. Unfortunately this goal has not been achieved and there is no known way to determine such criteria for any arbitrary flow because of the complicated nonlinear behaviour of the Navier-Stokes equations. Tackling this goal is immensely difficult and beyond current mathematics, indeed it is not known whether or not in three dimensions given an initial condition a solution even exists for all times.
+The natural question to ask is to whether we can predict such criteria for any given flow. Ideally, given information about a certain flow, one would be like to be able to determine how the fluid will evolve based on various parameters of the flow, such as viscosity, temperature, or velocity. Unfortunately this task has not been achieved in general and there is no known way to determine such criteria for any arbitrary flow.  This is due to the complicated nonlinear behaviour of the Navier-Stokes equations which makes devising a general algorithm for this task incredibly difficult. Tackling this goal in general is immensely difficult and beyond current mathematics, indeed it is not even known whether or not in three dimensions given an initial condition a solution even exists for all times.
 
 Thus, to proceed, a simplying approach must be derived. In order to do this, consider the following idea. Let $(\bm{u}_{0},p)$ denote a basic state that solves the Navier-Stokes equations and let $(\bm{u}',p')$ denote a small unknown perturbation such that $|\bm{u}',p'|\ll |\bm{u}_{0},p|$. Mathematically this means
 \begin{align}
@@ -72,8 +72,7 @@ The first simplifying assumption we make is that the basic state $\bm{u}_{0}=U(z
 \frac{\partial \bm{u}'}{\partial t} + U\frac{\partial \bm{u}}{\partial x} + w'\frac{dU}{dz}\hat{\bm{e}}_{x}= -\frac{1}{\rho_{0}}\nabla p' + \nu\nabla^{2} \bm{u}'\\
 \nabla \cdot\bm{u}'=0.
 \end{align}
-If we had considered the Euler equations instead of the Navier-Stokes equations, we would have the same equations as above except with $\nu=0$. Despite this seemingly simple modification, the resulting equation is very different. When the invsicid equations are considered, there are many elegant results about the stability of the flow that can be derived for the special case of parallel shear flow. For example, the Rayleigh's inflection point theorem states that a necessary condition for instability is that the basic velocity profile should have an inflection point\cite{drazinreid}. A complete discussion of this result and its generalisation, among other theorems, can be found in \cite{drazinreid,kundu}.
-
+If we had considered the Euler equations instead of the Navier-Stokes equations, we would have the same equations as above except with $\nu=0$. Despite this seemingly simple modification, the resulting equation is very different. When the invsicid equations are considered, there are many elegant results about the stability of the flow that can be derived for the special case of parallel shear flow. For example, the Rayleigh's inflection point theorem states that a necessary condition for instability is that the basic velocity profile should have an inflection point\cite{drazinreid}. Unfortunately, many of the results for inviscid flow theory do not hold for viscous flow theory. A complete discussion of this result and its generalisation, among other theorems, can be found in \cite{drazinreid,kundu}.
 
 Since the resulting set of equations is a set of coupled linear equations, the solution set is complex exponentials. Thus, the next natural step is to expand the solution as Fourier modes  
 \begin{align}
@@ -90,18 +89,17 @@ Expanding $\psi'$ as a complex exponential and denoting $\phi$ as the amplitude 
 \end{align}
 along with the appropriate boundary conditions. This equation is known as the Orr-Sommerfeld equation and has a rich history in the development of fluid mechanics. A comprehensive discussion of the various methods of solving this equation and others like it using techniques such as WKB theory, asymptotics, and perturbation theory, is contained in \cite{drazinreid,vandyke,benderorszag}.
 
-This simple derivation has resulted in a single equation with three unknowns $\alpha,c,Re$ and by choosing different $Re$ and $\alpha$, we can determine a criteria for $c$. Although much work has been done at the beginning of the 20th century to derive approximate solutions to the Orr-Sommerfeld equation, numerically it is very easy to solve. We can reformulate the above equation as a generalised eigenvalue problem for a given parallel shear flow and solve the problem rather easily on a computer\cite{trefethen_spectral}.
+This simple derivation has resulted in a single equation with three unknowns $\alpha,c,Re$ and by choosing different $Re$ and $\alpha$, we can determine a criteria for $c$. Although much work has been done at the beginning of the 20th century to derive approximate solutions to the Orr-Sommerfeld equation, numerically it is very easy to solve. We can reformulate the above equation as a generalised eigenvalue problem for a given parallel shear flow and solve the problem rather easily on a computer\cite{trefethen_spectral} and we can find that the condition for stability is $Re\sim 5500$, although the question of how valuable this is debatable\cite{trefethen_spectral}.
 
-Linear stability is a useful technique for determining whether or not a given flow is stable, however it is important to not forget the underlying assumptions. Since we are explicitly assuming that $|\bm{u}'|\ll |\bm{u}_{0}|$ the resulting linear equations are only valid when this is the case. As we shall see in numerical simulations, this assumption is not necessarily valid at all times. If viscous dissipation is neglected, the Euler equations conserve energy. If the viscous dissipation then the Navier-Stokes only approximately conserve energy, but even if we included a complicated mechanism for molecular dissipation, the resulting equations would still have to conserve energy, as long as there is no external forcing and thus if we were very careful and measured everything the total amount of energy in the system would remain constant. However we have stated that if $c_{i}>0$ then we have exponential growth. Clearly, as time advances, this gets infinitely large very quickly which implies that the perturbation will grow unbounded exponentially. This violates conservation of energy, since the total amount of energy of the pertrubation is growing, and violates the assumption that the perturbation is small.  
+Linear stability is a useful technique for determining whether or not a given flow is stable, however it is important to not forget the underlying assumptions. Since we are explicitly assuming that $|\bm{u}'|\ll |\bm{u}_{0}|$ the resulting linear equations are only valid when this is the case. As we shall see in numerical simulations, this assumption is not necessarily valid at all times. If viscous dissipation is neglected, the Euler equations conserve energy. If there is viscous dissipation then the Navier-Stokes only approximately conserve energy, but even if we included a complicated mechanism for molecular dissipation, the resulting equations would still have to conserve energy, as long as there is no external forcing and thus if we were very careful and measured everything the total amount of energy in the system would remain constant. However we have stated that if $c_{i}>0$ then we have exponential growth. Clearly, as time advances, this gets infinitely large very quickly which implies that the perturbation will grow unbounded exponentially. This violates conservation of energy, since the total amount of energy of the pertrubation is growing, and violates the assumption that the perturbation is small.  
 
 The reason this occurs in linear stability analysis is simple: we implicitly assume that the basic state remains undisturbed, i.e. that the perturbations are small enough so they do not change the basic state. This means, when running a numerical simulation, the perturbation is able to grow in time while the basic state remains unchanged. Thus we can think of the basic state as continuously pumping in energy into the perturbation state, allowing it to grow unbounded. Physically, this is not the case. In a full nonlinear simulation, the basic state does not remain unchanged and as the perturbation begins to grow, the basic state loses energy and changes and eventually reaches a point where we can no longer assume the perturbation is small compared to the basic state. Thus we have a breakdown of the linear theory and would need to turn to a nonlinear theory to continue our modeling. 
 
 However, despite violating conservation of energy, linear stability still provides useful information. Even though the individual eigenmodes grow exponentially, which eigenmodes are growing gives insight into what mechanisms are causing the growth. As we shall see, linear stability theory tells us what length scales dominate in the transition to turbulence in a stratified fluid. Given this information, it is possible to assume a certain scaling of the full nonlinear equations which can provide us with a potential simplified model to study the problem of turbulence in stratified fluids. 
 
-So far, we have studied the Navier-Stokes equations directly instead of, the perhaps more promising, Euler equations. Recall the Euler equations arise by setting the viscosity to $0$ or letting the Reynolds number go to infinity. The Euler equations also have some other nicer features, such as explicit conservation of energy which might provide a useful potential invariant to study the problem of turbulence analytically. 
+So far, we have studied the Navier-Stokes equations directly instead of, the perhaps more promising, Euler equations. Recall the Euler equations arise by setting the viscosity to $0$ or letting the Reynolds number go to infinity. The Euler equations also have some other nicer features, such as explicit conservation of energy which might provide a useful potential invariant that we can exploit in the study of stability and turbulence. 
 
-To motivate the use of the Euler equations, consider the full blown problem of turbulence: a high Reynolds number on the order of $10^{8}-10^{9}$ or higher. Since the inverse of the Reynolds number appears in front of the diffusion term, it seems reasonable to instead ignore the diffusion term since the coefficient is $\mathcal{O}(\Re^{-1}) \ll 1, Re\gg 1$. This would be a mistake. This is because the limit $Re\rightarrow\infty$ is a singular limit. Consider the following simplified model which arises in the study of boundary layers of shear bounded wall flow\cite{benderorszag,acheson_fluid,kundu}
-
+To motivate the possible us of the Euler equations, consider the observation that turbulence is very often observed at a high Reynolds number. In the atmosphere for example, the Reynolds number is on the order of $10^{8}-10^{9}$ or higher. Since the inverse of the Reynolds number appears in front of the diffusion term, it seems reasonable to instead ignore the diffusion term since the coefficient is $\mathcal{O}(\Re^{-1}) \ll 1, Re\gg 1$. This would be a mistake. This is because the limit $Re\rightarrow\infty$ is a singular limit. Consider the following simplified model which arises in the study of boundary layers of shear bounded wall flow\cite{benderorszag,acheson_fluid,kundu} 
 \begin{align}
 \epsilon y'' - y =0 \qquad y(0)=0,\qquad y(1)=1.
 \end{align}
@@ -113,17 +111,17 @@ which clearly has no solution that satisfies the boundary conditions. If we trie
 \begin{align}
 y(x) = \frac{e^{x/\epsilon}-1}{e^{1/\epsilon}-1}.
 \end{align}
-In this equation, we cannot set $\epsilon=0$ because that results in a singular limit. Thus regardless of how small we choose $\epsilon$, there will be a thin layer, called the boundary layer, which is essential to the fluid flow. For a discussion of techniques in singular perturbation theory in terms of the linear stability of the Navier-Stokes equations see \cite{drazinreid}. (van Dyke). Hence, even though it seems reasonable to neglect the diffusion term to study turbulence, it is not as a promising avenue as one might first expect. In one sense, this singular limit of the Navier-Stokes equations contributes to making turbulence a very difficult problem to investigate analytically and numerically. 
+In this equation, we cannot set $\epsilon=0$ because that results in a singular limit. Thus regardless of how small we choose $\epsilon$, there will be a thin layer, called the boundary layer, which is essential to the fluid flow. For a discussion of techniques in singular perturbation theory in terms of the linear stability of the Navier-Stokes equations see \cite{drazinreid,vandyke}. Hence, even though it seems reasonable to neglect the diffusion term to study instability and turbulence, it is not as a promising avenue as one might first expect. In one sense, this singular limit of the Navier-Stokes equations contributes to making turbulence a very difficult problem to investigate analytically and numerically. 
 
 Finally, the experimental investigation into instability of fluids and the transition to turbulence produces very appealing images which really illustrate the beauty of fluid dynamics and the reader is recommended to peruse the coffee table book by Van Dyke \cite{vandykealbum} which illustrates many images from experiments of the classical results in stability theory. 
 
 \section{The Zigzag Instability}
 \subsection{A Brief History of Vortex Instabilties}
 
-The origin of vortex instabilities begins with Lord Kelvin who in 1880 studied perturbations to columnar vortices and determined that they were stable. For the next 90 years, the theory of vortex instability remained relatively quiet until the field was re-ignited by the investigations Crow \cite{crow1970}. Motivated by engineering applications, Crow was an aeronautical engineer, he discovered that for long wavelength perturbations of a pair of counter-rotating vortices that there was a symmetric deformation of the vortices. This worked extended a few years later by Widnall et. al \cite{widnall1974} to small wavelength perturbations. Further investigations into small wavelength perturbations were carried out by numerous others e.g. \cite{moore1975,tsai1976}. It was noticed in these studies that the streamlines of the vortex became elliptical when perturbed. Motivated by this, Pierrehumbert \cite{pierrehumbert1986} investigated the simple case of a single 2D elliptical vortex subject to a constant 3D pertubation. Extensions to this elliptical model were done by Bayly \cite{bayly1986} and Waleffe \cite{waleffe1990} and led to this instability being called the elliptical instability. A complete and detailed history of the elliptical instability, including derivations and results of the above papers and nonlinear investigations, is presented in the review by Kerswell \cite{kerswell2002}. 
+The origin of vortex instabilities begins with Lord Kelvin who in 1880 studied perturbations to columnar vortices and determined that they were stable. For the next 90 years, the theory of vortex instability remained relatively quiet until the field was re-ignited by the investigations Crow \cite{crow1970}. Motivated by engineering applications, Crow was an aeronautical engineer, he discovered that for long wavelength perturbations of a pair of counter-rotating vortices that there was a symmetric deformation of the vortices. This worked extended a few years later by Widnall et. al \cite{widnall1974} to small wavelength perturbations. Further investigations into small wavelength perturbations were carried out by numerous others e.g. \cite{moore1975,tsai1976}. It was noticed in these studies that the streamlines of the vortex became elliptical when perturbed. Motivated by this, Pierrehumbert \cite{pierrehumbert1986} investigated the simple case of a single 2D elliptical vortex subject to a constant 3D pertubation. Extensions to this elliptical model were done by Bayly \cite{bayly1986} and Waleffe \cite{waleffe1990} and led to this instability being called the elliptical instability. A complete and detailed history of the elliptical instability, including derivations and results of the above papers and nonlinear investigations, is presented in the review by Kerswell \cite{kerswell2002}. Most of the investigations into the elliptical instability were concerned with unstratified flow, but an investigations by Miyazaki and Fukumoto \cite{miyazakifukumoto1992} showed with sufficient stratification, the elliptical instability is surpressed. 
 
 \subsection{Discovery of the Zigzag Instability}
-Experiments into this elliptical instability by Leweke and Williamson \cite{leweke1998} led Billant, Brancher, and Chomaz \cite{bc1999} to investigate the stability of a three dimensional vortex pair. Following up this work, Billant and Chomaz added in the effects of stratification and discovered a new type of instability at small scales that was distinct from the elliptical instability. They labeled this new instability the ``zigzag instability" due to its zigzag-like structure, as we shall see below. In a series of three papers they investigated experimentally\cite{bc2000a}, theoretically\cite{bc2000b}, and numerically \cite{bc2000c} the evolution of a pair of columnar vortices in a stratified tank.
+Experiments into this elliptical instability by Leweke and Williamson \cite{leweke1998} led Billant, Brancher, and Chomaz \cite{bc1999} to investigate the stability of a three dimensional vortex pair which, as we shall discuss below, provides a good model of the experimental setup. Initially this work was unstratified and confirmed the existence of the elliptical instability. However, following up this work, Billant and Chomaz added in the effects of stratification and discovered a new type of instability at small scales that was distinct from the elliptical instability. They labeled this new instability the ``zigzag instability" due to its zigzag-like structure, as we shall see below. In a series of three papers they investigated experimentally\cite{bc2000a}, theoretically\cite{bc2000b}, and numerically \cite{bc2000c} the evolution of a pair of columnar vortices in a stratified tank.
 
 First Billant and Chomaz investigated the zigzag instability experimentally \cite{bc2000a}. To do this, they investigated a columnar vortex pair created by a pair of flaps in a tank of stratified fluid. We now briefly discuss their experimental procedure since it provides important motivation for the resulting numerical study. 
 
@@ -139,7 +137,7 @@ and the Reynolds numbers
 \begin{align}
 \Re= \frac{UR}{\nu}
 \end{align}
-where $U$ is the propagating velocity of the dipole as above, $R$ is the riadus of the dipole, $\nu$ is the viscosity of the tank, and $N$ is the buoyancy frequency. Here the viscosity $\nu$ and the radius $R$ were fixed by experimental conditions and could not be varied. Thus the only parameters that could be varied were $N$ and $U$. Since the buoyancy frequency was more difficult to vary, as changing it required draining and refilling the tank, only four stratifications were considered ranging from $N=1.26 \text{ rad s}^{-1}$ to $N=1.97 \text { rad s}^{-1}$. Thus the parameter that was easy to control was the initial velocity $U$. Because $U$ shows up in both dimenionless numbers, changing $U$ resulted in the changing of both numbers, i.e. they are directly related by the following relationship 
+where $U$ is the propagating velocity of the dipole as above, $R$ is the riadus of the dipole, $\nu$ is the viscosity of the tank, and $N$ is the buoyancy frequency. Here the viscosity $\nu$ and the radius $R$ were fixed by experimental conditions and could not be varied. Thus the only parameters that could be varied were $N$ and $U$. Since the buoyancy frequency was more difficult to vary, as changing it required draining and refilling the tank, only four stratifications were considered ranging from $N=1.26 \text{ rad s}^{-1}$ to $N=1.97 \text { rad s}^{-1}$. Thus the parameter that was easy to control was the initial velocity $U$. Because $U$ shows up in both dimensionless numbers, changing $U$ resulted in the changing of both numbers, i.e. they are directly related by the following relationship 
 \begin{align}
 \Re = F_{h}\frac{NR^{2}}{\nu}
 \end{align} 
@@ -147,21 +145,25 @@ and for the given stratification numbers the ranges for the Froude number were b
 
 To determine a theoretical model of the dipole, they computed the FFT of the measured vorticity in order to determine the streamfunction. They found that there was a linear fit between the vorticity $\omega$ and the streamfunction $\psi$ such that $\omega = k^{2}\psi$ where $k^{2}=1.15 \text{cm}^{-2}$  which, as we will show below, corresponds to a columnar Lamb-Chaplygin dipole.
 
-(put in Figure 10 of BC 2000a)
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{zigzag_experimental.pdf}
+\caption{(get permission from JFM for picture + caption) A sequence of frontal (top) and side (bottom) views showing the growth of the zigzag instability for $F_{h}=0.19$ and $Re=365$. From left to right the pictures are taken at $7,36,75,109,121,176$ seconds after the flaps have closed. The vortex pair is propogating to the left. In this experiment, tape has been applied to force the the natural wavelength of the instability to produce a clearer result.}
+\label{zigzag_experimental}
+\end{center}
+\end{figure}
+Figure \ref{zigzag_experimental} demonstrates the evolution for the zigzag instability for $F_{h}=0.19$ and $Re=365$. The structure of the vortices displays a zigzag like structure. Additionally, the anistrophy between the vertical and horizontal directions is quite clear. The periodic behaviour of the vortex pair is also evident. 
 
-With all this set-up, Billant and Chomaz demonstrated the existence of new instability which they labeled as the zigzag instability. The name is motivated by the resulting structure, as demonstrated in Figure above. 
+%BC also confirmed the results of the Japanese guys because they found that below $F_{h}=0.22$ the elliptical instability was suppressed by stratification. 
 
-BC also confirmed the results of the Japanese guys because they found that below $F_{h}=0.22$ the elliptical instability was suppressed by stratification. 
+%Billant and Chomaz had experimentally observed this new instability which occured when $F_{h}<0.22$ 
 
-Now that Billant and Chomaz had experimentally observed this new instability which occured when $F_{h}<0.22$ they provided a theoretical account of the zigzag instability starting from the Bousinessq equations \cite{bc2000b}. In this very technical paper, they investigated the limit where $F_{h,v} = U/L_{h,v}N \ll 1$ and found that the zigzag motion was accounted for by combination of translation and rotation. Additionally, they also found that the zigzag stability should behave as $F_{v} \sim \mathcal{O}(1)$, i.e. $L_{v} \sim U/N$, known as the buoyancy length scale. This derivation of the buoyancy length scale should be treated with some concern since Billant and Chomaz assumed that $F_{v}\ll 1$ and showed that $F_{v}\sim \mathcal{O}(1)$. Despite this, the buoyancy length scale  has proven to be a very important number in stratified fluid flow and we will discuss this important quantity more below.
+Following up the experimental work, Billant and Chomaz provided a theoretical account of the zigzag instability starting from the Bousinessq equations \cite{bc2000b}. We will only discuss the main result of the paper as the paper is a very technical and long perturbation analysis. In the paper, they investigated the limit where $F_{h,v} = U/L_{h,v}N \ll 1$ and found that the zigzag motion was accounted for by combination of translation and rotation, which agrees with the experimental observations of \cite{bc2000a}. Additionally, they found that the zigzag stability should behave as $F_{v} \sim \mathcal{O}(1)$, i.e. $L_{v} \sim U/N$. This length is known as the buoyancy length scale (cite) and has proven to be a very important length scale in stratified fluid flow, as we shall discuss below. This derivation of the buoyancy length scale, however,  should be treated with some care since Billant and Chomaz assumed that $F_{v}\ll 1$ and showed that $F_{v}\sim \mathcal{O}(1)$. 
 
-In the final paper, Billant and Chomaz conducted a numerical linear stability analysis of the zigzag instability \cite{bc2000c}.
-
+In the final paper, Billant and Chomaz conducted a numerical linear stability analysis of the zigzag instability \cite{bc2000c}. In this study, they numerically solved the linear Boussinesq equations for the growth rate of the leading eigenmode for specific wavenumbers. We will not discuss the results details of the paper here as their paper forms the basis for much of this thesis and we will rederive and discuss their results throughout the next three chapters. In the remainder of this chapter we derive the numerical equations that Billant and Chomaz used in \cite{bc2000c} and provide some more background information. In Chapter 3 we introduce and discuss the numerical technique of spectral methods used to solve the numerical equations. In Chapter 4 we extend the analysis of Billant and Chomaz to length scales well below the sub-buoyancy scale of $L_{b}\sim U/N$. 
 
 \section{Formulation of the Linear Problem}
-In this thesis, we extend the results of Billant and Chomaz \cite{bc2000c} to length scales smaller then the buoyancny length scale $U/N$. 
-
-We consider the non-dimensional Boussinesq approximation to the Navier-Stokes equations in Cartesian co-ordinates (ref from intro)
+Following Billant and Chomaz \cite{bc2000c}, we consider the non-dimensional Boussinesq approximation to the Navier-Stokes equations in Cartesian co-ordinates (ref from intro)
 \begin{align}
 \frac{D\bm{u}}{Dt} = -\nabla p - \rho'\hat{\bm{e}}_{z} + \frac{1}{Re}\nabla^{2} \bm{u},\\
 \nabla \cdot \bm{u}=0,\\
@@ -175,7 +177,7 @@ In order to investigate the linear growth rate, we proceed as the introduction a
 p = p_{0} + \tilde{p}\\
 \rho' = \rho'_{0} + \tilde{\rho}' 
 \end{align}
-here the basic state is the Lamb-Chaplygin dipole from above. 
+here the basic state is the Lamb-Chaplygin dipole which we will now discuss and explain how it provides a convenient theoretical model for the experiment by Billant and Chomaz \cite{bc2000a}.
 
 
 \subsection{The Lamb-Chaplygin Dipole} 
@@ -220,11 +222,10 @@ which we can guess at a solution of the form $\psi(r,\theta) = Z(r)\sin\theta$. 
 where $\lambda$ is an arbitrary parameter where $\lambda=0$ is a completely symmetric dipole and $\lambda\rightarrow\infty$ corresponds to a completely asymmetric dipole. Here, again, Chaplygin investigated fully the pressure and circulation produced by this dipole. Additionally, in the same set of papers, Chaplygin also investigated the case of the dipole in rotating fluid, which was independently rediscovered 80 years later. Full details of this derivation are in \cite{meleshko1994} (flierl et. al) 
 
 
-\section{Scaling Analysis}
-We have mentioned two dimenionless numbers in stratified flow, the Reynolds number and the Froude number. Both these dimensionless numbers arise when comparing the relative sizes of various terms in the Navier-Stokes equations. Depending on what aspect of a problem we are looking at, these numbers can appear in different places when we non-dimensionalise. We will now illustrate the scaling arguments that have arisen in stratified turbulence. A comprehensive review of scaling in stratified turbulence is provided in a recent review by Riley and Lindborg and we review the important scaling arguments throughout the ages (reword this)
+\section{Scaling Analysis (to be finished)}
+We have mentioned two dimensionless numbers in stratified flow, the Reynolds number and the Froude number. Both these dimensionless numbers arise when comparing the relative sizes of various terms in the Navier-Stokes equations. Depending on what aspect of a problem we are looking at, these numbers can appear in different places when we choose different scalings. We will now discuss some of the scaling arguments that have been used in stratified flow as it can provide insights into what mechanisms underlie the transition to and evolution of turbulence. A comprehensive review of scaling in stratified turbulence is provided in a recent review by Riley and Lindborg (cite) and we will discuss the important scaling arguments therein. 
 
-For reference, we reproduce the Boussinesq equations here
-
+For reference, we reproduce the Boussinesq equations here 
 \begin{align}
 \frac{\partial \textbf{u}_{h}'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla'_{h}\textbf{u}_{h}'+u_{z}'\frac{\partial \textbf{u}_{h}'}{\partial z'} &= -\frac{1}{\rho_{0}}\nabla'_{h}p' + \nu \nabla'^{2}\textbf{u}_{h},\\
 \frac{\partial u_{z}'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla'_{h}u_{z}'+u_{z}'\frac{\partial u_{z}'}{\partial z'} &= -\frac{1}{\rho_{0}}\frac{\partial p'}{\partial z'} - \frac{\rho' g}{\rho_{0}} + \nu \nabla'^{2}u_{z},\\
@@ -233,21 +234,25 @@ For reference, we reproduce the Boussinesq equations here
 \end{align}
 where the primed quantities denote the dimenional quantities. 
 
-(Add this above). An observation from both experimental and numerical results of stratified flow considered here is that the flow is predominantly horizontal but has strong vertical variability. This difference in the vertical and horizontal directions suggests defining two length scales, the horizontal length scale $L_{h}$ and the vertical length scale $L_{v}$. Associated with this seperation we introduce the horizontal velocity scale $U$ and the vertical velocity scale $V$. The resulting scaling is
+As a starting point, we produce a scaling argument that seperates the horizontal and vertical directions. As we saw in the experiment of Billant and Chomaz \cite{bc2000a}, in the zigzag instability there was a clear seperation between the vertical and horizontal scales. This difference in the vertical and horizontal directions suggests defining two length scales, the horizontal length scale $L_{h}$ and the vertical length scale $L_{v}$. Associated with this seperation we introduce the horizontal velocity scale $U$ and the vertical velocity scale $V$. The resulting scaling is
 \begin{align}
 x'=L_{h}x,\qquad y' =L_{h}y, \qquad z'=L_{v}z, \qquad \textbf{u}_{h}' = U\textbf{u}, \qquad u_{z}' = Vu_{z}
 \end{align}
 We also define another useful quantity that plays an important role in the scaling of stratified flows, the aspect ratio
 \begin{align}
-\delta = \frac{L_{v}}{L_{h}}.
+\delta = \frac{L_{v}}{L_{h}},
 \end{align}
-For the time scale, we choose the advective time scale (add Riley, BC ref) so that 
+which measures how anisotrophic the length scales are. For the time scale, we choose the advective time scale 
 \begin{align}
-t' = \frac{L_{h}}{U}t
+t' = \frac{L_{h}}{U}t,
 \end{align}
-
+which is the characteristic time of a vortex to be advected around the characteristic length (riley, BC, Lilly). Following (prev rev) the pressure and density scales are
 \begin{align}
-\textbf{u}_{h}' = U\textbf{u}_{h}, u_{z}' = U\frac{F_{h}^{2}}{\delta}u_{z}, \rho' = \frac{U^{2}\rho_{0}}{gL_{v}}\rho'', p' = \rho_{0}U^{2}p, x'=L_{h}x, y'=L_{h}y, z'=L_{v}z, t'=\frac{L_{h}}{U}t
+p' = \rho_{0}U^{2}p, \qquad \rho' = \frac{U^{2}\rho_{0}}{gL_{v}}\rho''.
+\end{align}
+The only quantity left unspecified is the vertical velocity which can be determined by setting the terms in the density equation to be the same order which yields
+\begin{align}
+u_{z}' = u\frac{F_{h}^{2}}{\delta}u_{z}
 \end{align}
 This scaling now leads to the following set of equations (cite RL)
 \begin{align}
@@ -269,7 +274,7 @@ Let us now investigate the limit of strong stratification, i.e. $F_{h}\rightarro
 \nabla_{h}\cdot\textbf{u}_{h}+ \frac{F_{h}^{2}}{\alpha^{2}}\frac{\partial u_{z}}{\partial z} &=0\\
 \frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho + \frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \rho}{\partial z} &= u_{z} + \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
 \end{align} 
-It was initially assumed that as $F_{h}\rightarrow 0$ then so does $F_{h}/\delta$. Thus the resulting equations are 
+It was initially assumed by Lilly and RWL that as $F_{h}\rightarrow 0$ then so does $F_{h}/\delta$. Thus the resulting equations are 
 \begin{align}
 \frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h} &= -\nabla_{h}p + \frac{1}{\Re}\frac{1}{\alpha^{2}}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}},\\
 0&= -\frac{\partial p}{\partial z} - \rho  \\
@@ -287,10 +292,11 @@ Building on the work of RMWL, BC modified the argument suggesting that in the li
 \nabla_{h}\cdot\textbf{u}_{h}+ \frac{F_{h}^{2}}{\alpha^{2}}\frac{\partial u_{z}}{\partial z} &=0\\
 \frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho + \frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \rho}{\partial z} &= u_{z} + \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
 \end{align} 
-\subsection{Stratified Turbulence} 
+The assumption that $F_{h}/\delta \rightarrow 1$ can be rewritten to state that $L_{v} \sim U/N$, which is the buoyancy scale. 
+\subsection{Stratified Turbulence (to be written when nonlinear chapter is written)}
 In this final section of background a few results from stratified turbulence that are releveant to the zigzag instability are discussed. A complete discussion of the generation of and full blown stratified turbuelence is beyond the scope of these this thesis and instead we refer the reader to a recent review of recent theoretical, numerical, and experimental results by Riley and Lindborg. 
 
-Discuss some recent results in the nonlinear evolution and turbulence generating of the zigzag instability.
+Discuss some recent results in the nonlinear evolution and turbulence generating of the zigzag instability. 
 
 
 
