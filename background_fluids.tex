@@ -1,31 +1,66 @@
 \chapter{Fluids Background}
-\section{Boussinesq approximation (to be finished)}
+\section{Boussinesq approximation}
 
-The Navier-Stokes equations are the mathematical equations that govern the evolution of fluid flow. In the context of the ocean and atmosphere, the Navier-Stokes equations, along with an equation of state, provide good models of the evolution of fluid flow e.g. Batchelor \cite{batchelor}. For our purposes, however, these equations are too general and an approximation, called the Boussinesq approximation, can be made which results in a simplified version of the Navier-Stokes equations.
-
-
+The Navier-Stokes equations are the mathematical equations that govern the evolution of fluid flow. In the context of the ocean and atmosphere, the Navier-Stokes equations, along with an equation of state, provide good models of the evolution of fluid flow e.g. Batchelor \cite{batchelor}. For our purposes, however, these equations are too general and an approximation, called the Boussinesq approximation, can be made which results in a simplified version of the Navier-Stokes equations:  
 \begin{align} 
-\frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot \nabla \bm{u} = -\frac{1}{\rho_{0}}\nabla p - \frac{\rho g}{\rho_{0}}\hat{\bm{e}}_{z} + \nu \nabla^{2}\bm{u} \label{boussinesq1}\\
+\frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot \nabla \bm{u} = -\frac{1}{\rho_{0}}\nabla p - \frac{\rho' g}{\rho_{0}}\hat{\bm{e}}_{z} + \nu \nabla^{2}\bm{u} \label{boussinesq1}\\
 \nabla \cdot \bm{u} =0 \label{boussinesq2}\\
-\frac{\partial \rho}{\partial t} + \bm{u}\cdot \nabla \rho = \kappa \nabla^{2}\rho - \frac{\partial \bar{\rho}}{\partial z} w\label{boussinesq3}
+\frac{\partial \rho'}{\partial t} + \bm{u}\cdot \nabla \rho' = \kappa \nabla^{2}\rho' - \frac{\partial \bar{\rho}}{\partial z} w\label{boussinesq3}
 \end{align}
 where we have the following dimensional variables
 \begin{itemize}
-\item $\textbf{u}(x,y,z)=(u(x,y,z),v(x,y,z),w(x,y,z))$ is the velocity field in the $x,y,z$-directions directions respectively,
-\item $p(x,y,z)$ is the pressure field,
-\item $\rho(x,y,z)$ is a perturbation density,
+\item $\textbf{u}(x,y,z,t)=(u(x,y,z,t),v(x,y,z,t),w(x,y,z,t))$ is the velocity field in the $x,y,z$-directions directions respectively,
+\item $p(x,y,z,t)$ is the pressure field,
+\item $\rho(x,y,z,t)$ is the density,
 \item $\rho_{0}$ is a constant reference density,
-\item $\bar{\rho}$ is ... ? ,
+\item $\bar{\rho}(z)$ is a linear mean density profile,
+\item $\rho'(x,y,z,t)$ is a perturbation density,
 \item $g$ is the gravitational constant,
-\item $\nu$ is the constant kinematic velocity ,
+\item $\nu$ is the constant kinematic velocity,
 \item $\kappa$ is the constant molecular diffusivity.
 \end{itemize}
-Equations (\ref{boussinesq1})-(\ref{boussinesq3}) are a set of five coupled partial differential equations for the unknowns $\textbf{u},p,\rho$. Herein, we will refer to equation (\ref{boussinesq1}) as the velocity equations, equation (\ref{boussinesq2}) as the continuity equation, and equation (\ref{boussinesq3}) as the density equation. 
+Equations (\ref{boussinesq1})-(\ref{boussinesq3}) are a set of five coupled partial differential equations for the unknowns $\textbf{u},p,\rho$. Herein, we will refer to equation (\ref{boussinesq1}) as the velocity equations, equation (\ref{boussinesq2}) as the continuity equation, and equation (\ref{boussinesq3}) as the density equation. An additional useful quantity to define is the buoyancy frequency or the Brunt-Vaisala frequency which is defined as
+\begin{align}
+N^{2} = -\frac{g}{\rho_{0}}\frac{d\bar{\rho}}{dz}.
+\end{align}
+Note that we have included a negative sign because we assume that the linear density profile is decreasing. In the literature a positive sign also appears in the definition of the buoyancy frequency. Both definitions, however, will lead to the same conclusions. 
 
-Maybe go onto non-dimensionalisation? 
+A rigorous derivation of the Boussinesq equation is quite delicate and we provide a brief overview of the derivation. A complete derivation, along with many of the subtleties can be found in numerous books such as \cite{kundu,tritton,vallis} and a rigorous mathematical derivation in (Spiegel and Veronis). The Navier-Stokes equations for a compressible Newtonian fluid can be written as
+\begin{align}
+\rho \frac{D\bm{u}}{Dt} = -\nabla p + \rho \textbf{g} + \mu \nabla^{2}\bm{u},\\
+\frac{1}{\rho}\frac{D\rho}{Dt} + \nabla \cdot \bm{u}=0.
+\end{align}
 
-There is a difference between the linear and nonlinear equations (MIke's code uses a slightly modified version of Boussinesq that uses temperature) 
-We take the above equations (Ref) as the starting point for our simulations. 
+The Boussinesq equations are based off the following approximation to the density equation \cite{kundu,vallis}
+\begin{align}
+\rho(\bm{x},t) = \rho_{0} + \bar{\rho}(z) + \rho'(\bm{x},t) 
+\end{align}
+where we assume that $\bar{\rho}(z), \rho' \ll \rho_{0}$. In other words variations to the density are small compared to a reference density.
+
+The first approximation we make is replacing the mass continuity equation with the more simple incompressible equation $\nabla\cdot \bm{u}=0$. However,  since we are interested in a fluid with non-constant density, it is not as simple as setting $\rho=\rho_{0}$. The approximation we make is that even though the density is non-constant, it is approximately in hydrostatic balance \cite{vallis}. Thermodynamically \cite{kundu}, this means that density varies as
+\begin{align}
+\frac{\delta \rho}{\rho} = - \alpha \delta T
+\end{align} 
+where $\alpha$ is the thermal expansion coefficient, which for many gases is on the order of $10^{-3} \text{ K}^{-1}$ and fluids $10^{-4} \text{ K}^{-1}$ \cite{kundu}. If the variation in temperature $\delta T \sim 10 \text{ K}$, which is a reasonable approximation for many applications of oceanic and atmospheric modeling, then $\alpha \delta T\ll 1$. Comparing the material derivative and the velocity term in the conservation equation yields, assuming a characteristic velocity and length scales of $U$ and $L$ \cite{kundu}, 
+\begin{align}
+\frac{(1/\rho)(D\rho/Dt)}{\nabla \cdot\textbf{u}} \sim \frac{(U/\rho)\delta \rho / L}{U/L}  = \frac{\delta\rho}{\rho} \ll 1.
+\end{align}
+Thus we can replace the mass continuity with the ``incompressability condition". 
+
+We have simplified the equations of motion, however we still have five unknowns with only four equations. To get a fifth equation, we again appeal to thermodynamics. It can be shown that given the above density approximation, the thermodynamic equation of state of the density \cite{vallis} can be written as
+\begin{align}
+\frac{D\rho'}{Dt} - N^{2}w = \kappa \nabla^{2} \rho'
+\end{align}
+which closes the system. Finally, in the momentum equation, if we plug in the density approximation we obtain
+\begin{align} 
+\left(1 + \frac{\bar{\rho}}{\rho_{0}} + \frac{\rho'}{\rho_{0}}\right)\frac{D\bm{u}}{Dt} = -\frac{1}{\rho_{0}}\nabla p + \left(1 + \frac{\bar{\rho}}{\rho_{0}} + \frac{\rho'}{\rho_{0}}\right)\textbf{g} + \mu \nabla^{2}\bm{u}.
+\end{align}
+The terms multiplying the interial terms are tiny and can be neglected \cite{kundu}. The terms multiplied gravity need to be treated more carefully because of the hydrostatic balance condition. The resulting equation is \cite{kundu,vallis} is
+\begin{align} 
+\frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot \nabla \bm{u} = -\frac{1}{\rho_{0}}\nabla p - \frac{\rho' g}{\rho_{0}}\hat{\bm{e}}_{z} + \nu \nabla^{2}\bm{u}.
+\end{align}
+
+Thus we have derived the so-called Boussinesq approximation. 
 
 \section{Linear Stability Analysis}
 The stability of flows has a long and rich history within fluid dynamics. The classic experiment into the stability of fluid flow is that of  Reynolds \cite{reynolds1883}. In this experiment, Reynolds injected dye into the laminar flow through a pipe. By varying the velocity of the flow through the pipe Reynolds observed various effects. If the velocity was sufficiently low, Reynolds was able to observe ``a beautiful straight line through the tube". At slightly higher velocities, the straight line behaviour remained near the initial part of the pipe but further down ``the streak would shift about the tube, but there was no appearance of sinuosity". By increasing the velocity significantly, the dye would again initially remain straight near the initial part of the tube, but instead of shifting about the tube ``the colour band would all at once mix up with the surrounding water, and fill the rest of the tube with a mass of coloured water". (add image from Acheson)
