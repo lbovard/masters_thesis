@@ -11,3 +11,5 @@ masters_thesis.pdf
 *.tex~
 *.bbl
 uw-ethesis*
+*.eps
+*.txt
