@@ -63,7 +63,7 @@ The terms multiplying the interial terms are tiny and can be neglected \cite{kun
 Thus we have derived the so-called Boussinesq approximation. 
 
 \section{Linear Stability Analysis}
-The stability of flows has a long and rich history within fluid dynamics. The classic experiment into the stability of fluid flow is that of  Reynolds \cite{reynolds1883}. In this experiment, Reynolds injected dye into the laminar flow through a pipe. By varying the velocity of the flow through the pipe Reynolds observed various effects. If the velocity was sufficiently low, Reynolds was able to observe ``a beautiful straight line through the tube". At slightly higher velocities, the straight line behaviour remained near the initial part of the pipe but further down ``the streak would shift about the tube, but there was no appearance of sinuosity". By increasing the velocity significantly, the dye would again initially remain straight near the initial part of the tube, but instead of shifting about the tube ``the colour band would all at once mix up with the surrounding water, and fill the rest of the tube with a mass of coloured water". (add image from Acheson)
+The stability of flows has a long and rich history within fluid dynamics. The classic experiment into the stability of fluid flow is that of  Reynolds \cite{reynolds1883}. In this experiment, Reynolds injected dye into the laminar flow through a pipe. By varying the velocity of the flow through the pipe Reynolds observed various effects. If the velocity was sufficiently low, Reynolds was able to observe ``a beautiful straight line through the tube". At slightly higher velocities, the straight line behaviour remained near the initial part of the pipe but further down ``the streak would shift about the tube, but there was no appearance of sinuosity". By increasing the velocity significantly, the dye would again initially remain straight near the initial part of the tube, but instead of shifting about the tube ``the colour band would all at once mix up with the surrounding water, and fill the rest of the tube with a mass of coloured water". (add image from Acheson?)
 
 What Reynolds observed was the transition and breakdown of a flow into turbulence. Through careful observation, he determined that the dimensionless quantity that governed the behaviour of the flow was the Reynolds number 
 \begin{align}
@@ -198,7 +198,7 @@ Following up the experimental work, Billant and Chomaz provided a theoretical ac
 In the final paper, Billant and Chomaz conducted a numerical linear stability analysis of the zigzag instability \cite{bc2000c}. In this study, they numerically solved the linear Boussinesq equations for the growth rate of the leading eigenmode for specific wavenumbers. We will not discuss the results details of the paper here as their paper forms the basis for much of this thesis and we will rederive and discuss their results throughout the next three chapters. In the remainder of this chapter we derive the numerical equations that Billant and Chomaz used in \cite{bc2000c} and provide some more background information. In Chapter 3 we introduce and discuss the numerical technique of spectral methods used to solve the numerical equations. In Chapter 4 we extend the analysis of Billant and Chomaz to length scales well below the sub-buoyancy scale of $L_{b}\sim U/N$. 
 
 \section{Formulation of the Linear Problem}
-Following Billant and Chomaz \cite{bc2000c}, we consider the non-dimensional Boussinesq approximation to the Navier-Stokes equations in Cartesian co-ordinates (ref from intro)
+Following Billant and Chomaz \cite{bc2000c}, we consider the non-dimensional Boussinesq approximation to the Navier-Stokes equations in Cartesian co-ordinates 
 \begin{align}
 \frac{D\bm{u}}{Dt} = -\nabla p - \rho'\hat{\bm{e}}_{z} + \frac{1}{Re}\nabla^{2} \bm{u},\\
 \nabla \cdot \bm{u}=0,\\
@@ -232,8 +232,15 @@ and the corresponding vertical vorticity $\omega_{z0}=\nabla_{h}^{2}\psi_{0}$
 0 & r>1,
 \end{dcases}
 \end{align}
-where $J_{0},J_{1}$ are the zero and first order Bessel functions, $\mu_{1}\approx 3.8317$ is the first root of $J_{1}$, and $\nabla_{h}$ is the horizontal Laplacian. The basic state velocity is purely horizontal and is given by $\bm{u}_{h0}=\nabla_{h}\psi_{0}\times\hat{\bm{e}}_{z}$. Recall that in the previous section, Billant and Chomaz found experimentally that $\omega = k^{2}\psi$ where $k=1.15$. Here we have that $\omega_{z0}=\mu_{1}^{2}\psi_{0}$. If we consider the dimensional version, we would have that $k^{2} = \mu_{1}^{2}/R^{2}$ where $R=3.6$ cm. This gives $k^{2} = 1.13 \text{ cm}^{-2}$ which corresponds very well with the experimental value of $1.15$.
+where $J_{0},J_{1}$ are the zero and first order Bessel functions, $\mu_{1}\approx 3.8317$ is the first root of $J_{1}$, and $\nabla_{h}$ is the horizontal Laplacian. The basic state velocity is purely horizontal and is given by $\bm{u}_{h0}=\nabla_{h}\psi_{0}\times\hat{\bm{e}}_{z}$. Recall that in the previous section, Billant and Chomaz found experimentally that $\omega = k^{2}\psi$ where $k=1.15$. Here we have that $\omega_{z0}=\mu_{1}^{2}\psi_{0}$. If we consider the dimensional version, we would have that $k^{2} = \mu_{1}^{2}/R^{2}$ where $R=3.6$ cm. This gives $k^{2} = 1.13 \text{ cm}^{-2}$ which corresponds very well with the experimental value of $1.15$. Fig.~\ref{lamb_dipole_plot} is a plot of the vorticity. 
 
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{lamb_dipole}
+\caption{The Lamb-Chaplygin dipole.}
+\label{lamb_dipole_plot}
+\end{center}
+\end{figure}
 Let us now discuss the derivation of this result, which was first written down by Lamb and investigated further, independently, by Chaplygin. Although Lamb was the first to write down the above solution to the Euler equations, he did not provide any motiviation for the derivation beyond it being an exact solution of the 2D steady Euler equations. However, a decade later, Lamb provided a slightly more in depth derivation motivating somewhat the study of this dipole. Independently, in Russia, Chaplygin provided a complete derivation and motivation for studying this dipole, although it remained unknown outside of Russia. Following \cite{meleshko1994} we repeat the key points of Chaplygin's argument. 
 
 Recall that the steady 2D Euler equations can be written in terms of the streamfunction $\psi$ and a vorticity $\omega$ as
@@ -258,7 +265,7 @@ where $\lambda$ is an arbitrary parameter where $\lambda=0$ is a completely symm
 
 
 \section{Scaling Analysis (to be finished)}
-We have mentioned two dimensionless numbers in stratified flow, the Reynolds number and the Froude number. Both these dimensionless numbers arise when comparing the relative sizes of various terms in the Navier-Stokes equations. Depending on what aspect of a problem we are looking at, these numbers can appear in different places when we choose different scalings. We will now discuss some of the scaling arguments that have been used in stratified flow as it can provide insights into what mechanisms underlie the transition to and evolution of turbulence. A comprehensive review of scaling in stratified turbulence is provided in a recent review by Riley and Lindborg (cite) and we will discuss the important scaling arguments therein. 
+We have mentioned two dimensionless numbers in stratified flow, the Reynolds number and the Froude number. Both these dimensionless numbers arise when comparing the relative sizes of various terms in the Navier-Stokes equations. Depending on what aspect of a problem we are looking at, these numbers can appear in different places when we choose different scalings. We will now discuss some of the scaling arguments that have been used in stratified flow as it can provide insights into what mechanisms underlie the transition to and evolution of turbulence. A comprehensive review of scaling in stratified turbulence is provided in a recent review by Riley and Lindborg \cite{rileylindborg2013} and we will discuss the important scaling arguments therein. 
 
 For reference, we reproduce the Boussinesq equations here 
 \begin{align}
@@ -281,7 +288,7 @@ which measures how anisotrophic the length scales are. For the time scale, we ch
 \begin{align}
 t' = \frac{L_{h}}{U}t,
 \end{align}
-which is the characteristic time of a vortex to be advected around the characteristic length (riley, BC, Lilly). Following (prev rev) the pressure and density scales are
+which is the characteristic time of a vortex to be advected around the characteristic length \cite{rileylelong2000,bc2001,lilly1983}. Following these references the pressure and density scales are
 \begin{align}
 p' = \rho_{0}U^{2}p, \qquad \rho' = \frac{U^{2}\rho_{0}}{gL_{v}}\rho''.
 \end{align}
@@ -289,7 +296,7 @@ The only quantity left unspecified is the vertical velocity which can be determi
 \begin{align}
 u_{z}' = u\frac{F_{h}^{2}}{\delta}u_{z}
 \end{align}
-This scaling now leads to the following set of equations (cite RL)
+This scaling now leads to the following set of equations \cite{rileylindborg2013}
 \begin{align}
 \frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h}+\frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \textbf{u}_{h}}{\partial z} &= -\nabla_{h}p + \frac{1}{\Re}\left(\nabla^{2}_{h}\textbf{u}_{h}+\frac{1}{\alpha^{2}}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}}\right),\\
 F_{h}^{2}\left(\frac{\partial u_{z}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}u_{z}+\frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial u_{z}}{\partial z}\right) &= -\frac{\partial p}{\partial z} - \rho + \frac{F_{h}^{2}}{\Re}\left(\frac{1}{\alpha^{2}}\frac{\partial u_{z}}{\partial z^{2}} + \nabla^{2}_{h}u_{z}\right)\\
@@ -309,25 +316,26 @@ Let us now investigate the limit of strong stratification, i.e. $F_{h}\rightarro
 \nabla_{h}\cdot\textbf{u}_{h}+ \frac{F_{h}^{2}}{\alpha^{2}}\frac{\partial u_{z}}{\partial z} &=0\\
 \frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho + \frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \rho}{\partial z} &= u_{z} + \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
 \end{align} 
-It was initially assumed by Lilly and RWL that as $F_{h}\rightarrow 0$ then so does $F_{h}/\delta$. Thus the resulting equations are 
+It was initially assumed by Lilly \cite{lilly1983} and Riley et. al \cite{rileylelong2000} that as $F_{h}\rightarrow 0$ then so does $F_{h}/\delta$. Thus the resulting equations are 
 \begin{align}
 \frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h} &= -\nabla_{h}p + \frac{1}{\Re}\frac{1}{\alpha^{2}}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}},\\
 0&= -\frac{\partial p}{\partial z} - \rho  \\
 \nabla_{h}\cdot\textbf{u}_{h} &=0\\
 \frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho &= \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
 \end{align} 
-These equations have been well known in the atmosopheric modelling community. Notice that in these resulting equations, the horizontal and vertical velocities have become almost completely decoupled. They are not completely decoupled because there is still depenedence through the pressure term. However this decoupling led Lilly to conjecture that stratified turbulence in the strong stratification limit will obey 2D turbulence. (add link to review of 2D turbulence). 2D turbulence exhibits an inverse energy cascade however this has not been observed in stratified turbulence (cite).
+These equations have been well known in the atmosopheric modelling community. Notice that in these resulting equations, the horizontal and vertical velocities have become almost completely decoupled. They are not completely decoupled because there is still depenedence through the pressure term. However this decoupling led Lilly to conjecture that stratified turbulence in the strong stratification limit will obey 2D turbulence \cite{lilly1983}. (add link to review of 2D turbulence). 2D turbulence exhibits an inverse energy cascade however this has not been observed in stratified turbulence (cite stuff... add when nonlinear written).
 
 
-Building on the work of RMWL, BC modified the argument suggesting that in the limit of strong stratifications that instead $F_{h}/\delta\rightarrow 1$ as $F_{h}\rightarrow 1$. This scaling analysis leads to $L_{v} \sim U/N$ which is the result obtained for the zigzag instability.
+Building on the work of Lilly \cite{lilly1983} and Riley et. al. \cite{rileylelong2000}, Billant and Chomaz \cite{bc2001} modified the argument suggesting that in the limit of strong stratifications that instead $F_{h}/\delta\rightarrow 1$ as $F_{h}\rightarrow 1$. This scaling analysis leads to $L_{v} \sim U/N$ which is the result obtained for the zigzag instability.
 
 \begin{align}
 \frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h}+u_{z}\frac{\partial \textbf{u}_{h}}{\partial z} &= -\nabla_{h}p + \frac{1}{\Re}\frac{1}{\alpha^{2}}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}},\\
 0&= -\frac{\partial p}{\partial z} - \rho  \\
-\nabla_{h}\cdot\textbf{u}_{h}+ \frac{F_{h}^{2}}{\alpha^{2}}\frac{\partial u_{z}}{\partial z} &=0\\
-\frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho + \frac{F_{h}^{2}}{\alpha^{2}}u_{z}\frac{\partial \rho}{\partial z} &= u_{z} + \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
+\nabla_{h}\cdot\textbf{u}_{h}+ \frac{\partial u_{z}}{\partial z} &=0\\
+\frac{\partial \rho}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho + u_{z}\frac{\partial \rho}{\partial z} &= u_{z} + \frac{1}{\Re Sc}\frac{1}{\alpha^{2}}\frac{\partial^{2}\rho}{\partial z^{2}} 
 \end{align} 
-The assumption that $F_{h}/\delta \rightarrow 1$ can be rewritten to state that $L_{v} \sim U/N$, which is the buoyancy scale. 
+The assumption that $F_{h}/\delta \rightarrow 1$ can be rewritten to state that $L_{v} \sim U/N$, which is the buoyancy scale. In this case, there is no decoupling between the horizontal and vertical directions.  
+
 \subsection{Stratified Turbulence (to be written when nonlinear chapter is written)}
 In this final section of background a few results from stratified turbulence that are releveant to the zigzag instability are discussed. A complete discussion of the generation of and full blown stratified turbuelence is beyond the scope of these this thesis and instead we refer the reader to a recent review of recent theoretical, numerical, and experimental results by Riley and Lindborg. 
 

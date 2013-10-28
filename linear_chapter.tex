@@ -116,56 +116,70 @@ Examining panels (g)-(i) (fixed $Re$ and decreasing $F_{h}$), the core of the di
 Fig.~\ref{zigzagcomparison} shows the perturbation structure for the zigzag peak (a) and the short-wave peak (b) for the case of $Re=5000,F_{h}=0.2$. This case was chosen because the growth rates of the two wavenumbers is roughly the same (see Fig~\ref{FixFhVaryRe} a). The zigzag instability exhibits a quadropole vorticity structure as discussed in Ref 17\nocite{bc2000c}, which corresponds to a bend and a twist of the basic state dipole. The short-wave instability shares some common overall structure with the zigzag instability. Both have a line of vorticity centred in between two Lamb-Chaplygin vortices and have a ring of vorticity negative vorticity around the outer edges of the dipoles. Additionally, the number of local maximum and minimum remains the same. However, in the short-wave instability, these bands of vorticity have been squeezed into thinner strips and are much more localised along the outer edges of the vortices. In the cores of the dipoles, there is almost no structure and we do not see a quadropole moment. The full vorticity field of the short-wave instability has a much more dominant twist then the zigzag instability and the bending of the dipole is reduced. As the stratification is increased, this behaviour continues but there is a significant emergence of structure within the cores of the vortices, as observed in Fig~\ref{secondpeak}.
 
 
-\section{Subdominant modes (To be finished)} 
-An important aspect of a fluid flow is whether or not it is stable. To get insight into the stability, we start with linear stability. The idea of linear stability is to derive a set of linear equations from the non-linear equations and find the corresponding eigenvalues and eigenmodes of the system of the resulting equations. From these equations one can get a first insight into the stability of the flow by finding critical dimensionless numbers (commonly the Reynolds number) or regions of stability and instability. In this problem we are considering a flow which is unstable, i.e. has growing eigenmodes as a function of time, and we are interested in what that growth rate is, commonly denoted $\sigma$. Let us define mathematically what we mean. Consider the following time dependent linear system
+\section{Subdominant modes}
+The method we have used is limited to only determining the leading eigenmode. An interesting question is whether or not we can determine sub-dominant eigenmodes and what sorts of information they can tell us. For example, is the same eigenmode dominating at both the zigzag peak and the short wave peak? To investigate this question, we use a Krylov space to obtain the growth rates for subdominant modes. Recall that our linear stability problem can be written as 
 \begin{align}
-\frac{du}{dt} = Au,\label{eig}
+\frac{d\bm{u}}{dt} = A\bm{u}
 \end{align}
-where $u=u(\vec{x},t)$ is vector of the unknowns and $A$ is the associated linear operator. We can consider solutions of the form $u(\vec{x},t)=\hat{u}(\vec{x})e^{\sigma t}$, where $\sigma$ is the growth rate. Plugging in we obtain the following eigenvalue equation for $u$
+where $\bm{u}=\bm{u}(\bm{x},t)$ is vector of the unknowns and $A$ is the associated linear operator. We can consider solutions of the form $\bm{u}(\bm{x},t)=\hat{\bm{u}}(\bm{x})e^{\sigma t}$, where $\sigma$ is the growth rate. Plugging in we obtain the following eigenvalue equation for $u$
 \begin{align}
-\sigma \hat{u} = A\hat{u}.
+\sigma \hat{\bm{u}} = A\hat{\bm{u}}.
 \end{align}
-The problem is now to find this eigenvalue $\sigma$, and if required, the corresponding eigenmodes. In fact our problem is often simpler, find the largest eigenvalue.
+As mentioned, we have only been trying to find the leading eigenvalue $\sigma$ but since this is an eigenvalue problem, many algorithms exist to find the eigenspectrum. 
 
- To solve on a computer, we must discretise $A$. Since $A$ is a linear operator there are many ways to discretise (e.g. spectral, finite difference) but at the end of the day we can re-write all these schemes as some giant, typically non-symmetric, $A \in \textbf{R}^{n\times n}$. \footnote{I take $A$ to be real but in general this holds for complex $A$ but replace all the transposes with daggers.} Depending on the context, this way of writing the problem is not very good, especially if underlying linear operator $A$ has a more complicated structure. 
+If we want to solve this eigenvalue problem, we must discretise the operator $A$. For our numerical scheme, we do not explicitly construct this operator because it would get very large. Our code is equivalent to this matrix multiplication if one were to write all the FFTs as a matrix multiplication. Writing out operators this way in practice is unfeasible since for our problem, it would require a matrix that is of size $4N^{2}\times 4N^{2}$ and is very dense. Thus trying to find the eigenvalues using a direct eigenvalue routine is not possible. Instead we investigate other algorithms that can determine the eigenvalues without computing $A$ explicitly. 
 
-For example, in my research $A$ would be a fairly dense with size $10^{6}\times 10^{6}$. It would be unfeasible to find the eigenvalues with this set-up. Instead what we do is assume, at long times, the solution is of the form $u=\hat{u}(\vec{x})e^{\sigma t}$ and we extract the largest growth rate from the long term energy time series from the time stepped solution of (\ref{eig}). 
-
-But what if we did want to know about sub dominant eigenmodes? This method of computing the energy will only give us the dominate mode. This is where Krylov methods come in.
-
-\section*{Eigenvalue Algorithms and Krylov}
-One of the simplest (and easiest to code) methods for finding eigenvalues is the power method. It is given by the following iteration
+\subsection{Krylov Eigenvalue Routines}
+One of the simplest and easiest to code algorithms for finding eigenvalues is the power method. It is given by the following iteration \cite{MeyerLinAlg}
 \begin{align}
 u_{k+1}=\frac{Au_{k}}{|Au_{k}|}, \sigma_{k}=\frac{u_{k}^{t}Au_{k}}{u_{k}^{t}u_{k}}.
 \end{align}
-Very simple, but it will only give us the largest eigenvalue and corresponding eigenmode, often very quickly. In fact Google uses it in its pagerank algorithm. However it does not tell us anything about smaller eigenvalues. 
-If you think about it, we are throwing away a lot of information in the above iteration. Each iteration we are discarding all previous approximations to the eigenvalues and vectors. It does not seem unreasonable that maybe these previous approximations can tell us something. This is the key to Krylov methods.
-
-A Krylov sequence is defined as $\{u,Au,A^{2}u,\ldots,A^{n-1}u\}$ 
-
-\noindent This definition is nothing but taking the first $n$ iterations and defining a sequence of them. Likewise we can also define
-A Krylov matrix is defined as $K_{n}(A,u)=(u|Au|A^{2}u|\ldots|A^{n-1}u)$ 
-\noindent where we are defining a new matrix whose $i$th column is the $i$ iteration. Given this Krylov matrix, we are able to approximate the sub dominant eigenvalues. 
-
-Consider the following matrix, $L=K^{-1}AK$, which is the similarity transformation of $A$ by $K$. Recall that the eigenvalues of similar matrices are the same. This is the key idea of the Krylov methods. But how do we compute $K^{-1}$? If we orthogonalise $K$ (by Gram-Schmidt) then $K^{-1}=K^{t}$. So far everything has been exact. Let us now consider what happens if  instead of taking the first $n$ iterations we take some small number, say $l$. Let us then define a new matrix $L$ as above
+The reasoning for this algorith is very simple. If we suppose that the operator $A$ has a spectrum of eigenvalues such that $\lambda_{1} > \lambda_{2} > \ldots $ then by the spectral theorem we can re-write the operator $A$ as
 \begin{align}
-L=K_{l}^{t}AK_{l}
+A = \lambda_{1}\bm{u}_{1}\bm{u}_{1}^{T} + \lambda_{2}\bm{u}_{2}\bm{u}_{2}^{T} + \lambda_{3}\bm{u}_{3}\bm{u}_{3}^{T} + \ldots 
+\end{align} 
+where $\bm{u}_{i}$ is the eigenvector associated with $\lambda_{i}$. Now recall that by the spectral theorem we have the following \cite{MeyerLinAlg}
+\begin{align}
+\left(\frac{A}{\lambda_{1}}\right)^{n} = \bm{u}_{1}\bm{u}_{1}^{T} + \left(\frac{\lambda_{2}}{\lambda_{1}}\right)^{n}\bm{u}_{2}\bm{u}_{2}^{T} + \left(\frac{\lambda_{3}}{\lambda_{1}}\right)^{n}\bm{u}_{3}\bm{u}_{3}^{T} + \ldots 
 \end{align}
-but now $L$ is no longer the same size as $A$. Unfortunately the similarity properties no longer hold (they hold for matrices of the same sizes) but, and this is the amazing part, the eigenvalues of $L$ are a very good approximation to the largest eigenvalues of $A$! This is despite them being of two different sizes. This leads to a very simple idea for finding dominant eigenvalues for large matrices: simply choose $l\ll n$ and then find the eigenvalues of $L$ which is only $l\times l$ which can often easily be solved for moderate values of $l$.
+and since there is an ordering on the eigenvalues we have that $\lambda_{i}/\lambda_{1}<1$ and hence as $n\rightarrow\infty$ these terms will vanish. Thus if we consider a random initial vector $\bm{b}_{0}$ we have that 
+\begin{align}
+\frac{A^{n}\bm{b}_{0}}{\lambda_{1}^{n}}\rightarrow \bm{u}_{1}\bm{u}_{1}^{T}\bm{b}_{0}, n\rightarrow\infty.
+\end{align}
+Now in practice we don't have $\lambda_{1}$ but if we replace $\lambda_{1}$ with the norm of $|A^{n}\bm{b}_{0}|$ we can still get a good approximation \cite{MeyerLinAlg}. By repeated iteration we obtain the scheme from above. This very simple algorithm is able to give us the leading eigenvalue and eigenvector starting from any random initial vector. A rigorous derivation is contained in any good numerical linear algebra book, e.g. Trefethen and Bau (cite). 
 
- This amazing fact has been fairly well understood for symmetric $A$ and leads to the Lanczos algorithm. The non-symmetric case is less well understood and leads to the Arnoldi iteration. Similar ideas of using Krylov sequences and matrices form the theoretical basis for conjugate gradient and GMRES algorithms for solving linear systems.
+One drawback of this method is that we are throwing away a lot of information at each iteration. It does not seem unreasonable that maybe these previous approximations can tell us something.Utilising this extra information is the key of Krylov methods. First, we define a Krylov sequence to be 
+\begin{align}
+\{u,Au,A^{2}u,\ldots,A^{n-1}u\}
+\end{align}
+This definition is just taking the first $n$ iterations of the power method and defining a sequence of them. Likewise we can also define the Krylov matrix as 
+\begin{align}
+K_{n}(A,u)=(u|Au|A^{2}u|\ldots|A^{n-1}u)
+\end{align}
+where we are defining a new matrix whose $i$th column is the $i$ iteration. This Krylov matrix allows us to compute the sub-dominant modes.  
 
+Consider the following matrix, $L=K^{-1}AK$, which is the similarity transformation of $A$ by $K$. Recall that the eigenvalues of similar matrices are the same \cite{MeyerLinAlg}. This is the key idea of the Krylov methods, if we apply a similarity transform to our original matrix $A$ by $K$ we can instead compute the eigenvalues of $L$. However we still are stuck with the inverse matrix $K^{-1}$. To compute this inverse, we orthogonalise $K$ (by Gram-Schmidt) and thus $K^{-1}=K^{t}$. 
+
+So far everything has been exact since the size of $K$ must be the same size as $A$. Now we make the approximation that we can replace $K$ with $K_{n}$. Now taking the first $n$ iterations, and $n$ being small in some sense, let us define a new matrix $P$ as above
+\begin{align}
+P=K_{n}^{t}AK_{n}.
+\end{align}
+Now $P$ is no longer the same size as $A$. Clearly the similarity properties no longer hold but if the eigenvalues of $P$ are computed, they, rather amazingly, turn out to be a very good approximation to $A$. This leads to a very simple idea for finding dominant eigenvalues for A: simply choose a small $n$ and then find the eigenvalues of $P$ which is only $n\times n$ and there exist many good algorithms for finding the eigenvalues of small $n$. 
+
+This amazing fact has been fairly well understood for symmetric $A$ and leads to the Lanczos algorithm \cite{MeyerLinAlg} (Krylov book). The non-symmetric case is less well understood and leads to the Arnoldi iteration. Similar ideas of using Krylov sequences and matrices form the theoretical basis for conjugate gradient and GMRES algorithms for solving linear systems.  
+
+
+\subsection{Results}
 \begin{figure}
 \begin{center}
 \includegraphics[scale=0.7]{final_data.png}
-\caption{Krylov methods with two different choices of $l=50 (left), 100 (right)$ for $Re=10000, N=256, F_{h}=0.1$. Star is dominate eigenvalue from energy method, circle is the leading approximation from the Krylov method, triangle and x are the second and third eigenvalues respectively.}
-\end{center}
+\caption{Krylov methods with two different choices of $n=50 (left), 100 (right)$ for $Re=10000, N=256, F_{h}=0.1$. Star is dominate eigenvalue from energy method, circle is the leading approximation from the Krylov method, triangle and x are the second and third eigenvalues respectively.}
+\label{krylov_tests}
+\end{center} 
 \end{figure}
+Fig.~\ref{krylov_tests} uses the Krylov method for finding sub dominant eigenvalues for the linear stability of a Lamb-Chaplygin dipole in a stratified fluid for $Re=10000, F_{h}=0.1, N=256$. The reason $N=256$ was chosen was for memory issues in MATLAB. Some tests of various sizes of $N$ showed some robustness although a thorough convergence investigation was not completed and the results were only compared to those of the previous sections. To find the Krylov sequence, the output from the simulation of the previous section was saved at certain time.  Selecting $n$ samples, they were orthogonalised using a Gram-Schmidt procedure  and used to form the Krylov matrix $K$. To evaluate $AK$ the linear code was simulated as normal and reformatted into a giant vector. Then $P$ was constructed and the eigenvalues of the resulting matrix were found using MATLAB's \texttt{eigs} routine. 
 
-\section*{Results}
-Figure 1 shows my attempt at using the Krylov method for finding sub dominant eigenvalues for the linear stability of a Lamb-Chaplygin dipole in a stratified fluid. To find the Krylov sequence, I saved the output from the simulation at certain times and was able to adjust how frequently I wanted to sample, i.e. how large $l$ is. After selecting $l$ samples I orthogonalised using Gram-Schmidt\footnote{Thanks to Francis Poulin for discussing and sharing his Gram-Schmidt code with me}  which forms the Krylov matrix $K$. To evaluate $AK$ I just evaluated the right hand side of (\ref{eig}) for each column of $K$. This is very easy to do because each time-step of evaluating (\ref{eig}) we are doing this operation, albeit with ffts instead of multiplying a giant matrix. After the projection we are left with an $L$ which is size $l\times l$ and  MATLAB's \texttt{eig} command was used to solve for the largest eigenvalues.
-
-As can be seen results are okay. The leading eigenvalue is pretty good but the sub dominant eigenvalues aren't that great. Since $A$ is non-symmetric there is very little theory on the errors in the approximation so it is difficult to judge on how good these sub dominant approximations are.
+The results of Fig.~\ref{krylov_tests} are somewhat promising. As can be seen, doubling $n$ does improve convergence, althought there are still numerical anomolies, such as the random jump in growth rate at $k_{z}=60,65$ for $n=100$. As mentioned above, the theory of Krylov methods for non-symmetric matrices is still not well developed and few rigorous results on errors have been derived. The leading eigenvalue is reproduced accurately up to just about the short-wave peak before the Krylov results decay faster. The most promising result is at the local minimum between the two peaks. Here there is a very smooth curve of the growth rates of the second and third eigenmodes whose values are close to the values of the leading eigenmode. This result suggests that at this local minimum, a different eigenmode might be the dominate eigenmode for the short wave instability than that of the zigzag peak. 
 \section{Dimensional Analysis}
 Motivated by the scale analysis of those presented in the Chapter 2 review \cite{lilly1983,rileylelong2000,bc2001,brethouwer2007}, we present a scaling analysis for small vertical scales as considered in the above numerical simulations. We consider the Boussinesq equations
 
