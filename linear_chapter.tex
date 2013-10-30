@@ -92,25 +92,38 @@ The dependence of the growth rate on $k_{z}F_{h}$ appears to be similar in the c
 In Fig.~\ref{FixFhVaryRe} (b) the green curve corresponds to a hyperviscosity run with $Re=20000$, which has $Re_{h}=2.8\times 10^{8}$. The motivation for using hyperviscosity is to capture higher-Reynolds number regime by restricting dissipation to only the largest wavenumbers. As the hyperviscosity run demonstrates, the zigzag peak is independent of Reynolds number and the existence of the peak would be expected at higher Reynolds numbers. For the second peak, we note that the growth rate  of the hyperviscosity run exceeds that of $Re=20000$ for $k_{z}F_{h}>3$ and reaches a maximum around $k_{z}F_{h}=7$. The maximum growth rate in the hyperviscosity case is around $25\%$ larger than the regular viscosity case with $Re=20000$. At $k_{z}F_{h}=12$ we see the hyperviscosity and non-hyperviscosity curves cross. This intersection corresponds to the horizontal wavenumber at which the hyperviscosity damping rate equals the regular viscous damping rate for $Re=20000$. For $k_{z}$ greater than this maximum, the hyperviscosity operator experiences greater damping than the regular viscosity, which can be seen by the sudden drop off of the growth rate. This simulation presents evidence that as $Re\rightarrow \infty$, the growth rate of the second peak will the same order as, or larger than, the growth rate of the zigzag instability. 
 
 \section{Structure (to be finished)} 
+Briefly, we discuss the structure of the zigzag instability. Fig.~\ref{zigzag_vorticity} demonstrates the vertical vorticity of the zigzag peak for $F_{h}=0.2,0.1,0.05$ and $Re=20000$. Fig.~\ref{zigzag_fields} is In all vertical vorticity plots that follow, we have normalised the plots so red represents the maximum velocity or vortcity and blue represents the minimum velocity  or vorticity. Since the vorticity field is real, we have chosen the real part. Only $Re=20000$ has been included since the structure is nearly identical for $Re=10{,}000$ and $5000$. This confirms the assumption made by Billant and Chomaz \cite{bc2000b} that the zigzag peak emerges at the buoyancy scale $U/N$ independent of $Re$. A detailed study of the structure of the zigzag instability is done by Billant and Chomaz \cite{bc2000c}. 
+\begin{figure} 
+\begin{center}
+\includegraphics[width=\textwidth]{vorticity_zigzag}
+\caption{Perturbation vertical vorticity $\omega_{z}$ at the zigzag peak for $F_{h}=0.2 \text{ (left) }, 0.1 \text{ (middle) }, 0.05 \text{ (right) }$ and $Re=20000$.}
+\label{zigzag_vorticity}
+\end{center}
+\end{figure} 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.85]{velocity_fields_kz_6}
-\caption{Imaginary part of the growth rate for $F_{h}=0.05$ and $Re=20{,}000$ (blue) and $Re=10{,}000$ (black).}
+\includegraphics[width=\textwidth]{velocity_fields_kz_6}
+\caption{Perturbation fields $u,v,w,\rho$ at the zigzag peak for $F_{h}=0.1$ and $Re=20{,}000$. Here $k_{z}=6$.}
 \end{center}
+\label{zigzag_fields}
 \end{figure} 
 
+The minimum between the zigzag and short-wave instability is the oscillatory minimum. Fig.~\ref{oscillation_vorticity} and Fig.~\ref{oscillation_fields} are the vorticity and velocity fields respectively. In the vorticity structure, for $Re=20{,}000$ the structure is much more defined then the smoothed out structure of the zigzag instability. At the largest Froude number, the vorticity is in thin strips around the dipole. At the middle Froude number (b),(e),(h) the core of the dipole, new structure has emerged has has a swirl-like pattern. At the smallest Froude number (c),(f),(i), this structure has become much more detailed and a swirl-like pattern has clearly emerged. Additionally, as we increase the viscosity, this swirl-like structure becomes more defused out. 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.85]{velocity_fields_kz_60}
-\caption{Imaginary part of the growth rate for $F_{h}=0.05$ and $Re=20{,}000$ (blue) and $Re=10{,}000$ (black).}
+\includegraphics[width=\textwidth]{vorticity_oscillation}
+\caption{Perturbation vertical vorticity $\omega_{z}$ at local oscillatory minimum for $Re=20000\text{ (top) }, 10000 \text{ (middle) }, 5000 \text{ (bottom) }$; and $F_{h}=0.2 \text{ (left) }, 0.1 \text{ (middle) }, 0.05 \text{ (right) }$.}
+\label{oscillation_vorticity}
 \end{center}
 \end{figure} 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.85]{velocity_fields_kz_20}
-\caption{Imaginary part of the growth rate for $F_{h}=0.05$ and $Re=20{,}000$ (blue) and $Re=10{,}000$ (black).}
+\includegraphics[width=\textwidth]{velocity_fields_kz_20}
+\caption{Perturbation fields $u,v,w,\rho$ at the oscillatory minimum for $F_{h}=0.1$ and $Re=20{,}000$. Here $k_{z}=20$.}
 \end{center}
+\label{oscillation_fields}
 \end{figure} 
+
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{vorticity_second_peak}
@@ -119,9 +132,16 @@ In Fig.~\ref{FixFhVaryRe} (b) the green curve corresponds to a hyperviscosity ru
 \label{secondpeak}
 \end{center}
 \end{figure}
-Fig.~\ref{secondpeak} shows the spatial structure of the perturbation vertical vorticity at the second peak for different $Re$ and $F_{h}$. Qualitatively, we observe greater variation for different Froude numbers versus different Reynolds number as suggested above.  At the largest Froude number, the perturbation vorticity is organised in thin strips around and inside the dipole core between the two vortices. Panels (b),(e),(h) have $F_{h}=0.1$ and have a similar overall structure to the larger Froude number. Here, in the cores of the vortices, there is an emergence of a swirl-like pattern. At lower Reynolds number, the structure is spread out due to diffusion, while at higher Reynolds number, small-scale structure is beginning to emerge. This trend continues overall as we move to lower Froude numbers. 
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{velocity_fields_kz_60}
+\caption{Perturbation fields $u,v,w,\rho$ at the short wave instability for $F_{h}=0.1$ and $Re=20{,}000$. Here $k_{z}=60$.} 
+\label{secondpeak_fields}
+\end{center}
+\end{figure} 
+Fig.~\ref{secondpeak} and Fig.~\ref{secondpeak_fields} show the spatial structure of the perturbation vertical vorticity and fields at the second peak for different $Re$ and $F_{h}$. Qualitatively, we observe greater variation for different Froude numbers versus different Reynolds number as suggested above.  At the largest Froude number, the perturbation vorticity is organised in thin strips around and inside the dipole core between the two vortices. Panels (b),(e),(h) have $F_{h}=0.1$ and have a similar overall structure to the larger Froude number. Here, in the cores of the vortices, there is an emergence of a swirl-like pattern. At lower Reynolds number, the structure is spread out due to diffusion, while at higher Reynolds number, small-scale structure is beginning to emerge. This trend continues overall as we move to lower Froude numbers. 
 
-Examining panels (g)-(i) (fixed $Re$ and decreasing $F_{h}$), the core of the dipoles has a twisting-like behaviour as the Froude number decreases. From this we can conclude that the instability structure of the second peak depends more on the Froude number than on the Reynolds number, which again reinforces the buoyancy Reynolds number scaling.  Indeed, if we consider the cases with $Re_{b}=50$ and $200$ as above, which correspond to Fig.~\ref{secondpeak} (b),(g) and (c),(h) respectively, we can see similar structure in the vorticity fields. Additionally, the anti-symmetric structure of the perturbation can be observed in the dominant eigenmodes in all cases, as found by Refs 17,26\nocite{bc1999,bc2000c}.
+Examining panels (g)-(i) (fixed $Re$ and decreasing $F_{h}$), the core of the dipoles has a twisting-like behaviour as the Froude number decreases. From this we can conclude that the instability structure of the second peak depends more on the Froude number than on the Reynolds number, which again reinforces the buoyancy Reynolds number scaling.  Indeed, if we consider the cases with $Re_{b}=50$ and $200$ as above, which correspond to Fig.~\ref{secondpeak} (b),(g) and (c),(h) respectively, we can see similar structure in the vorticity fields. Additionally, the anti-symmetric structure of the perturbation can be observed in the dominant eigenmodes in all cases, as found by \cite{bc1999,bc2000c}.
 
 % The vorticity being very thin in the centre is consistent with the results of \cite{pierrehumbert1986} which examined unstratified inviscid vortices at small vertical scales which also demonstrated this behaviour. 
 \begin{figure}
@@ -132,8 +152,30 @@ Examining panels (g)-(i) (fixed $Re$ and decreasing $F_{h}$), the core of the di
 \end{center}
 \end{figure}
 
-Fig.~\ref{zigzagcomparison} shows the perturbation structure for the zigzag peak (a) and the short-wave peak (b) for the case of $Re=5000,F_{h}=0.2$. This case was chosen because the growth rates of the two wavenumbers is roughly the same (see Fig~\ref{FixFhVaryRe} a). The zigzag instability exhibits a quadropole vorticity structure as discussed in Ref 17\nocite{bc2000c}, which corresponds to a bend and a twist of the basic state dipole. The short-wave instability shares some common overall structure with the zigzag instability. Both have a line of vorticity centred in between two Lamb-Chaplygin vortices and have a ring of vorticity negative vorticity around the outer edges of the dipoles. Additionally, the number of local maximum and minimum remains the same. However, in the short-wave instability, these bands of vorticity have been squeezed into thinner strips and are much more localised along the outer edges of the vortices. In the cores of the dipoles, there is almost no structure and we do not see a quadropole moment. The full vorticity field of the short-wave instability has a much more dominant twist then the zigzag instability and the bending of the dipole is reduced. As the stratification is increased, this behaviour continues but there is a significant emergence of structure within the cores of the vortices, as observed in Fig~\ref{secondpeak}.
+Fig.~\ref{zigzagcomparison} shows the perturbation structure for the zigzag peak (a) and the short-wave peak (b) for the case of $Re=5000,F_{h}=0.2$. This case was chosen because the growth rates of the two wavenumbers is roughly the same (see Fig~\ref{FixFhVaryRe} a). The zigzag instability exhibits a quadropole vorticity structure as discussed in \cite{bc2000c}, which corresponds to a bend and a twist of the basic state dipole. The short-wave instability shares some common overall structure with the zigzag instability. Both have a line of vorticity centred in between two Lamb-Chaplygin vortices and have a ring of vorticity negative vorticity around the outer edges of the dipoles. Additionally, the number of local maximum and minimum remains the same. However, in the short-wave instability, these bands of vorticity have been squeezed into thinner strips and are much more localised along the outer edges of the vortices. In the cores of the dipoles, there is almost no structure and we do not see a quadropole moment. The full vorticity field of the short-wave instability has a much more dominant twist then the zigzag instability and the bending of the dipole is reduced. As the stratification is increased, this behaviour continues but there is a significant emergence of structure within the cores of the vortices, as observed in Fig~\ref{secondpeak}.
 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{velocity_field_evolution_u_fh_01_re_20000}
+\caption{Evolution of the v velocity from $k_{z}=3$ up to $k_{z}=110$ for $F_{h}=0.1$ and $Re=20{,}000$. Here the scaling has not been applied to better illustrate the structure.}
+\label{evolution}
+\end{center}
+\end{figure}
+
+Fig.~\ref{evolution} demonstrates the evolution of the $v$ component of velocity for $F_{h}=0.1$ and $Re=20{,}000$. Here the transition from the zigzag peak, through the oscillatory minimum to the short-wave instability is explicit. Initially the structure has a large positive and negative velocity but as we increase $k_{z}$ this positive velocity is stretched forward and flattened out and becomes stretched out in the middle of the velocity field. The initial negative velocity simply dies out. The initial small areas of positive velocity in front of the dipole undergo an interesting evolution and become larger and stretched out wrapping around the back of the dipole and become very thin. The small initial negative velocity also becomes stretched out but instead forms a v-like shape behind the dipole. The evolution of this wake looks quantitatively similar to the wake of a boat through water. Fig.~\ref{wake} is a loglog plot of the angle of this wake as a function of the perturbation wavelength. The red line is a reference slope of $k=1$ and suggests the relationship between the angle and the wavenumber to be
+\begin{align}
+\theta \sim \frac{1}{k_{z}}.
+\end{align} 
+An investigation by Sharman and Wurtele \cite{sharman1983ship} suggests an inverse relationship between the angle of the wake and the vertical wavenumber. However their stratification set-up is different from ours and it is unlikely their analysis carrys over directly, however it does suggest there maybe a similar theory that can be derived for the case of waves behind vortices. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{wake_fh_01_re_20000}
+\caption{Angle of the wake behind the v velocity field as a function of the perturbation wavelength for $F_{h}=0.1$ and $Re=20{,}000$. The red line is a reference slope of $1$.}
+\label{wake}
+\end{center}
+\end{figure}
 
 \section{Subdominant modes}
 The method we have used is limited to only determining the leading eigenmode. An interesting question is whether or not we can determine sub-dominant eigenmodes and what sorts of information they can tell us. For example, is the same eigenmode dominating at both the zigzag peak and the short wave peak? To investigate this question, we use a Krylov space to obtain the growth rates for subdominant modes. Recall that our linear stability problem can be written as 
@@ -198,7 +240,10 @@ This amazing fact has been fairly well understood for symmetric $A$ and leads to
 \end{figure}
 Fig.~\ref{krylov_tests} uses the Krylov method for finding sub dominant eigenvalues for the linear stability of a Lamb-Chaplygin dipole in a stratified fluid for $Re=10000, F_{h}=0.1, N=256$. The reason $N=256$ was chosen was for memory issues in MATLAB. Some tests of various sizes of $N$ showed some robustness although a thorough convergence investigation was not completed and the results were only compared to those of the previous sections. To find the Krylov sequence, the output from the simulation of the previous section was saved at certain time.  Selecting $n$ samples, they were orthogonalised using a Gram-Schmidt procedure  and used to form the Krylov matrix $K$. To evaluate $AK$ the linear code was simulated as normal and reformatted into a giant vector. Then $P$ was constructed and the eigenvalues of the resulting matrix were found using MATLAB's \texttt{eigs} routine. 
 
-The results of Fig.~\ref{krylov_tests} are somewhat promising. As can be seen, doubling $n$ does improve convergence, althought there are still numerical anomolies, such as the random jump in growth rate at $k_{z}=60,65$ for $n=100$. As mentioned above, the theory of Krylov methods for non-symmetric matrices is still not well developed and few rigorous results on errors have been derived. The leading eigenvalue is reproduced accurately up to just about the short-wave peak before the Krylov results decay faster. The most promising result is at the local minimum between the two peaks. Here there is a very smooth curve of the growth rates of the second and third eigenmodes whose values are close to the values of the leading eigenmode. This result suggests that at this local minimum, a different eigenmode might be the dominate eigenmode for the short wave instability than that of the zigzag peak. 
+The results of Fig.~\ref{krylov_tests} are somewhat promising. As can be seen, doubling $n$ does improve convergence, althought there are still numerical anomolies, such as the random jump in growth rate at $k_{z}=60,65$ for $n=100$. As mentioned above, the theory of Krylov methods for non-symmetric matrices is still not well developed and few rigorous results on errors have been derived. The leading eigenvalue is reproduced accurately up to just about the short-wave peak before the Krylov results decay faster. The most promising result is at the local minimum between the two peaks. Here there is a very smooth curve of the growth rates of the second and third eigenmodes whose values are close to the values of the leading eigenmode. This result suggests that at this local minimum, a different eigenmode might be the dominate eigenmode for the short wave instability than that of the zigzag peak. Returning to the structure, Fig.~\ref{evolution} supports this viewpoint as the the zigzag and short-wave peak velocity fields are different and the oscillatory region in between suggests a combination of the two which might be the two different modes interchanging dominance and resulting in a mix of the two. 
+
+Finally, some attempts were made use MATLABs \texttt{eigs} routine and passing the operator $A$ explicitly, instead of evaluating from a time series, were unsuccesful despite many hours of debugging. 
+
 \section{Dimensional Analysis}
 Motivated by the scale analysis of those presented in the Chapter 2 review \cite{lilly1983,rileylelong2000,bc2001,brethouwer2007}, we present a scaling analysis for small vertical scales as considered in the above numerical simulations. We consider the Boussinesq equations
 
