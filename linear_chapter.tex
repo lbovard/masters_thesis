@@ -274,7 +274,7 @@ which leads to
 \begin{align}
 \frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h}+u_{z}\frac{\partial \textbf{u}_{h}}{\partial z} &= -\nabla_{h}p + \frac{1}{Re}\nabla_{h}^{2}\textbf{u}_{h} +  \frac{1}{\delta^{2}Re}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}},\\
 \delta^{2}\left(\frac{\partial u_{z}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}u_{z}+u_{z}\frac{\partial u_{z}}{\partial z}\right) &= -\frac{\partial p}{\partial z} - \rho' + \frac{\delta^{2}}{Re}\nabla_{h}^{2}u_{z} + \frac{1}{Re}\frac{\partial^{2}u_{z}}{\partial z^{2}},\\
-\nabla_{h}\cdot\textbf{u}_{h} + \frac{\partial u_{z}}{\partial z} &=1,\\
+\nabla_{h}\cdot\textbf{u}_{h} + \frac{\partial u_{z}}{\partial z} &=0,\\
 \frac{\partial \rho'}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho' + u_{z}\frac{\partial \rho'}{\partial z} -\frac{\delta^{2}}{F_{h}^{2}}u_{z}&=\frac{1}{ReSc}\nabla_{h}^{2}\rho + \frac{1}{\delta^{2}ReSc}\frac{\partial^{2}\rho}{\partial z^{2}},
 \end{align}
 which holds when $\delta<F_{h}\ll 1$. This suggests that for very small vertical scales with $\delta \ll  F_{h}$ the effects of stratification should be negligible. At such small vertical scales, density variation due to stratification would be negligible and thus we would not expect stratification to play an important role in the overall evolution. Additionally, the presence of the factors of $\delta$ in the denominator of the vertical viscous terms suggests that the effects of viscosity become more dominant at very small vertical scales.  
