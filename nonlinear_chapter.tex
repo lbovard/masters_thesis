@@ -16,8 +16,8 @@ In this chapter we extended the results of the linear stability analysis to a no
 %\end{itemize}
 
 \section{Set-up}
-In this section we discuss some numerical tests of the code to verify that the nonlinear results are correctly resolving the samllest scales. 
-In order to do a full DNS, we need to resolve the Kolmogorov scales. The Kolomogorov scale is given by (cite)
+In this section we discuss some numerical tests of the code to verify that the nonlinear results are correctly resolving the smallest scales. 
+In order to do a full DNS, we need to resolve the Kolmogorov scales. The Kolmogorov scale is given by (cite)
 \begin{align}
 \eta = \left(\frac{\nu^{3}}{\epsilon}\right)^{3}
 \end{align}
@@ -25,13 +25,13 @@ where $\epsilon$ is the energy given by
 \begin{align}
 \epsilon \sim \frac{U^{3}}{R} 
 \end{align}
-where $U,R$ are the characteristic velocity and length respectively. Rewriting the Kolmogorov scale $\eta$ in terms of the Reynolds number by multipying by the characteristic length $R$, which we take to be unity as has been suggested from the linear results, to obtain
+where $U,R$ are the characteristic velocity and length respectively. Rewriting the Kolmogorov scale $\eta$ in terms of the Reynolds number by multiplying by the characteristic length $R$, which we take to be unity as has been suggested from the linear results, to obtain
 \begin{align}
 \eta = \frac{1}{\Re^{3/4}}
 \end{align}
-For our simulations, the code seperates the horizontal and vertical resolutions, which we denote by $\Delta x$ and $\Delta z$. We want to choose the number of grid points to be such that $\Delta x \approx \Delta z$. 
+For our simulations, the code separates the horizontal and vertical resolutions, which we denote by $\Delta x$ and $\Delta z$. We want to choose the number of grid points to be such that $\Delta x \approx \Delta z$. 
 
-To illustrate, we consider a test case that was run to determine whether or not to use $L=9$ or $L=5$ for the box size. Both have been used in practice (cite). Consider a grid with $N\times N \times n$ points, where we have explicitly seperated out the horizontal and vertical directions. Because we need to resolve the Kolmogorov scales, we have restrictions on the total number of grid points. We consider the case of $Re=2000$ and $F_{h}=0.2$. The Reynolds number tells us that that the Kolmogorov scale is
+To illustrate, we consider a test case that was run to determine whether or not to use $L=9$ or $L=5$ for the box size. Both have been used in practice (cite). Consider a grid with $N\times N \times n$ points, where we have explicitly separated out the horizontal and vertical directions. Because we need to resolve the Kolmogorov scales, we have restrictions on the total number of grid points. We consider the case of $Re=2000$ and $F_{h}=0.2$. The Reynolds number tells us that that the Kolmogorov scale is
 \begin{align}
 \eta \sim \frac{1}{Re^{3/4}} \approx 0.003343,\qquad \Delta x \sim \eta 
 \end{align}
@@ -56,6 +56,8 @@ In this case, the greatest growth rate occurs at the wavenumber $k_{z}=20$ and t
 \end{figure}
 In Fig.~\ref{test_energy} we demonstrate two tests run that were done to determine what resolution to use. Qualitatively, both curves are very similar, with the $L=5$ curves shifted upwards by a constant. This is to be expected because by using a larger domain size, less of the domain is focused on the dipole and thus there is less energy in this dipole. When we decrease the domain size, the dipole takes up a larger percentage of the grid and thus has a larger energy. 
 
+When we compute the growth rates and saturation levels, they are in close agreement. Thus we choose $L=9$ and $n=32$ for our simulations despite not completely resolving the Kolmogorov scale. Our time step $\Delta = 5.0\times 10^{-4}$. Each run was initialised with a random density sinusoidal perturbation with $\epsilon=0.01$. 
+
 %\begin{figure}
 %\begin{center}
 %\includegraphics[width=\textwidth]{vert_spectrum_test}
@@ -64,9 +66,16 @@ In Fig.~\ref{test_energy} we demonstrate two tests run that were done to determi
 %\end{center}
 %\end{figure}
 \section{Results}
-The nonlinear evolution of the short-wave instability tells us how the zigzag instability and the short-wave instability interact. Investigations by Waite and Smolarkiewicz into the breakdown of the Lamb-Chaplygin dipole into turbulence and observed that the energy of the zigzag instability grew such that it became the same order of magntiude as the kinetic energy. In these simulations, no short-wave instabiltiies were observed despite having a similar growth rate. We present results that suggest that the short-wave instability saturates at a level proportional to the aspect ratio $\delta$.
+The nonlinear evolution of the short-wave instability tells us how the zigzag instability and the short-wave instability interact. Investigations by Waite and Smolarkiewicz into the breakdown of the Lamb-Chaplygin dipole into turbulence and observed that the energy of the zigzag instability grew such that it became the same order of magnitude as the kinetic energy. In these simulations, no short-wave instabilities were observed despite having a similar growth rate. We present results that suggest that the short-wave instability saturates at a level proportional to the aspect ratio $\delta$.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{sat_eg_re5000_fh02}
+\caption{Time series of the kinetic energy (top line) and potential energy (bottom line) for $Re=5000$ and $F_{h}=0.2$.}
+\label{sat_energy}
+\end{center}
+\end{figure}
 
-To investigate the saturation level, nonlinear simulations were run with an initially small, $\epsilon=0.01$, random sinusodial perturbation of the initial density. Figure (blah) is an example of the evolution of the energy for a given set of parameters. As can be observed in this figure the saturation level occurs at roughly $T=$.  
+To investigate the saturation level, nonlinear simulations were run with an initially small, $\epsilon=0.01$, random sinusoidal perturbation of the initial density. Fig.~\ref{sat_energy} is an example of the evolution of the energy for $Re=5000$ and $F_{h}=0.2$. As can be observed in the saturation level occurs at roughly $T=20$ after which the potential energy states approximately constant. The saturation is defined to be
 \begin{align}
 \text{saturation} = \frac{E_{3D}}{E_{2D}}
 \end{align}
@@ -86,15 +95,22 @@ where we find the maximum $E_{3D}$ at later times and divide that time by the ki
 \label{re5000sat}
 \end{center}
 \end{figure}
-Fig.~\ref{re2000sat} and Fig.~\ref{re5000sat} demonstrate the saturation level for $F_{h}=0.2$ and $Re=2000,5000$ respectively. The reference line is a slope of 2. In Fig.~\ref{re5000sat} there is some variation in the data points as there is no clear saturation level. Fig blah demonstrates an example of this. From these curves, it suggests that  
+Fig.~\ref{re2000sat} and Fig.~\ref{re5000sat} demonstrate the saturation level for $F_{h}=0.2$ and $Re=2000,5000$ respectively. The reference line is a slope of 2. In Fig.~\ref{re5000sat} there is some variation in the data points as the length scales get smaller, the definition of when the saturation first occurs is ambiguous. This effect can be observed in Fig.~\ref{sat_energy} as at $T=30$ the saturation level has increased a little bit from the start of the saturation at $T=20$. Despite this slight increase, it is clear that the potential energy has saturated. 
+
+The linear fit through these curves suggests that the saturation level depends upon $\delta$ as
 \begin{align}
 \frac{E_{3Dsat}}{E_{2Dsat}} \sim \delta^{2}.
 \end{align}
-This scaling suggests that as the aspect ratio gets smaller, the saturation level decreases. 
+This scaling suggests that as the aspect ratio gets smaller, the saturation level decreases. In Chapter 3, we found that the short-wave instability scaled as $k_{z}\sim F_{h}^{-1/5}Re^{2/5}$ thus
+\begin{align}
+\frac{E_{3Dsat}}{E_{2Dsat}} \sim \frac{F_{h}^{2/5}}{H^{2}Re^{4/5}}.
+\end{align}
+Thus as we increase the $Re$ or horizontal length scale, the saturation level decreases. Alternatively, if we increase stratification, i.e. decrease the Froude number, the saturation level also decreases. Thus, we should not expect the short-wave instability to play a significant role in the evolution of the Lamb-Chaplygin's transition to turbulence. 
 
 The scaling suggested has a theoretical backing. In investigations by Ngan, et al \cite{ngan2005} into quasi-two dimensional turbulence, they determined that the saturation level of a perturbation depended linearly upon the aspect ratio. We review their derivation. Ngan et. al \cite{ngan2005} consider quasi-two dimensional turbulence, which they define to be the three-dimesionalisation of a two-dimensional flow. The study of such flows are motivated by geophysical applications were aspects ratios range from $\delta\sim 0.01-0.1$\cite{ngan2005}. 
 
-Ngan et al. now consider a simple scaling analysis \cite{ngan2005}. Initially the time scales of the 2D base flow is long compared to that of the 3D base flow. In our results, we verify this. In figure blah note that the time scale of the 2D perturabtion, here the top line, is constant while the timescale of the 3D flow is much shorter, which is exemplified by the change that the 3D perturbation goes through over the first 20 or seconds. However once the 3D perturbation saturates, it stops growing and its timescale becomes similar to that of the 2D flowa.  Now consider the following timescales for these flows \cite{ngan2005} as
+
+Ngan et al. now consider a simple scaling analysis \cite{ngan2005}. Initially the time scales of the 2D base flow is long compared to that of the 3D base flow. In our results, we verify this. In figure blah note that the time scale of the 2D perturbation, here the top line, is constant while the timescale of the 3D flow is much shorter, which is exemplified by the change that the 3D perturbation goes through over the first 20 or seconds. However once the 3D perturbation saturates, it stops growing and its timescale becomes similar to that of the 2D flow.  Now consider the following timescales for these flows \cite{ngan2005} as
 \begin{align}
 T_{2D} = \frac{U}{L},\qquad T_{3D} =\frac{u}{H}
 \end{align}
@@ -106,13 +122,22 @@ However we are considering the energy and thus we would have to square both side
 \begin{align}
 \frac{E_{2D}}{E_{3D}} \sim \delta^{2}
 \end{align}
-which is the result suggested by Figs.~\ref{re2000sat} and Fig.~\ref{re5000sat}. Thus, the short-wave instability, despite having a similar growth rate to that of the zigzag instability, is saturated at a level proportional to the aspect ratio of the flow, which in stratified flows, is small. 
+which is the result suggested by Figs.~\ref{re2000sat} and Fig.~\ref{re5000sat}. Thus, the short-wave instability, despite having a similar growth rate to that of the zigzag instability, is saturated at a level proportional to the aspect ratio of the flow, which in stratified flows, is small.  
 
-%Furthermore, in the scaling analysis derived in the previous chapter, if $\delta < F_{h} \ll 1$ then the startification 
+Furthermore, in the scaling analysis derived in the previous chapter, if $\delta < F_{h} \ll 1$, let us neglect terms of the form $F_{h}/\delta$, then we would have
+\begin{align}
+\frac{\partial \textbf{u}_{h}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\textbf{u}_{h}+u_{z}\frac{\partial \textbf{u}_{h}}{\partial z} &= -\nabla_{h}p + \frac{1}{Re}\nabla_{h}^{2}\textbf{u}_{h} +  \frac{1}{\delta^{2}Re}\frac{\partial^{2}\textbf{u}_{h}}{\partial z^{2}},\\
+\delta^{2}\left(\frac{\partial u_{z}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}u_{z}+u_{z}\frac{\partial u_{z}}{\partial z}\right) &= -\frac{\partial p}{\partial z} - \rho' + \frac{\delta^{2}}{Re}\nabla_{h}^{2}u_{z} + \frac{1}{Re}\frac{\partial^{2}u_{z}}{\partial z^{2}},\\
+\nabla_{h}\cdot\textbf{u}_{h} + \frac{\partial u_{z}}{\partial z} &=0,\\
+\frac{\partial \rho'}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}\rho' + u_{z}\frac{\partial \rho'}{\partial z}-u_{z}&=\frac{1}{ReSc}\nabla_{h}^{2}\rho + \frac{1}{\delta^{2}ReSc}\frac{\partial^{2}\rho}{\partial z^{2}}.
+\end{align}
+Here stratification has dropped out of the equations of motion and, as discussed, the short-wave instability shouldn't depend on stratification. These equations are very similar to the starting equations of Ngan et al. \cite{ngan2005} (+prev paper) which further suggests a link between their derivation and our result. It is important to note, however, that the results of \cite{ngan2005} + other are for an inviscid theory. In Fig.~\ref{test_energy} the saturation level lasts for only a few seconds before the potential energy decreases, most likely due to viscous effects. Regardless, the result is still robust enough that even if the saturation level begins to decrease due to viscosity, its initial maximum is still determined by the aspect ratio. 
 
-
-%To determine this linear relationship, they consider the following flow
-%\begin{align}
-%\bm{v}(x,y,z,t) = \bm{U}(x,y,t)+\bm{u}(x,y,z,t)
-%\end{align}
-%where $\bm{U}$ is a 2D base flow that satisfies the 2D Navier-Stokes equations and $\bm{u}$ is a 3D perturbation. 
+We conclude with examining the growth rate of the linear theory and that of the nonlinear theory. In comparing the linear theory with the nonlinear theory, there is a problem with what defines the linear regime of the nonlinear simulation. If we examine Fig.~\ref{sat_energy}, the growth of the potential energy between $T=5$ and $T=20$, it is very difficult to justify approximating this growth rate as linear. For most of the cases of $Re=5000$ and $F_{h}=0.2$, we were unable to determine a consistent way to determine the growth rate of the perturbation and thus we have not included the results for this simulation. Fig.~\ref{test_energy}, which choses a $Re=2000$ and $F_{h}=0.2$ case illustrates the more linear growth rate exhibited by these simulations. Fig.~\ref{growth_rates_nonlinear} illustrates the results for the linear and nonlinear theories for $Re=2000$ and $F_{h}=0.2$. Here the nonlinear results are greater than those of the linear theory, however the curve still follows the linear theory curve. Again, the issue of the growth in the potential energy not being perfectly linear could contribute to this discrepancy of $8\%-40\%$. 
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{re2000_fh02_growth_rates} 
+\caption{Growth rate for $Re=5000$ and $F_{h}=0.2$ with the linear results (red) and the nonlinear results (blue). Note we have not scaled by $F_{h}$ unlike the results in Chapter 3.}
+\label{growth_rates_nonlinear}
+\end{center}
+\end{figure}
