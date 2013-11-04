@@ -1,11 +1,11 @@
 \chapter{Fluids Background}
 \section{Boussinesq approximation}
 
-The Navier-Stokes equations are the mathematical equations that govern the evolution of fluid flow. In the context of the ocean and atmosphere, the Navier-Stokes equations, along with an equation of state, provide good models of the evolution of fluid flow e.g. Batchelor \cite{batchelor}. For our purposes, however, these equations are too general and an approximation, called the Boussinesq approximation, can be made which results in a simplified version of the Navier-Stokes equations:  
+The Navier-Stokes equations are the mathematical equations that govern the evolution of fluid flow. In the context of the ocean and atmosphere, the Navier-Stokes equations, along with equations for conservation of mass, energy, and state provide good models of the evolution of fluid flow (e.g. Batchelor\cite{batchelor}). For our purposes, however, these equations are too general and an approximation, called the Boussinesq approximation, can be made which results in a simplified version of the Navier-Stokes equations:  
 \begin{align} 
-\frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot \nabla \bm{u} = -\frac{1}{\rho_{0}}\nabla p - \frac{\rho' g}{\rho_{0}}\hat{\bm{e}}_{z} + \nu \nabla^{2}\bm{u} \label{boussinesq1}\\
-\nabla \cdot \bm{u} =0 \label{boussinesq2}\\
-\frac{\partial \rho'}{\partial t} + \bm{u}\cdot \nabla \rho' = \kappa \nabla^{2}\rho' - \frac{\partial \bar{\rho}}{\partial z} w\label{boussinesq3}
+\frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot \nabla \bm{u} = -\frac{1}{\rho_{0}}\nabla p - \frac{\rho' g}{\rho_{0}}\hat{\bm{e}}_{z} + \nu \nabla^{2}\bm{u} \label{boussinesq1},\\
+\nabla \cdot \bm{u} =0 \label{boussinesq2},\\
+\frac{\partial \rho'}{\partial t} + \bm{u}\cdot \nabla \rho' = \kappa \nabla^{2}\rho' - \frac{\partial \bar{\rho}}{\partial z} w,\label{boussinesq3}
 \end{align}
 where we have the following dimensional variables
 \begin{itemize}
@@ -13,17 +13,17 @@ where we have the following dimensional variables
 \item $p(x,y,z,t)$ is the pressure field,
 \item $\rho(x,y,z,t)$ is the density,
 \item $\rho_{0}$ is a constant reference density,
-\item $\bar{\rho}(z)$ is a linear mean density profile,
+\item $\bar{\rho}(z)$ is a background density profile,
 \item $\rho'(x,y,z,t)$ is a perturbation density,
 \item $g$ is the gravitational constant,
 \item $\nu$ is the constant kinematic velocity,
 \item $\kappa$ is the constant molecular diffusivity.
 \end{itemize}
-Equations (\ref{boussinesq1})-(\ref{boussinesq3}) are a set of five coupled partial differential equations for the unknowns $\textbf{u},p,\rho$. Herein, we will refer to equation (\ref{boussinesq1}) as the velocity equations, equation (\ref{boussinesq2}) as the continuity equation, and equation (\ref{boussinesq3}) as the density equation. An additional useful quantity to define is the buoyancy frequency or the Brunt-Vaisala frequency which is defined as
+Equations (\ref{boussinesq1})-(\ref{boussinesq3}) are a set of five coupled partial differential equations for the unknowns $\textbf{u},p,\rho$. Herein, we will refer to equation (\ref{boussinesq1}) as the velocity equations, equation (\ref{boussinesq2}) as the continuity equation, and equation (\ref{boussinesq3}) as the density equation. An additional useful quantity is the buoyancy frequency or the Brunt-V\"ais\"al\"a frequency which is defined as
 \begin{align}
 N^{2} = -\frac{g}{\rho_{0}}\frac{d\bar{\rho}}{dz}.
 \end{align}
-Note that we have included a negative sign because we assume that the linear density profile is decreasing. In the literature a positive sign also appears in the definition of the buoyancy frequency. Both definitions, however, will lead to the same conclusions. 
+Note that we have included a negative sign because we assume that the density profile is decreasing. We now assume that $N$ is constant, which implies a linear background density profile.
 
 A rigorous derivation of the Boussinesq equation is quite delicate and we provide a brief overview of the derivation. A complete derivation, along with many of the subtleties can be found in numerous books such as \cite{kundu,tritton,vallis} and a rigorous mathematical derivation in (Spiegel and Veronis). The Navier-Stokes equations for a compressible Newtonian fluid can be written as
 \begin{align}
@@ -31,11 +31,11 @@ A rigorous derivation of the Boussinesq equation is quite delicate and we provid
 \frac{1}{\rho}\frac{D\rho}{Dt} + \nabla \cdot \bm{u}=0.
 \end{align}
 
-The Boussinesq equations are based off the following approximation to the density equation \cite{kundu,vallis}
+The Boussinesq equations are based on the following decomposition of the density \cite{kundu,vallis}
 \begin{align}
 \rho(\bm{x},t) = \rho_{0} + \bar{\rho}(z) + \rho'(\bm{x},t) 
 \end{align}
-where we assume that $\bar{\rho}(z), \rho' \ll \rho_{0}$. In other words variations to the density are small compared to a reference density.
+where we assume that $\rho' \ll \bar{\rho}(z) \ll \rho_{0}$. In other words, variations to the density are small compared to a reference density.
 
 The first approximation we make is replacing the mass continuity equation with the more simple incompressible equation $\nabla\cdot \bm{u}=0$. However,  since we are interested in a fluid with non-constant density, it is not as simple as setting $\rho=\rho_{0}$. The approximation we make is that even though the density is non-constant, it is approximately in hydrostatic balance \cite{vallis}. Thermodynamically \cite{kundu}, this means that density varies as
 \begin{align}
@@ -62,7 +62,7 @@ The terms multiplying the interial terms are tiny and can be neglected \cite{kun
 
 Thus we have derived the so-called Boussinesq approximation. 
 
-\section{Linear Stability Analysis}
+\section{Linear stability analysis}
 The stability of flows has a long and rich history within fluid dynamics. The classic experiment into the stability of fluid flow is that of  Reynolds \cite{reynolds1883}. In this experiment, Reynolds injected dye into the laminar flow through a pipe. By varying the velocity of the flow through the pipe Reynolds observed various effects. If the velocity was sufficiently low, Reynolds was able to observe ``a beautiful straight line through the tube". At slightly higher velocities, the straight line behaviour remained near the initial part of the pipe but further down ``the streak would shift about the tube, but there was no appearance of sinuosity". By increasing the velocity significantly, the dye would again initially remain straight near the initial part of the tube, but instead of shifting about the tube ``the colour band would all at once mix up with the surrounding water, and fill the rest of the tube with a mass of coloured water". (add image from Acheson?)
 
 What Reynolds observed was the transition and breakdown of a flow into turbulence. Through careful observation, he determined that the dimensionless quantity that governed the behaviour of the flow was the Reynolds number 
@@ -150,7 +150,7 @@ In this equation, we cannot set $\epsilon=0$ because that results in a singular 
 
 Finally, the experimental investigation into instability of fluids and the transition to turbulence produces very appealing images which really illustrate the beauty of fluid dynamics and the reader is recommended to peruse the coffee table book by Van Dyke \cite{vandykealbum} which illustrates many images from experiments of the classical results in stability theory. 
 
-\section{The Zigzag Instability}
+\section{The zigzag instability}
 \subsection{A Brief History of Vortex Instabilties}
 
 The origin of vortex instabilities begins with Lord Kelvin who in 1880 studied perturbations to columnar vortices and determined that they were stable. For the next 90 years, the theory of vortex instability remained relatively quiet until the field was re-ignited by the investigations Crow \cite{crow1970}. Motivated by engineering applications, Crow was an aeronautical engineer, he discovered that for long wavelength perturbations of a pair of counter-rotating vortices that there was a symmetric deformation of the vortices. This worked extended a few years later by Widnall et. al \cite{widnall1974} to small wavelength perturbations. Further investigations into small wavelength perturbations were carried out by numerous others e.g. \cite{moore1975,tsai1976}. It was noticed in these studies that the streamlines of the vortex became elliptical when perturbed. Motivated by this, Pierrehumbert \cite{pierrehumbert1986} investigated the simple case of a single 2D elliptical vortex subject to a constant 3D pertubation. Extensions to this elliptical model were done by Bayly \cite{bayly1986} and Waleffe \cite{waleffe1990} and led to this instability being called the elliptical instability. A complete and detailed history of the elliptical instability, including derivations and results of the above papers and nonlinear investigations, is presented in the review by Kerswell \cite{kerswell2002}. Most of the investigations into the elliptical instability were concerned with unstratified flow, but an investigations by Miyazaki and Fukumoto \cite{miyazakifukumoto1992} showed with sufficient stratification, the elliptical instability is surpressed. 
@@ -197,7 +197,7 @@ Following up the experimental work, Billant and Chomaz provided a theoretical ac
 
 In the final paper, Billant and Chomaz conducted a numerical linear stability analysis of the zigzag instability \cite{bc2000c}. In this study, they numerically solved the linear Boussinesq equations for the growth rate of the leading eigenmode for specific wavenumbers. We will not discuss the results details of the paper here as their paper forms the basis for much of this thesis and we will rederive and discuss their results throughout the next three chapters. In the remainder of this chapter we derive the numerical equations that Billant and Chomaz used in \cite{bc2000c} and provide some more background information. In Chapter 3 we introduce and discuss the numerical technique of spectral methods used to solve the numerical equations. In Chapter 4 we extend the analysis of Billant and Chomaz to length scales well below the sub-buoyancy scale of $L_{b}\sim U/N$. 
 
-\section{Formulation of the Linear Problem}
+\section{Formulation of the linear problem}
 Following Billant and Chomaz \cite{bc2000c}, we consider the non-dimensional Boussinesq approximation to the Navier-Stokes equations in Cartesian co-ordinates 
 \begin{align}
 \frac{D\bm{u}}{Dt} = -\nabla p - \rho'\hat{\bm{e}}_{z} + \frac{1}{Re}\nabla^{2} \bm{u},\\
@@ -264,7 +264,7 @@ which we can guess at a solution of the form $\psi(r,\theta) = Z(r)\sin\theta$. 
 where $\lambda$ is an arbitrary parameter where $\lambda=0$ is a completely symmetric dipole and $\lambda\rightarrow\infty$ corresponds to a completely asymmetric dipole. Here, again, Chaplygin investigated fully the pressure and circulation produced by this dipole. Additionally, in the same set of papers, Chaplygin also investigated the case of the dipole in rotating fluid, which was independently rediscovered 80 years later. Full details of this derivation are in \cite{meleshko1994} (flierl et. al) 
 
 
-\section{Scaling Analysis (to be finished)}
+\section{Scaling analysis}
 We have mentioned two dimensionless numbers in stratified flow, the Reynolds number and the Froude number. Both these dimensionless numbers arise when comparing the relative sizes of various terms in the Navier-Stokes equations. Depending on what aspect of a problem we are looking at, these numbers can appear in different places when we choose different scalings. We will now discuss some of the scaling arguments that have been used in stratified flow as it can provide insights into what mechanisms underlie the transition to and evolution of turbulence. A comprehensive review of scaling in stratified turbulence is provided in a recent review by Riley and Lindborg \cite{rileylindborg2013} and we will discuss the important scaling arguments therein. 
 
 For reference, we reproduce the Boussinesq equations here 
