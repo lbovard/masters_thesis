@@ -55,7 +55,7 @@
 \renewcommand{\Re}{\text{Re}}
 \newcommand{\dt}{\Delta t}
 \newcommand{\dx}{\Delta x}
-\newcommand{\uhat}{\hat{\textbf{u}}}
+\newcommand{\uhat}{\hat{\bm{u}}}
 \newcommand{\kvec}{\textbf{k}}
 \newcommand{\uhatm}{$\hat{\textbf{u}}$ }
 \newcommand{\kvecm}{$\textbf{k}$ }
@@ -74,7 +74,7 @@
 %----------------------------------------------------------------------
 % FRONT MATERIAL
 %----------------------------------------------------------------------
-%\input{thesis_preamble}
+\input{thesis_preamble}
 
 %----------------------------------------------------------------------
 % MAIN BODY
@@ -85,7 +85,7 @@
 % separate documents, they would each start with the \chapter command, i.e, 
 % do not contain \documentclass or \begin{document} and \end{document} commands.
 %======================================================================
-%\input{introduction}
+\input{introduction}
 %%======================================================================
 %THIS IS THE BEGINNING
 
@@ -102,63 +102,68 @@
 %  NUMERICAL STUFF 
 %
 %-------------------------------------------------------------------------------
-%\input{background_numerical}
+\input{background_numerical}
 
 %-------------------------------------------------------------------------------
 %
 %   LINEAR THEORY 
 %
 %-------------------------------------------------------------------------------
-%\input{linear_chapter}
+\input{linear_chapter}
 
 %-------------------------------------------------------------------------------
 %
 %   NONLINEAR THEORY 
 %
 %-------------------------------------------------------------------------------
-%\input{nonlinear_chapter}
+\input{nonlinear_chapter}
 
 %-------------------------------------------------------------------------------
 %
 %   CONCLUSIONS
 %
 %-------------------------------------------------------------------------------
-%\input{conclusions}
+\input{conclusions}
 
 
-%\appendix
+\appendix
 %
 %% Add a title page before the appendices and a line in the Table of Contents
-%\chapter*{APPENDICES}
-%\addcontentsline{toc}{chapter}{APPENDICES}
-%%======================================================================
-%\chapter[PDF Plots From Matlab]{Matlab Code for Making a PDF Plot}
-%\label{AppendixA}
-%% Tip 4: Example of how to get a shorter chapter title for the Table of Contents 
-%%======================================================================
-%\section{Using the GUI}
-%Properties of Matab plots can be adjusted from the plot window via a graphical interface. Under the Desktop menu in the Figure window, select the Property Editor. You may also want to check the Plot Browser and Figure Palette for more tools. To adjust properties of the axes, look under the Edit menu and select Axes Properties.
-%
-%To set the figure size and to save as PDF or other file formats, click the Export Setup button in the figure Property Editor.
-%
-%\section{From the Command Line} 
-%All figure properties can also be manipulated from the command line. Here's an example: 
-%\begin{verbatim}
-%x=[0:0.1:pi];
-%hold on % Plot multiple traces on one figure
-%plot(x,sin(x))
-%plot(x,cos(x),'--r')
-%plot(x,tan(x),'.-g')
-%title('Some Trig Functions Over 0 to \pi') % Note LaTeX markup!
-%legend('{\it sin}(x)','{\it cos}(x)','{\it tan}(x)')
-%hold off
-%set(gca,'Ylim',[-3 3]) % Adjust Y limits of "current axes"
-%set(gcf,'Units','inches') % Set figure size units of "current figure"
-%set(gcf,'Position',[0,0,6,4]) % Set figure width (6 in.) and height (4 in.)
-%cd n:\thesis\plots % Select where to save
-%print -dpdf plot.pdf % Save as PDF
-%\end{verbatim}
+\chapter*{APPENDICES}
+\addcontentsline{toc}{chapter}{APPENDICES}
+%======================================================================
+\chapter[Spectral Example in Matlab]{Matlab Code for Solving Advection Equation}
+\label{AppendixA}
+% Tip 4: Example of how to get a shorter chapter title for the Table of Contents 
+%====================================================================== 
 
+The following code is the MATLAB code for evaluating the advection-diffusion equation with 2/3s deliasing
+\begin{verbatim}
+%construct the grid and basic parameters
+N=128; dx=2*pi/N; x=dx*(1:N);t=0;dt=dx/10;tf=5;nsteps=ceil(tf/dt);
+c=0.2+sin(x-1).^2;
+%store the wavenumbers
+kx=[0:N/2-1 0 -N/2+1:-1];
+%define cut to cut out the highest Fourier modes
+cut=ones(1,N); ksq=kx.*kx;
+%cut out the Fourier co-efficients according to dealiasing 
+%because of wavenumber ordering cut out (most negative wave numbers start
+%at N/2) e.g. (2/3)*(N/2) : (N/2+(1/3)(N/2) for 2/3s
+cut(ceil(dealias_coeff*N/2):(N/2+ceil((1-dealias_coeff)*N/2))+1)=0;
+%initial condition
+u=exp(-100*(x-1).^2);uhat=fft(u);
+%do initial timestep using Euler
+Fold=-fft(c.*real(ifft(1i*cut.*kx.*uhat)));
+uhat=(uhat+dt*Fold); 
+
+%do Adams Bashforth
+for i=1:nsteps
+    F=-fft(c.*real(ifft(1i*cut.*kx.*uhat)));
+    uhat=uhat+1.5*dt*F-0.5*dt*Fold;
+    Fold=F;
+end
+\end{verbatim}
+In the above code the line \texttt{ifft(1i*cut.*kx*uhat)} evalutes the spectral derivative of the velocity field and adds in the dealiasing by cutting out the top 1/3 of the Fourier coefficients. Note that MATLAB stores the wavenumbers \texttt{kx=[0:N/2-1 0 -N/2+1:-1]} and thus to zero out the correct coefficients requires some clever index manipulation. 
 %----------------------------------------------------------------------
 % END MATERIAL
 %----------------------------------------------------------------------
