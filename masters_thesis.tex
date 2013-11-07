@@ -52,7 +52,7 @@
 \let\cleardoublepage\clearemptydoublepage
 
 
-\renewcommand{\Re}{\text{Re}}
+\renewcommand{\Re}{Re}
 \newcommand{\dt}{\Delta t}
 \newcommand{\dx}{\Delta x}
 \newcommand{\uhat}{\hat{\bm{u}}}
@@ -74,7 +74,7 @@
 %----------------------------------------------------------------------
 % FRONT MATERIAL
 %----------------------------------------------------------------------
-\input{thesis_preamble}
+%\input{thesis_preamble}
 
 %----------------------------------------------------------------------
 % MAIN BODY
@@ -85,7 +85,7 @@
 % separate documents, they would each start with the \chapter command, i.e, 
 % do not contain \documentclass or \begin{document} and \end{document} commands.
 %======================================================================
-\input{introduction}
+%\input{introduction}
 %%======================================================================
 %THIS IS THE BEGINNING
 
@@ -95,21 +95,21 @@
 %  BACKGROUND FLUIDS
 %
 %-------------------------------------------------------------------------------
-\input{background_fluids}
+%\input{background_fluids}
 
 %-------------------------------------------------------------------------------
 %
 %  NUMERICAL STUFF 
 %
 %-------------------------------------------------------------------------------
-\input{background_numerical}
+%\input{background_numerical}
 
 %-------------------------------------------------------------------------------
 %
 %   LINEAR THEORY 
 %
 %-------------------------------------------------------------------------------
-\input{linear_chapter}
+%\input{linear_chapter}
 
 %-------------------------------------------------------------------------------
 %
@@ -123,47 +123,47 @@
 %   CONCLUSIONS
 %
 %-------------------------------------------------------------------------------
-\input{conclusions}
+%\input{conclusions}
 
 
-\appendix
+%\appendix
 %
 %% Add a title page before the appendices and a line in the Table of Contents
-\chapter*{APPENDICES}
-\addcontentsline{toc}{chapter}{APPENDICES}
-%======================================================================
-\chapter[Spectral Example in Matlab]{Matlab Code for Solving Advection Equation}
-\label{AppendixA}
-% Tip 4: Example of how to get a shorter chapter title for the Table of Contents 
-%====================================================================== 
-
-The following code is the MATLAB code for evaluating the advection-diffusion equation with 2/3s deliasing
-\begin{verbatim}
-%construct the grid and basic parameters
-N=128; dx=2*pi/N; x=dx*(1:N);t=0;dt=dx/10;tf=5;nsteps=ceil(tf/dt);
-c=0.2+sin(x-1).^2;
-%store the wavenumbers
-kx=[0:N/2-1 0 -N/2+1:-1];
-%define cut to cut out the highest Fourier modes
-cut=ones(1,N); ksq=kx.*kx;
-%cut out the Fourier co-efficients according to dealiasing 
-%because of wavenumber ordering cut out (most negative wave numbers start
-%at N/2) e.g. (2/3)*(N/2) : (N/2+(1/3)(N/2) for 2/3s
-cut(ceil(dealias_coeff*N/2):(N/2+ceil((1-dealias_coeff)*N/2))+1)=0;
-%initial condition
-u=exp(-100*(x-1).^2);uhat=fft(u);
-%do initial timestep using Euler
-Fold=-fft(c.*real(ifft(1i*cut.*kx.*uhat)));
-uhat=(uhat+dt*Fold); 
-
-%do Adams Bashforth
-for i=1:nsteps
-    F=-fft(c.*real(ifft(1i*cut.*kx.*uhat)));
-    uhat=uhat+1.5*dt*F-0.5*dt*Fold;
-    Fold=F;
-end
-\end{verbatim}
-In the above code the line \texttt{ifft(1i*cut.*kx*uhat)} evalutes the spectral derivative of the velocity field and adds in the dealiasing by cutting out the top 1/3 of the Fourier coefficients. Note that MATLAB stores the wavenumbers \texttt{kx=[0:N/2-1 0 -N/2+1:-1]} and thus to zero out the correct coefficients requires some clever index manipulation. 
+%\chapter*{APPENDICES}
+%\addcontentsline{toc}{chapter}{APPENDICES}
+%%======================================================================
+%\chapter[Spectral Example in Matlab]{Matlab Code for Solving Advection Equation}
+%\label{AppendixA}
+%% Tip 4: Example of how to get a shorter chapter title for the Table of Contents 
+%%====================================================================== 
+%
+%The following code is the MATLAB code for evaluating the advection-diffusion equation with 2/3s deliasing
+%\begin{verbatim}
+%%construct the grid and basic parameters
+%N=128; dx=2*pi/N; x=dx*(1:N);t=0;dt=dx/10;tf=5;nsteps=ceil(tf/dt);
+%c=0.2+sin(x-1).^2;
+%%store the wavenumbers
+%kx=[0:N/2-1 0 -N/2+1:-1];
+%%define cut to cut out the highest Fourier modes
+%cut=ones(1,N); ksq=kx.*kx;
+%%cut out the Fourier co-efficients according to dealiasing 
+%%because of wavenumber ordering cut out (most negative wave numbers start
+%%at N/2) e.g. (2/3)*(N/2) : (N/2+(1/3)(N/2) for 2/3s
+%cut(ceil(dealias_coeff*N/2):(N/2+ceil((1-dealias_coeff)*N/2))+1)=0;
+%%initial condition
+%u=exp(-100*(x-1).^2);uhat=fft(u);
+%%do initial timestep using Euler
+%Fold=-fft(c.*real(ifft(1i*cut.*kx.*uhat)));
+%uhat=(uhat+dt*Fold); 
+%
+%%do Adams Bashforth
+%for i=1:nsteps
+%    F=-fft(c.*real(ifft(1i*cut.*kx.*uhat)));
+%    uhat=uhat+1.5*dt*F-0.5*dt*Fold;
+%    Fold=F;
+%end
+%\end{verbatim}
+%In the above code the line \texttt{ifft(1i*cut.*kx*uhat)} evalutes the spectral derivative of the velocity field and adds in the dealiasing by cutting out the top 1/3 of the Fourier coefficients. Note that MATLAB stores the wavenumbers \texttt{kx=[0:N/2-1 0 -N/2+1:-1]} and thus to zero out the correct coefficients requires some clever index manipulation. 
 %----------------------------------------------------------------------
 % END MATERIAL
 %----------------------------------------------------------------------

@@ -48,7 +48,7 @@ From the definitions of the DFT and inverse DFT, we can see a close analogy to t
 
 In order to approximate the derivative of a function, we first need to determine how to sample the function $f(x)$. We assume $f(x)$ to periodic on $0\le x\le 2\pi$. If the domain is different, a simple scaling can transform the periodic domain to this standard interval. To compute the derivative of $f(x)$, we first sample at the points 
 \begin{align}
-x_{j} = \frac{2\pi j}{N}, j=1,\ldots,N
+x_{j} = \frac{2\pi j}{N}, j=1,\ldots,N,
 \end{align}
 and set $v_{j}=f(x_{j})$. Now we can compute the DCT from $v_{j}$ giving the coefficients $\hat{v}_{k}$ which is the discrete analogue of $\hat{f}(k)$.  Since this is the analogue of the Fourier transform, we now multiply by $ik$ resulting in the analogue of computing the first derivative. Finally, we compute the inverse DFT from $ik\hat{v}_{k}$ which produces the spectral approximation, $v'_{j}$, to the derivative of the sampled function $f'(x)$ at points $x_{j}$. However, there is some subtlety involved in treating the wavenumber $N/2$, which is usally set to zero \cite{trefethen_spectral}.
 
@@ -96,7 +96,7 @@ Consider the following general 1D non-linear PDE
 \end{align}
 where $F(\psi)$ is some general nonlinear function. Consider seeking a series expansion of the form \cite{durran}
 \begin{align}
-\psi(x,t)\approx \phi(x,t) = \sum_{k=1}^{N}a_{k}(t)\varphi_{k}(x)
+\psi(x,t)\approx \phi(x,t) = \sum_{k=1}^{N}a_{k}(t)\varphi_{k}(x),
 \end{align}
 where $\varphi_{k}$ are basis functions around which we are interested in expanding the solution. Some examples of such functions might be complex exponentials, Bessel functions, or spherical harmonics. In general,  we will not be able to find the eigenfunctions that provide the natural basis to seek a series expansion. Without the proper basis functions, it is clear that the approximate solution will never exactly solve the original PDE and we have to determine a way to minimise the error. For many problems, there is often some degree of symmetry so choosing a certain basis makes sense. For example, for a problem within a periodic box, it makes sense to choose complex exponentials as a basis; if the problem is based on a sphere, spherical harmonics are a natural choice. Thus, we are interested in not finding the correct $\varphi_{k}$ for a given problem but instead focus picking a known basis and appropriately choosing $a_{k}(t)$ to minimise the residual \cite{durran},
 \begin{align}
@@ -113,11 +113,11 @@ For the special case of the spectral method, we require that the basis functions
 
 By imposing the above integral, it can be shown\cite{durran} that the resulting system of ODEs for the above is
 \begin{align}
-\frac{d a_{k}}{dt} = -\frac{1}{M_{k,k}}\int_{S}\left[F\left(\sum_{n=1}^{N}a_{n}\varphi_{n}\right)\varphi_{k}\right]dx \qquad k=1,\ldots,N
+\frac{d a_{k}}{dt} = -\frac{1}{M_{k,k}}\int_{S}\left[F\left(\sum_{n=1}^{N}a_{n}\varphi_{n}\right)\varphi_{k}\right]dx \qquad k=1,\ldots,N,
 \end{align}
 where $M_{k,k}=\langle \varphi_{k},\varphi_{k}\rangle$. For our work, we are interested in a specific case of basis functions, $\varphi_{k}(x)=e^{ikx}$ and the inner product to be the standard inner product for complex functions
 \begin{align}
-\int_{S}g(x)h^{*}(x)dx=0 
+\int_{S}g(x)h^{*}(x)dx=0.
 \end{align}
 
 To demonstrate the above formulation, we use the spectral method to solve the 1D advection equation with variable windspeed,
@@ -134,11 +134,11 @@ and plugging this into the above yields
 \end{align}
 Expanding out $c(x,t)$ as a Fourier series we obtain
 \begin{align} 
-\frac{d a_{k}}{dt} = -\frac{i}{2\pi}\sum_{n=-K}^{K}\sum_{m=-K}^{K}na_{n}c_{m}\int_{-\pi}^{\pi}e^{i(n+m-k)x}dx \qquad k=-K,\ldots,K
+\frac{d a_{k}}{dt} = -\frac{i}{2\pi}\sum_{n=-K}^{K}\sum_{m=-K}^{K}na_{n}c_{m}\int_{-\pi}^{\pi}e^{i(n+m-k)x}dx \qquad k=-K,\ldots,K,
 \end{align}
 and upon using the orthogonality of the integral, we obtain
 \begin{align}
-\frac{da_{k}}{dt} = -\sum_{\substack{m+n=k\\ |m|,|n|\le K}} inc_{m}a_{n}
+\frac{da_{k}}{dt} = -\sum_{\substack{m+n=k\\ |m|,|n|\le K}} inc_{m}a_{n},
 \end{align}
 where we require that $n+m=k$ and $|n|,|m|\le K$. If we want to evaluate this sum directly, we would need to evaluate $\mathcal{O}(K^{2})$ operations due to the double sum in the convolution. Historically, this was a barrier for spectral methods because even though they provided accurate results, this $\mathcal{O}(K^{2})$ bottleneck did not allow for larger numerical simulations, where $\mathcal{O}(K)$ finite differences method could \cite{durran}.
 
@@ -165,7 +165,7 @@ f(x) = \sum_{m=-K}^{K}a_{m}e^{imx}, \qquad g(x) = \sum_{n=-K}^{K}b_{n}e^{inx}.
 \end{align}
 The above algorithm states that we convert the Fourier coefficients $a_{m},b_{n}$ to real space and multiply. Suppose that in real space the spacing between the grid points is
 \begin{align}
-x_{j} = \frac{2\pi j}{2N+1}
+x_{j} = \frac{2\pi j}{2N+1},
 \end{align}
 where we let $2N+1$ denotes the total number of grid points. 
 
@@ -179,7 +179,7 @@ K<|2K- \frac{2\pi}{\dx}|,
 \end{align}
 and upon subbing in $\dx$ we find that 
 \begin{align}
-N > \frac{3}{2}K - 1
+N > \frac{3}{2}K - 1.
 \end{align}
 
 There is an alternative way to get at the same result. Consider the discrete Fourier transform of the product $f(x)g(x)$
@@ -197,10 +197,10 @@ p_{k} = \frac{1}{2N+1}\sum_{m=-N}^{N}\sum_{n=-N}^{N}\sum_{j=1}^{2N+1}a_{m}b_{n}e
 Recalling that $x_{j} = 2\pi j/(2N+1)$ the inner summation is
 \begin{align}
 \sum_{j=1}^{2N+1}e^{i(m+n-k)x_{j}} =  \begin{cases}
-1 & m+n-k =0\\
-1 & m+n-k =2N+1\\
-1 & m+n-k =-(2N+1)\\
-0 & \text{otherwise}
+1 & m+n-k =0,\\
+1 & m+n-k =2N+1,\\
+1 & m+n-k =-(2N+1),\\
+0 & \text{otherwise,}
 \end{cases}
 \end{align}
 which is a restatement of the well known orthogonality condition \cite{durran}. Thus we can break up the above summation into three cases, $m+n=k, m+n=k\pm(2N+1)$ which gives
@@ -286,7 +286,7 @@ Here the right hand side is a function solely of $\psi_{n}$. When scheme can be 
 \begin{align}
 \psi_{n+1} = \psi_{n} - \Delta t F(\psi_{n+1}).
 \end{align} 
-Here, if $F(\psi)$ is nonlinear function, we cannot isolate for $\psi_{n+1}$. Instead we would have to use some sort of root finding solver to find the correct $\psi_{n+1}$ given $\psi_{n}$. Schemes that exhibit this property are known as implicity schemes. Depending on the problem at hand, one scheme may be better than the other. For this thesis, we uses Adams-Bashforth 2nd and 3rd order, follwing previous work \cite{bc2000c,waitesmol2008}.
+Here, if $F(\psi)$ is nonlinear function, we cannot isolate for $\psi_{n+1}$. Instead we would have to use some sort of root finding solver to find the correct $\psi_{n+1}$ given $\psi_{n}$. Schemes that exhibit this property are known as implicity schemes. Depending on the problem at hand, one scheme may be better than the other. For this thesis, we uses Adams-Bashforth 2nd and 3rd order, following previous work \cite{bc2000c,waitesmol2008}.
 
 Once we have choosen a time-stepping scheme, the stability of the scheme is important to know. If we pick $\Delta t$ too large, for example, the right handside might grow too large and become unstable. By finding the stability region of a scheme, it tells us when we can except our solution to not blow up. To investigate this we define the amplitude A to be
 \begin{align}
@@ -308,7 +308,7 @@ where $\lambda,\omega$ are real numbers.
 
 To determine the stability region we use the method from Leveque \cite{leveque} which gives a stability region of
 \begin{align}
-z = \frac{2(\xi^{2}-\xi)}{3\xi -1}
+z = \frac{2(\xi^{2}-\xi)}{3\xi -1},
 \end{align}
 where $\xi$ is the unit circle. Fig.~\ref{ab_stab} illustrates the stability region of the Adams-Bashforth second order.
 \begin{figure}
@@ -321,21 +321,21 @@ where $\xi$ is the unit circle. Fig.~\ref{ab_stab} illustrates the stability reg
 
 To illustrate time-stepping schemes and how they are applied to problems, consider the following one dimensional advection equation\cite{trefethen_spectral}
 \begin{align}
-\frac{\partial u}{\partial t} + c(x)\frac{\partial u}{\partial x} = 0,\qquad c(x)=\frac{1}{5}+\sin^{2}(x-1), \qquad u(x,0)=e^{-100(x-1)^{2}}, x\in[0,2\pi], t>0
+\frac{\partial u}{\partial t} + c(x)\frac{\partial u}{\partial x} = 0,\qquad c(x)=\frac{1}{5}+\sin^{2}(x-1), \qquad u(x,0)=e^{-100(x-1)^{2}}, x\in[0,2\pi],
 \end{align}
 where we are solving on a periodic domain. The physical interpretation of this equation is the simple one dimensional advection of a velocity field $u(x,t)$ by the fixed field $c(x)$. To evaluate the advection term, we use a spectral method with 2/3s dealiasing. As discussed in the previous section, there is still non-standard terminology throughout the literature regrading the names of the various methods of using FFTs. Trefethen, for example, calls pseudospectral methods, `collocation methods'\cite{trefethen_spectral} which is also a term used by Durran \cite{durran}, although Durran prefers the term pseudospectral.  
 
 For a time-stepping scheme, we use a second-order Adams-Bashforth\cite{durran} scheme. Re-writing wave-equation as
 \begin{align}
-\frac{\partial u}{\partial t} = -c(x)\frac{\partial u}{\partial x} = F(u)
+\frac{\partial u}{\partial t} = -c(x)\frac{\partial u}{\partial x} = F(u),
 \end{align}
 which we can write in Fourier space as
 \begin{align}
-\frac{\partial \hat{u}}{\partial t} = \widehat{-c(x)\frac{\partial u}{\partial x}} = F(\hat{u})
+\frac{\partial \hat{u}}{\partial t} = \widehat{-c(x)\frac{\partial u}{\partial x}} = F(\hat{u}),
 \end{align}
 the Adams-Bashforth scheme is
 \begin{align}
-\hat{u}^{n+1} = \hat{u}^{n} + \frac{\dt}{2}[3F(\hat{u}^{n})-F(\hat{u}^{n-1})]
+\hat{u}^{n+1} = \hat{u}^{n} + \frac{\dt}{2}[3F(\hat{u}^{n})-F(\hat{u}^{n-1})].
 \end{align}
 Since the Adams-Bashforth scheme uses a previous time-step, we will use forward Euler for the first time-step. To evaluate $F(u)$ we will use the spectral differentiation, as discussed above. See Appendix A for the sample MATLAB code which illustrates how to achieve dealiasing in practice. 
 
@@ -367,7 +367,7 @@ Fig.~\ref{spectralvpseudo} illustrates the results of the numerical experiment. 
 \subsection{Fourier Transformed Navier-Stokes}
 We now turn to the formulation of the Navier-Stokes equations in the Fourier domain which provides a convenient formulation to analyse the underlying mechanisms of turbulence. Recall that in the Fourier domain, derivatives become multiplication of wavenumbers which converts the spatial parts of the Navier-Stokes equations into algebraic equations. To demonstrate the formulation in Fourier space, let us cast the standard Navier-Stokes equations into Fourier space. 
 \begin{align}
-\frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot\nabla\bm{u} = -\frac{1}{\rho_{0}}\nabla p + \nu\nabla^{2}\bm{u}, \qquad \nabla\cdot\bm{u}=0
+\frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot\nabla\bm{u} = -\frac{1}{\rho_{0}}\nabla p + \nu\nabla^{2}\bm{u}, \qquad \nabla\cdot\bm{u}=0,
 \end{align}
 Taking the Fourier transform of the above equation is straight-forward for all terms except the advection term $\bm{u}\cdot\nabla\bm{u}$, which we postpone for now.
 
@@ -390,25 +390,25 @@ This result is unsurprising, since all we have done is take the divergence of th
 \subsection{Projection Tensor}
 In order to project the Navier-Stokes equations onto the $\uhat$-plane, we define the following projection operator
 \begin{align}
-\textbf{P}=\textbf{1} - \frac{\kvec\kvec}{k^{2}} \text{ or } P_{ij}(\kvec) = \delta_{ij} - \frac{k_{i}k_{j}}{k^{2}}
+\textbf{P}=\textbf{1} - \frac{\kvec\kvec}{k^{2}} \text{ or } P_{ij}(\kvec) = \delta_{ij} - \frac{k_{i}k_{j}}{k^{2}},
 \end{align}
 where we are using Einstein summation notation \cite{lesieur,wald}. It is straightforward to verify that $P_{ij}P_{jk}=P_{ik}$ or in matrix notation $\textbf{P}^{2}=\textbf{P}$, in other words the projection tensor is idempotent. Idempotence is a defining feature of projection operators \cite{MeyerLinAlg}. It is straightforward to verify that $k_{j}P_{ij}=0$ and $\hat{u}_{j}P_{ij}=\hat{u}_{i}$. These simple observations confirm that the projection tensor projects a vector onto the $\uhat$-plane. 
 
 Applying $P_{ij}$ to (\ref{NS_fourier_1}) we obtain the following 
 \begin{align}
-\frac{\partial \uhat}{\partial t} + \textbf{P}\mathcal{F}(\bm{u}\cdot\nabla\bm{u}) =  -\nu k^{2}\uhat\label{NS_fourier_3}
+\frac{\partial \uhat}{\partial t} + \textbf{P}\mathcal{F}(\bm{u}\cdot\nabla\bm{u}) =  -\nu k^{2}\uhat\label{NS_fourier_3},
 \end{align}
 where $\textbf{P}$ is acting on the Fourier transform of the advection term. In order to compute the Fourier transform of the advection term, we note that 
 \begin{align}
-\bm{u}\cdot\nabla\bm{u} = u_{j}\frac{\partial u_{i}}{\partial x_{j}} = \frac{\partial (u_{i}u_{j})}{\partial x_{j}}
+\bm{u}\cdot\nabla\bm{u} = u_{j}\frac{\partial u_{i}}{\partial x_{j}} = \frac{\partial (u_{i}u_{j})}{\partial x_{j}},
 \end{align}
 where the incompressibility condition has been used to bring the velocity inside the derivative. Thus we are able to write
 \begin{align}
-\mathcal{F}(\bm{u}\cdot\nabla\bm{u})=ik_{j}\int_{\textbf{p}+\textbf{q}=\kvec}d\kvec\hat{u}_{i}(\textbf{p})\hat{u}_{j}(\textbf{q})
+\mathcal{F}(\bm{u}\cdot\nabla\bm{u})=ik_{j}\int_{\textbf{p}+\textbf{q}=\kvec}d\kvec\hat{u}_{i}(\textbf{p})\hat{u}_{j}(\textbf{q}),
 \end{align}
 and hence we can finally write out the Navier-Stokes equations in Fourier space as \cite{lesieur}
 \begin{align}
-\frac{\partial \hat{u}_{i}}{\partial t} + iP_{ij}k_{m}\int_{\textbf{p}+\textbf{q}=\kvec}d\kvec\hat{u}_{j}(\textbf{p})\hat{u}_{m}(\textbf{q})=  -k^{2}\hat{u}_{i}\label{NS_fourier_3}
+\frac{\partial \hat{u}_{i}}{\partial t} + iP_{ij}k_{m}\int_{\textbf{p}+\textbf{q}=\kvec}d\kvec\hat{u}_{j}(\textbf{p})\hat{u}_{m}(\textbf{q})=  -k^{2}\hat{u}_{i}\label{NS_fourier_4}.
 \end{align}
 
 \subsection{Numerical Formulation of NS in Fourier}
@@ -416,15 +416,15 @@ Although we have eliminated the pressure completely, we still have the nonlinear
 
 Recall the following identity \cite{kundu,acheson_fluid}
 \begin{align}
-\bm{u}\cdot\nabla\bm{u} = \bm{\omega}\times \bm{u} - \frac{1}{2}\nabla \bm{u}^{2}
+\bm{u}\cdot\nabla\bm{u} = \bm{\omega}\times \bm{u} - \frac{1}{2}\nabla \bm{u}^{2},
 \end{align}
 When we apply the projection operator $\textbf{P}$ to the above equation, the $\nabla \bm{u}^{2}$ term will vanish since it is orthogonal to the $\uhat$-plane. For the cross product between the vorticity and velocity, we use the methods discussed above from dealiasing. Thus to evaluate the cross product term, we assume we have the Fourier transform of the vorticity and velocity $\hat{\bm{\omega}},\uhat$ and re-write the cross product term as
 \begin{align}
-\mathcal{F}(\bm{\omega}\times \bm{u}) = \mathcal{F}(\mathcal{F}^{-1}(\hat{\bm{\omega}})\times\mathcal{F}^{-1}(\uhat))
+\mathcal{F}(\bm{\omega}\times \bm{u}) = \mathcal{F}(\mathcal{F}^{-1}(\hat{\bm{\omega}})\times\mathcal{F}^{-1}(\uhat)).
 \end{align}
 Using this result we can reformulate the Navier-Stokes equations into a form to be solved numerically using a spectral method
 \begin{align}
-\frac{\partial \uhat}{\partial t} = \textbf{P}(\kvec)\mathcal{F}(\mathcal{F}^{-1}(\hat{\bm{\omega}})\times\mathcal{F}^{-1}(\uhat))-k^{2}\uhat
+\frac{\partial \uhat}{\partial t} = \textbf{P}(\kvec)\mathcal{F}(\mathcal{F}^{-1}(\hat{\bm{\omega}})\times\mathcal{F}^{-1}(\uhat))-k^{2}\uhat,
 \end{align}
 where the $\mathcal{F},\mathcal{F}^{-1}$ can be evaluated by FFTs, as discussed above.
 
@@ -434,15 +434,15 @@ The above has been focused on the Navier-Stokes equations and not the Boussinesq
 \subsection{Integrating Factor}
 Another advantage of the Fourier formulation is the ability to exactly integrate the diffusion term. Let us denote the advective projective term as $F(\hat{\bm{u}})$ and we have
 \begin{align}
-\frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat = F(\uhat) 
+\frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat = F(\uhat) ,
 \end{align}
 where the left-hand side has been explicitly written out. Written in this form, the common trick of writing a product as a derivative is observed since
 \begin{align}
- \frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat= e^{-\nu k^{2}t}\frac{\partial }{\partial t}(\uhat e^{\nu k^{2}t})
+ \frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat= e^{-\nu k^{2}t}\frac{\partial }{\partial t}(\uhat e^{\nu k^{2}t}),
 \end{align}
 Thus we can re-write the Navier-Stokes equations as 
 \begin{align}
-\frac{\partial }{\partial t}(\uhat e^{\nu k^{2}t})= e^{\nu k^{2}t}F(\uhat) 
+\frac{\partial }{\partial t}(\uhat e^{\nu k^{2}t})= e^{\nu k^{2}t}F(\uhat).
 \end{align}
 For notational convenience, let us write $g(t) = e^{\nu k^{2}t}$ and the note the following trivial identities
 \begin{align}
@@ -473,7 +473,7 @@ Hyperviscosity is a method of simulating higher Reynolds number flow by replacin
 \end{center}
 \end{figure}
 
-REPLACE THIS PARAGRAPH WITH EXAMPLES FROM LITERATURE
+
 %In general we consider $k$ to be an even number, since this corresponds to even derivatives, however as long as we correctly choose the co-efficient in front of the $k^{n}$ to be $-1$, we can obtain different degrees of diffusion. But if we allow this, odd powers of $k$ no longer correspond to odd derivatives as we will be off by a factor of $i$ and we cannot interpret these derivatives as dispersive terms.
 
 In order to encorporate hyperviscosity numerically, we scale the coefficient by the maximum wavenumber $k_{max}$. We want the diffusive timescales of the smallest scales to be the same for both the regular viscosity and the hyperviscosity. That is we want 
@@ -484,7 +484,7 @@ where $i$ is an even integer. Solving for $\nu_{i}$ then gives the following rep
 \begin{align}
 \nu k^{2} \Rightarrow \nu k_{max}^{2-i}k^{i}.
 \end{align}
-Throughout this thesis, we will use $i=4$. 
+Throughout this thesis, we will use $i=4$, although $i=8$ is also common \cite{lindborg2006,augier2012}.
 
 \subsection{Concluding Remarks}
 Although we have done all our manipulations in Fourier space, we could have equally well formulated the above equations in real space. The idea of projecting the velocity field onto the $\uhat$-plane is motivated by the Helmholtz decomposition. This decomposition states, for any $C^{2}$ vector field in a bounded region of $\mathbb{R}^{3}$, we can decompose the vector field into a divergence-free and curl-free component. The divergence free part corresponds to taking the divergence of the Navier-Stokes equations which would yield the Poisson equation for the pressure. Taking the curl of the Navier-Stokes equation - which we define to be the vorticity - would yield the vorticity equation which does not have a pressure term.
