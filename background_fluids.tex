@@ -1,7 +1,7 @@
 \chapter{Fluids Background}
 \section{Boussinesq approximation}
 
-The Navier-Stokes equations are the mathematical equations that govern the evolution of fluid flow. In the context of the ocean and atmosphere, the Navier-Stokes equations, along with equations for conservation of mass, energy, and state provide good models of the evolution of fluid flow (e.g. Batchelor\cite{batchelor}). For our purposes, however, these equations are too general and an approximation, called the Boussinesq approximation, can be made which results in a simplified version of the Navier-Stokes equations:  
+The Navier-Stokes equations are the mathematical equations that govern the evolution of fluid flow. In the context of the ocean and atmosphere, the Navier-Stokes equations, along with equations for conservation of mass and energy and an equation of state provide a good model of the evolution of fluid flow (e.g. Batchelor\cite{batchelor}). For our purposes, however, these equations are too general and an approximation, called the Boussinesq approximation, can be made which results in a simplified version of the Navier-Stokes equations:  
 \begin{align} 
 \frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot \nabla \bm{u} = -\frac{1}{\rho_{0}}\nabla p - \frac{\rho' g}{\rho_{0}}\hat{\bm{e}}_{z} + \nu \nabla^{2}\bm{u} \label{boussinesq1},\\
 \nabla \cdot \bm{u} =0 \label{boussinesq2},\\
@@ -9,12 +9,12 @@ The Navier-Stokes equations are the mathematical equations that govern the evolu
 \end{align}
 where we have the following dimensional variables:
 \begin{itemize}
-\item $\textbf{u}(x,y,z,t)=(u(x,y,z,t),v(x,y,z,t),w(x,y,z,t))$ is the velocity field in the $x,y,z$-directions directions respectively,
+\item $\textbf{u}(x,y,z,t)=(u(x,y,z,t),v(x,y,z,t),w(x,y,z,t))$ is the velocity field in the $x,y,z$-directions respectively,
 \item $p(x,y,z,t)$ is the pressure field,
 \item $\rho(x,y,z,t)$ is the density,
 \item $\rho_{0}$ is a constant reference density,
 \item $\bar{\rho}(z)$ is a background density profile,
-\item $\rho'(x,y,z,t)$ is a perturbation density,
+\item $\rho'(x,y,z,t)=\rho(x,y,z,t)-\bar{\rho}(z)$ is a perturbation density,
 \item $g$ is the gravitational constant,
 \item $\nu=\mu/\rho_{0}$ is the constant kinematic viscosity,
 \item $\mu$ is the constant dynamic viscosity,
@@ -28,11 +28,11 @@ Note that we have included a negative sign because we assume that the density pr
 
 A rigorous derivation of the Boussinesq equation is quite delicate and we provide a brief overview of the derivation. A complete derivation, along with many of the subtleties can be found in numerous books such as \cite{batchelor,kundu,tritton,vallis}. The Navier-Stokes equations for a compressible Newtonian fluid can be written as
 \begin{align}
-\rho \frac{D\bm{u}}{Dt} = -\nabla p + \rho \textbf{g} + \mu \nabla^{2}\bm{u},\\
+\rho \frac{D\bm{u}}{Dt} = -\nabla p - \rho \textbf{g} + \mu \nabla^{2}\bm{u},\\
 \frac{1}{\rho}\frac{D\rho}{Dt} + \nabla \cdot \bm{u}=0.\\
 \rho c_{p} \frac{DT}{Dt} -\alpha T \frac{D\rho}{Dt}=k\nabla^{2}T+\phi,\label{energy_equation}
 \end{align}
-where $\alpha=-\rho^{-1}(\partial \rho/\partial T)_{p}$ is the coefficient of thermal expansion, $c_{p}$ is the specific heat, and $\phi$ represent conversion of kinetic energy to potential energy \cite{waitecnotes}. To close the system, we need an equation of state, which we take to be \cite{kundu}
+where $\alpha=-\rho^{-1}(\partial \rho/\partial T)_{p}$ is the coefficient of thermal expansion, $c_{p}$ is the specific heat, and $\phi$ represent conversion of kinetic energy to internal energy by viscous dissipation\cite{waitecnotes}. To close the system, we need an equation of state, which we take to be \cite{kundu}
 \begin{align}
 \rho = \rho_{0}(1-\alpha(T-T_{0})).\label{equation_of_state}
 \end{align}
@@ -43,13 +43,13 @@ The first approximation we make is that of incompressibility. The conditions for
 \item Speed: the characteristic velocity of the flow is much smaller than the speed of sound.
 \item Gravity: the vertical scale of the flow is not too large.
 \end{enumerate}
-Mathematically, letting $v$ denote the speed of sound in the medium, $T$ the characteristic time, $u$ the characteristic velocity, and $L$ the characteristic vertical length, these three conditions become \cite{waitecnotes}
+Mathematically, letting $v$ denote the speed of sound in the medium, $T$ the characteristic time, $u$ the characteristic velocity, and $L_{v}$ the characteristic vertical length, these three conditions become \cite{waitecnotes}
 \begin{align}
 \text{unsteadiness: } T^{2} &\gg L^{2}/v^{2},\\
 \text{speed: } (u/v)^{2} &\ll 1,\\
-\text{gravity: } L&\ll v^{2}/g.
+\text{gravity: } L_{v}&\ll v^{2}/g.
 \end{align} 
-For the atmosphere, $v\approx 330$ m/s, $g=9.8 \text{ m/s}^{2}$. The speed condition is easily satisfied if $u< 100$ m/s. The gravity condition holds as long as $L\ll 11 \text{ km}$ which implies that the unsteadiness condition holds as long as $T\gg 30$ s. Such conditions are reasonable for the atmosphere. For the ocean $v\approx 1500$ m/s thus speed is satisfied if $u<475$ m/s, $L<230$ km, and $T>300$ s. Again, such conditions are satisfied in the ocean. Thus to a good approximation, the ocean and atmosphere are incompressible fluids. Thus the conservation of mass equation can be approximated as \cite{kundu,waitecnotes}
+For the atmosphere, $v\approx 330$ m/s, $g=9.8 \text{ m/s}^{2}$. The speed condition is easily satisfied if $u< 100$ m/s. The gravity condition holds as long as $L\ll 11 \text{ km}$ which implies that the unsteadiness condition holds as long as $T\gg 30$ s. Such conditions are reasonable for shallow motions in the atmosphere. For the ocean $v\approx 1500$ m/s thus speed is satisfied if $u<475$ m/s, $L<230$ km, and $T>300$ s. Again, such conditions are satisfied in the ocean. Assuming incompressibility, the conservation of mass equation can be approximated as \cite{kundu,waitecnotes}
 \begin{align}
 \frac{1}{\rho}\frac{D\rho}{Dt} + \nabla \cdot \bm{u}=0 \Rightarrow \nabla \cdot\bm{u}=0.
 \end{align}
@@ -64,20 +64,20 @@ where we assume that $|\rho'| \ll |\bar{\rho}(z)| \ll |\rho_{0}|$. In other word
 \end{align}
 Plugging in the equation of state (\ref{equation_of_state}) and using (\ref{bouss_approx}) we obtain (\ref{boussinesq3}).
 
-Consider the first two terms in (\ref{bouss_approx}). To these densities, we associate \cite{kundu,vallis} a corresponding pressure term in hydrostatic balance so that
+Consider the first two terms in (\ref{bouss_approx}). To these background densities, we associate \cite{kundu,vallis} a corresponding background pressure term in hydrostatic balance so that
 \begin{align}
-p_{0} + \bar{p}(z) \Rightarrow \nabla(p_{0} + \bar{p}(z)) = \rho_{0}\textbf{g} + \bar{\rho}(z)\textbf{g}.
+\nabla \bar{p}(z) = -(\rho_{0}\textbf{g} + \bar{\rho}(z)\textbf{g}).\label{bgpressure}
 \end{align}
 
 Plugging in (\ref{bouss_approx}) into the momentum equation (\ref{boussinesq1}) and dividing through by $\rho_{0}$ we obtain
 \begin{align} 
-\left(1 + \frac{\bar{\rho}}{\rho_{0}} + \frac{\rho'}{\rho_{0}}\right)\frac{D\bm{u}}{Dt} = -\frac{1}{\rho_{0}}\nabla p + \left(1 + \frac{\bar{\rho}}{\rho_{0}} + \frac{\rho'}{\rho_{0}}\right)\textbf{g} + \nu \nabla^{2}\bm{u},
+\left(1 + \frac{\bar{\rho}}{\rho_{0}} + \frac{\rho'}{\rho_{0}}\right)\frac{D\bm{u}}{Dt} = -\frac{1}{\rho_{0}}\nabla p - \left(1 + \frac{\bar{\rho}}{\rho_{0}} + \frac{\rho'}{\rho_{0}}\right)\textbf{g} + \nu \nabla^{2}\bm{u},
 \end{align}
-and subtracting these two equations yields 
+and subtracting (\ref{bgpressure}) yields
 \begin{align} 
-\left(1 + \frac{\bar{\rho}}{\rho_{0}} + \frac{\rho'}{\rho_{0}}\right)\frac{D\bm{u}}{Dt} = -\frac{1}{\rho_{0}}\nabla p' + \frac{\rho'}{\rho_{0}}\textbf{g} + \nu \nabla^{2}\bm{u},
+\left(1 + \frac{\bar{\rho}}{\rho_{0}} + \frac{\rho'}{\rho_{0}}\right)\frac{D\bm{u}}{Dt} = -\frac{1}{\rho_{0}}\nabla p' - \frac{\rho'}{\rho_{0}}\textbf{g} + \nu \nabla^{2}\bm{u},
 \end{align}
-where $p' = p - (p_{0}+\bar{p})$. Using the definition of (\ref{bouss_approx}) we can neglect the ratios in front of the material derivative to obtain \cite{kundu} (\ref{boussinesq1}). Thus we have derived the Boussinesq equations.
+where $p' = p - \bar{p}$. Using $|\rho'|\ll |\bar{\rho}|\ll|\rho_{0}|$, we can neglect the ratios in front of the material derivative to obtain \cite{kundu} (\ref{boussinesq1}). Thus we have derived the Boussinesq equations.
 
 \section{Linear stability analysis}
 The study of flow stability has a long and rich history within fluid dynamics. The classic experiment into the stability of fluid flow is that of  Reynolds \cite{reynolds1883}. In this experiment, Reynolds injected dye into the laminar flow through a pipe. By varying the velocity of the flow through the pipe Reynolds observed various effects. If the velocity was sufficiently low, Reynolds was able to observe ``a beautiful straight line through the tube" \cite{reynolds1883}. At slightly higher velocities, the straight line behaviour remained near the initial part of the pipe but further down ``the streak would shift about the tube, but there was no appearance of sinuosity" \cite{reynolds1883}. By increasing the velocity significantly, the dye would again initially remain straight near the initial part of the tube, but instead of shifting about the tube ``the colour band would all at once mix up with the surrounding water, and fill the rest of the tube with a mass of coloured water" \cite{reynolds1883}.
@@ -353,9 +353,9 @@ Building on the work of Lilly \cite{lilly1983} and Riley et al.\cite{rileylelong
 \end{align} 
 The assumption that $F_{h}/\delta \rightarrow 1$ can be rewritten to state that $L_{v} \sim U/N$, which is the buoyancy scale. In this case, there is no decoupling between the horizontal and vertical directions and the advection terms and incompressibility condition are fully three-dimensional. 
 
-\subsection{Stratified Turbulence}
-In this thesis we focus on the linear stability and the transition to stratified turbulence, but not on stratified turbulence itself however it worth making a few brief remarks. For an in-depth recent review, see Lindborg and Riley \cite{rileylindborg2013} which contains a thorough review of recent process made in stratified turbulence in experimental, theoretical, and numerical results.
-
-Experimental results by Nastrom and Gage \cite{nastrom1985} analysing data from airplanes have shown that stratified turbulence in the atmosphere exhibits the scaling of the horizontal energy spectrum as $k_{h}^{-3}$ at large horizontal scales and as $k_{h}^{-5/3}$ as small horizontal scales. The $k_{h}^{-3}$ spectrum is well known in the quasi-geostrophic community (source?). The $k_{h}^{-5/3}$ is the well known \cite{lesieur} scaling of isotropic homogeneous turbulence derived by Kolmogorov in the 1940s. The appearance of this scaling is surprising since anisotropy, as we have discussed, is very important in stratified flows. One possible theory, proposed by Lindborg \cite{lindborg2006}, is that the buoyancy length $U/N$, here meaning the length scale of the eddies within the flow, plays the important role in governing the evolution of the turbulence. However many open questions remain (cite?).
-
+%\subsection{Stratified Turbulence}
+%In this thesis we focus on the linear stability and the transition to stratified turbulence, but not on stratified turbulence itself however it worth making a few brief remarks. For an in-depth recent review, see Lindborg and Riley \cite{rileylindborg2013} which contains a thorough review of recent process made in stratified turbulence in experimental, theoretical, and numerical results.
+%
+%Experimental results by Nastrom and Gage \cite{nastrom1985} analysing data from airplanes have shown that stratified turbulence in the atmosphere exhibits the scaling of the horizontal energy spectrum as $k_{h}^{-3}$ at large horizontal scales and as $k_{h}^{-5/3}$ as small horizontal scales. The $k_{h}^{-3}$ spectrum is well known in the quasi-geostrophic community (source?). The $k_{h}^{-5/3}$ is the well known \cite{lesieur} scaling of isotropic homogeneous turbulence derived by Kolmogorov in the 1940s. The appearance of this scaling is surprising since anisotropy, as we have discussed, is very important in stratified flows. One possible theory, proposed by Lindborg \cite{lindborg2006}, is that the buoyancy length $U/N$, here meaning the length scale of the eddies within the flow, plays the important role in governing the evolution of the turbulence. However many open questions remain (cite?).
+%
 

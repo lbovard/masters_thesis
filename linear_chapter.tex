@@ -1,4 +1,4 @@
-\chapter{Linear Theory}
+\chapter{Linear Simulations}
 
 \section{Introduction}
 In this chapter we extend the results of Billant and Chomaz \cite{bc2000c} to the sub-buoyancy length-scales. We also reproduce the numerical results presented by Billant and Chomaz and confirm their conclusions about the existence of the zigzag instability at the buoyancy scale. The results in this chapter are based on the paper by Bovard and Waite \cite{bovard2013}.
@@ -6,7 +6,7 @@ In this chapter we extend the results of Billant and Chomaz \cite{bc2000c} to th
 \section{Set-up}
 The equations that we want to solve are the linear Boussinesq equations, which we derived in Chapter 2 and for which we derived the numerical scheme in Chapter 3. We repeat the equations here:
 \begin{align}
-\frac{\partial \hat{\bm{u}}}{\partial t} = \textbf{P}(\textbf{k})[\widehat{\bm{u}\times \omega_{z0}\hat{\bm{e}}_{z}} + \widehat{\bm{u}_{h0}\times\bm{\omega}}-\hat{\rho}'\hat{\bm{e}}_{z}] - \frac{k^{2}}{Re}\hat{\bm{u}},\label{solve1}\\
+\frac{\partial \hat{\bm{u}}}{\partial t} = \textbf{P}(\textbf{k})[\widehat{\bm{u}\times \omega_{z0}\hat{\bm{e}}_{z}} + \widehat{\bm{u}_{h0}\times\bm{\omega}}-\hat{\rho}'\hat{\bm{e}}_{z}] - \frac{k^{2}}{Re}\hat{\bm{u}},\\
 \frac{\partial\hat{\rho}'}{\partial t} = -i\bm{k}_{h}\cdot\widehat{\bm{u}_{h0}\rho'} + \frac{1}{F_{h}^{2}}\hat{w}- \frac{k^{2}}{ScRe}\hat{\rho}'.
 \end{align} 
 The parameter regime to be explored is a function of $k_{z},Re,F_{h}$. 
