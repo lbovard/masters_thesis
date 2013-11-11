@@ -10,7 +10,7 @@
 In this chapter we discuss the numerical techniques and methods used in this thesis. In this thesis we use the spectral method to numerically solve the linear and nonlinear Navier-Stokes equations. Spectral methods provide a convenient and quick way to compute derivatives of sufficiently well-behaved periodic functions. In evaluating derivatives of smooth periodic functions, spectral methods provide an advantage over other methods of evaluating derivatives, such as finite difference, as the derivatives can be computed to with greater accuracy, often to machine precision, in exchange for only a relatively modest increase in complexity. Specifically, finite difference methods run in $\mathcal{O}(N)$ time, where $N$ is the number of grid points, but the error tends to be on the order of $\mathcal{O}(N^{-p})$ where $p$ is a small integer \cite{durran}. Spectral methods, however, run in $\mathcal{O}(N\log N)$ time but the errors are on the order of $\mathcal{O}(N^{-p})$ when the function is $C^{p}$\cite{trefethen_spectral}. A complete overview of spectral methods is beyond the scope of this thesis and we only discuss the key features needed for numerical work. Comprehensive reviews of spectral methods are provided in many books, e.g. Trefethen \cite{trefethen_spectral}, Boyd \cite{boyd2001}, and Canuto \cite{canuto}.
 
 
-\section{Spectral Methods Motivation}
+\section{Spectral methods motivation}
 Spectral methods have their origins in the Fourier transform. Let us denote the Fourier transform, $\mathcal{F}$, of $f(x)$ as $\mathcal{F}(f(x)) = \hat{f}(k)$, given by
 \begin{align}
 \mathcal{F}(f(x)) = \hat{f}(k) = \int_{-\infty}^{\infty}dxe^{-ikx}f(x)\label{fouriertransform}.
@@ -32,7 +32,7 @@ This procedure suggests a method to compute the derivative of a function. Comput
 \end{enumerate}
 
 We need a method to evaluate the integrals (\ref{fouriertransform}) and (\ref{inversefouriertransform}). One possible avenue would be to apply well known integral quadratures to evaluate these integrals. However, there are more efficient and better alternatives. The correct avenue to implementing the above algorithm is to consider the discrete analogue of the Fourier transform, the discrete Fourier transform. From the discrete Fourier transform, we discuss the Fast Fourier Transform, which is a fast way to evaluate the discrete Fourier transform.
-\section{FFT and Spectral Derivatives} 
+\section{FFT and spectral derivatives} 
 Let us now investigate how we can quickly compute the Fourier transform of a function on a computer. In analogy to the Fourier transform, we define \cite{trefethen_spectral} the discrete Fourier transform\footnote{Note that there is no universal standard on where to put the factors of $N$ and $2\pi$.} (DFT) on $N$ data points $v_{j}$
 \begin{align}
 \hat{v}_{k} = \frac{2\pi}{N}\sum_{j=1}^{N} e^{-ikx_{j}}v_{j},\qquad k=-\frac{N}{2}+1,\ldots,\frac{N}{2},\label{dft}
@@ -50,7 +50,7 @@ In order to approximate the derivative of a function, we first need to determine
 \begin{align}
 x_{j} = \frac{2\pi j}{N}, j=1,\ldots,N,
 \end{align}
-and set $v_{j}=f(x_{j})$. Now we can compute the DCT from $v_{j}$ giving the coefficients $\hat{v}_{k}$ which is the discrete analogue of $\hat{f}(k)$.  Since this is the analogue of the Fourier transform, we now multiply by $ik$ resulting in the analogue of computing the first derivative. Finally, we compute the inverse DFT from $ik\hat{v}_{k}$ which produces the spectral approximation, $v'_{j}$, to the derivative of the sampled function $f'(x)$ at points $x_{j}$. However, there is some subtlety involved in treating the wavenumber $N/2$, which is usally set to zero \cite{trefethen_spectral}.
+and set $v_{j}=f(x_{j})$. Now we can compute the DCT from $v_{j}$ giving the coefficients $\hat{v}_{k}$ which is the discrete analogue of $\hat{f}(k)$.  Since this is the analogue of the Fourier transform, we now multiply by $ik$ resulting in the analogue of computing the first derivative. Finally, we compute the inverse DFT from $ik\hat{v}_{k}$ which produces the spectral approximation, $v'_{j}$, to the derivative of the sampled function $f'(x)$ at points $x_{j}$. However, there is some subtlety involved in treating the wavenumber $N/2$, which is usually set to zero \cite{trefethen_spectral}.
 
 Despite having a discrete algorithm to compute an analogue of the Fourier transform, our goal has still not been reached because we are still left with doing $\mathcal{O}(N^{2})$ operations. This results because there are $N$ coefficients and for each coefficient a sum of $N$ terms must be added together. For small $N$, computing spectral derivatives are not that much slower than finite differences methods, however they quickly become impractical for large $N$. This barrier can be overcome through the Fast Fourier Transform (FFT) algorithm. This algorithm has a rich history and has been rediscovered multiple times, beginning with Gauss in the early 1800s before Fourier published his results on Fourier series \cite{kammler}. The most popular and well known rediscovery of the FFT was in 1965 by Cooley-Tukey \cite{cooley1965}.
 
@@ -81,7 +81,7 @@ which are both periodic on the interval $[0,2\pi]$.
 
 As we can see in Fig.~\ref{spectral_derivatives} when the original function is sufficiently smooth and periodic, here $g(x)$, the accuracy of the derivative is very good. However, when the function is not smooth, as exhibited in $f(x)$, the accuracy is not very good. Here $g(x)$ is not differentiable at $\pi$ and spectral methods have a difficult time dealing with this. For a complete discussion of the specific smoothness and accuracy is contained in Chapter 4 of \cite{trefethen_spectral}.
 
-In this section, we have focused only on simple one-dimensional examples, but the method easily generalises to arbitrary dimensions. To compute multiple partial derivatives, the only change to the algorithm is that we have seperate wavenumbers for the different directions. The only modification is computing the higher dimensional FFTs. To compute the $n$-dimensional FFT of a given function, we must compute the FFT of the all the columns and all the rows in each dimension\cite{kammler}. For example in 2D dimensions, we would compute the FFT of each of the columns, and then computing the FFT of all the rows of the previous result \cite{matlabfft2}. 
+In this section, we have focused only on simple one-dimensional examples, but the method easily generalises to arbitrary dimensions. To compute multiple partial derivatives, the only change to the algorithm is that we have separate wavenumbers for the different directions. The only modification is computing the higher dimensional FFTs. To compute the $n$-dimensional FFT of a given function, we must compute the FFT of the all the columns and all the rows in each dimension\cite{kammler}. For example in 2D dimensions, we would compute the FFT of each of the columns, and then computing the FFT of all the rows of the previous result \cite{matlabfft2}. 
 
 \section{Dealiasing} 
 In the previous section we demonstrated that spectral differentiation can produce very accurate results in only $\mathcal{O}(N\log N)$ operations. However, we have only considered the spectral derivative of a single function $f(x)$. The question naturally arises about what happens if we have products of functions, for example advection like terms in the Navier-Stokes equations 
@@ -104,7 +104,7 @@ R(\phi) = \frac{\partial \phi}{\partial t} + F(\phi),
 \end{align}
 in some way.  
 
-\subsection{Spectral Method}
+\subsection{Spectral method}
 How we choose to minimise this error leads to different methods of solving the problem. Right now we consider the so-called ``spectral method" which is a special case of a very general technique called Galerkin approximation.  The spectral method requires the residual be orthogonal to the basis functions $\varphi_{k}$, i.e.
 \begin{align}
 \int_{S}R(\phi(x))\varphi_{k}(x)dx = 0 \qquad k=1,\ldots,N.\label{residual_constraint}
@@ -221,7 +221,7 @@ This dealiasing rule is known as the ``two-thirds rule" and will completely elim
 \end{itemize}
 This procedure will allow us to evaluate the Navier-Stokes equations in Fourier space by evaluating convolution terms by multiplying fields in real space and to eliminate numerical error. In the next section, we provide a simple example that illustrates this method in practice.
 
-\subsection{Pseudospectral Method}
+\subsection{Pseudospectral method}
 We have so far been focusing on eliminating the aliasing error at the cost of eliminating some Fourier modes which can be achieved by taking $N>3K/2$. A closely related method known as the pseudospectral method is an alternative way to evaluate the above equations. In this case, instead of enforcing that the residual is orthogonal to the basis functions, we instead choose a collocation method \cite{durran}, i.e.
 \begin{align}
 R(\phi(j\dx)) = 0,
@@ -250,7 +250,7 @@ This is the set of equations we want to solve. Thus we now have a way to evaluat
 \item Timestep the resulting solution.
 \end{enumerate} 
 
-\subsection{Spectral vs Psuedospectral}
+\subsection{Spectral vs pseudospectral}
 The equations resulting from the pseudospectral method are actually very similar to the spectral equations except that there is no dealiasing. To see why, multiply the above equation by $e^{-ikx_{j}}$ and sum over all $j$ and we will obtain
 \begin{align}
 \frac{da_{k}}{dt}= -\sum_{\substack{m+n=k\\ |m|,|n|\le K}}inc_{m}a_{n}-\sum_{\substack{m+n=k+2K+1\\ |m|,|n|\le K}}inc_{m}a_{n}- \sum_{\substack{m+n=k-2K-1\\ |m|,|n|\le K}}inc_{m}a_{n}.
@@ -267,7 +267,7 @@ p_{k} = \sum_{\substack{m+n=k\\ |m|,|n|\le N}}a_{m}b_{n}+  \sum_{\substack{m+n=k
 \end{align}
 which has the exact same form as the pseudospectral method but the crucial difference is that the sum is over $N$ and not $K$. If we set $N=K$, which would result in dealiasing error, we would obtain the pseudospectral method. Thus, at a fundamental level, the pseudospectral method is just the spectral method without dealiasing.
 
-\section{Timestepping and Examples}
+\section{Timestepping and examples}
 Recall that our model 1D problem is 
 \begin{align}
 \frac{\partial \psi}{\partial t} + F(\psi) = 0.
@@ -286,9 +286,9 @@ Here the right hand side is a function solely of $\psi_{n}$. When scheme can be 
 \begin{align}
 \psi_{n+1} = \psi_{n} - \Delta t F(\psi_{n+1}).
 \end{align} 
-Here, if $F(\psi)$ is nonlinear function, we cannot isolate for $\psi_{n+1}$. Instead we would have to use some sort of root finding solver to find the correct $\psi_{n+1}$ given $\psi_{n}$. Schemes that exhibit this property are known as implicity schemes. Depending on the problem at hand, one scheme may be better than the other. For this thesis, we uses Adams-Bashforth 2nd and 3rd order, following previous work \cite{bc2000c,waitesmol2008}.
+Here, if $F(\psi)$ is nonlinear function, we cannot isolate for $\psi_{n+1}$. Instead we would have to use some sort of root finding solver to find the correct $\psi_{n+1}$ given $\psi_{n}$. Schemes that exhibit this property are known as implicit schemes. Depending on the problem at hand, one scheme may be better than the other. For this thesis, we uses Adams-Bashforth 2nd and 3rd order, following previous work \cite{bc2000c,waitesmol2008}.
 
-Once we have choosen a time-stepping scheme, the stability of the scheme is important to know. If we pick $\Delta t$ too large, for example, the right handside might grow too large and become unstable. By finding the stability region of a scheme, it tells us when we can except our solution to not blow up. To investigate this we define the amplitude A to be
+Once we have chosen a time-stepping scheme, the stability of the scheme is important to know. If we pick $\Delta t$ too large, for example, the right hand side might grow too large and become unstable. By finding the stability region of a scheme, it tells us when we can except our solution to not blow up. To investigate this we define the amplitude A to be
 \begin{align}
 A = \frac{\psi_{n+1}}{\psi_{n}},
 \end{align}
@@ -296,7 +296,7 @@ and stability is defined to be
 \begin{align}
 |A|^{2} \le 1,
 \end{align}
-since $A$ can potentially be complex. The reasoning from this equation arises from rearranging the above so that $\phi_{n+1}=A\phi_{n}$. If $|A|\le 1$ then the solution is not growing in time. If $|A|>1$ then at each time-step the solution is being multiplied by a number greater then one, hence it is growing.  To illustrate, we use the second order Adams-Bashforth scheme \cite{durran}
+since $A$ can potentially be complex. The reasoning from this equation arises from rearranging the above so that $\psi_{n+1}=A\psi_{n}$. If $|A|\le 1$ then the solution is not growing in time. If $|A|>1$ then at each time-step the solution is being multiplied by a number greater then one, hence it is growing.  To illustrate, we use the second order Adams-Bashforth scheme \cite{durran}
 \begin{align}
 \psi_{n+1} = \psi_{n} + \frac{\dt}{2}(3F(\psi_{n}) - F(\psi_{n-1})).
 \end{align} 
@@ -360,11 +360,11 @@ The initial condition used was a Gaussian. To handle the time-stepping, we use a
 \label{spectralvpseudo}
 \end{center}
 \end{figure}
-Fig.~\ref{spectralvpseudo} illustrates the results of the numerical experiment. Initially, both the spectral and pseudospectral codes have similar energy wise but after around $1$ time unit, the pseudospectral is dissipating energy faster than the spectral code. However, the key difference is that at around $T=3.6$ the pseudospectral code diverges due to aliasing error. The spectral code, which does dealias, does not experience this divergence and continues to decay due to viscous effects. Indeed, it can be shown \cite{durran} that for inviscid problems, the spectral method will conserve energy. This example illustrates the importance and necessity of dealiasing. 
+Fig.~\ref{spectralvpseudo} illustrates the results of the numerical experiment. Initially, both the spectral and pseudospectral codes have similar energy wise but after around $1$ time unit, the pseudospectral is dissipating energy faster than the spectral code. However, the key difference is that at around $T=3.6$ the pseudospectral code diverges due to aliasing error. The spectral code, which does dealiasing, does not experience this divergence and continues to decay due to viscous effects. Indeed, it can be shown \cite{durran} that for inviscid problems, the spectral method will conserve energy. This example illustrates the importance and necessity of dealiasing. 
 
 %Discuss dealiasing of linear and nonlinear code as well. Show plots.  
-\section{Navier-Stokes in Fourier Space}
-\subsection{Fourier Transformed Navier-Stokes}
+\section{Navier-Stokes in Fourier space}
+\subsection{Fourier transformed Navier-Stokes}
 We now turn to the formulation of the Navier-Stokes equations in the Fourier domain which provides a convenient formulation to analyse the underlying mechanisms of turbulence. Recall that in the Fourier domain, derivatives become multiplication of wavenumbers which converts the spatial parts of the Navier-Stokes equations into algebraic equations. To demonstrate the formulation in Fourier space, let us cast the standard Navier-Stokes equations into Fourier space. 
 \begin{align}
 \frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot\nabla\bm{u} = -\frac{1}{\rho_{0}}\nabla p + \nu\nabla^{2}\bm{u}, \qquad \nabla\cdot\bm{u}=0,
@@ -387,7 +387,7 @@ Isolating for pressure and substituting back into (\ref{NS_fourier_1}) we obtain
 \end{align}
 This result is unsurprising, since all we have done is take the divergence of the Navier-Stokes equations, which in Fourier space corresponds to taking the dot product with respect to $\kvec$. But using this observation we can avoid the need for solving the pressure altogether because the pressure term is orthogonal to the $\uhat$-plane. But what about the advection term? As can be seen in (\ref{NS_fourier_2}), it has this factor $\textbf{1} - \kvec\kvec/k^{2}$ multiplying it. This term represents a projection into the $\uhat$-plane. The advection term can thought of a vector that is pointing in some direction in-between the planes of $\kvec$ and $\uhat$. By projecting the advection term into the $\uhat$-plane, we would have a set of equations that are independent of the pressure completely.
 
-\subsection{Projection Tensor}
+\subsection{Projection tensor}
 In order to project the Navier-Stokes equations onto the $\uhat$-plane, we define the following projection operator
 \begin{align}
 \textbf{P}=\textbf{1} - \frac{\kvec\kvec}{k^{2}} \text{ or } P_{ij}(\kvec) = \delta_{ij} - \frac{k_{i}k_{j}}{k^{2}},
@@ -411,7 +411,7 @@ and hence we can finally write out the Navier-Stokes equations in Fourier space 
 \frac{\partial \hat{u}_{i}}{\partial t} + iP_{ij}k_{m}\int_{\textbf{p}+\textbf{q}=\kvec}d\kvec\hat{u}_{j}(\textbf{p})\hat{u}_{m}(\textbf{q})=  -k^{2}\hat{u}_{i}\label{NS_fourier_4}.
 \end{align}
 
-\subsection{Numerical Formulation of NS in Fourier}
+\subsection{Numerical formulation of Navier-Stokes in Fourier}
 Although we have eliminated the pressure completely, we still have the nonlinear term in the equation. To formulate this problem numerically, we make the following observation that is useful in spectral methods \cite{lesieur,orszag1972}.
 
 Recall the following identity \cite{kundu,acheson_fluid}
@@ -431,7 +431,7 @@ where the $\mathcal{F},\mathcal{F}^{-1}$ can be evaluated by FFTs, as discussed 
 This reformulation of the Navier-Stokes equations into Fourier space simplifies numerical calculations immensely and provides many advantages over the real space formulation. The absence of the pressure term means that there is no Poisson equation to be solved at each time-step for the pressure. If one did want the pressure, one can solve (\ref{pressure_fourier_1}) for $\hat{p}$. In addition there is no need to enforce a divergence free solution\footnote{Except possibly at the initial time step and periodically during a simulation due to numerical errors.} as the equations are formulated by definition to satisfy divergence free condition. The only additional technical difficulty is evaluating the vorticity, but this can easily be handled because of the simple structure of the curl. 
 
 The above has been focused on the Navier-Stokes equations and not the Boussinesq equations, however the extension to these equations is straightforward. The only additional complexities are an additional equation which can be solved analogously to the momentum equation \cite{lesieur}.
-\subsection{Integrating Factor}
+\subsection{Integrating factor}
 Another advantage of the Fourier formulation is the ability to exactly integrate the diffusion term. Let us denote the advective projective term as $F(\hat{\bm{u}})$ and we have
 \begin{align}
 \frac{\partial \uhat}{\partial t} + \nu k^{2}\uhat = F(\uhat) ,
@@ -476,7 +476,7 @@ Hyperviscosity is a method of simulating higher Reynolds number flow by replacin
 
 %In general we consider $k$ to be an even number, since this corresponds to even derivatives, however as long as we correctly choose the co-efficient in front of the $k^{n}$ to be $-1$, we can obtain different degrees of diffusion. But if we allow this, odd powers of $k$ no longer correspond to odd derivatives as we will be off by a factor of $i$ and we cannot interpret these derivatives as dispersive terms.
 
-In order to encorporate hyperviscosity numerically, we scale the coefficient by the maximum wavenumber $k_{max}$. We want the diffusive timescales of the smallest scales to be the same for both the regular viscosity and the hyperviscosity. That is we want 
+In order to incorporate hyperviscosity numerically, we scale the coefficient by the maximum wavenumber $k_{max}$. We want the diffusive timescales of the smallest scales to be the same for both the regular viscosity and the hyperviscosity. That is we want 
 \begin{align}
 \nu k_{max}^{2} = \nu_{i}k_{max}^{i},
 \end{align}
@@ -486,12 +486,11 @@ where $i$ is an even integer. Solving for $\nu_{i}$ then gives the following rep
 \end{align}
 Throughout this thesis, we will use $i=4$, although $i=8$ is also common \cite{lindborg2006,augier2012}.
 
-\subsection{Concluding Remarks}
+\subsection{Concluding remarks}
 Although we have done all our manipulations in Fourier space, we could have equally well formulated the above equations in real space. The idea of projecting the velocity field onto the $\uhat$-plane is motivated by the Helmholtz decomposition. This decomposition states, for any $C^{2}$ vector field in a bounded region of $\mathbb{R}^{3}$, we can decompose the vector field into a divergence-free and curl-free component. The divergence free part corresponds to taking the divergence of the Navier-Stokes equations which would yield the Poisson equation for the pressure. Taking the curl of the Navier-Stokes equation - which we define to be the vorticity - would yield the vorticity equation which does not have a pressure term.
 
 
-\section{Numerical Scheme for Linear and Nonlinear Boussinesq Equations}
-\subsection{Linear Boussinesq Equations Scheme}
+\section{Numerical scheme for linear Boussinesq equations}
 We now write the fields as a basic state, denoted by a subscript $0$, plus perturbations, denoted by $\sim$. Ignoring the viscous diffusion of the basic state \cite{drazinreid} and neglecting products of the perturbations, we obtain the following set of linear equations for the perturbations
 \begin{align}
 \frac{\partial \tilde{\bm{u}}}{\partial t} + \omega_{z0}\hat{\bm{e}}_{z}\times \tilde{\bm{u}}+\tilde{\boldsymbol{\omega}}\times \bm{u}_{h0} = -\nabla(\tilde{p}+\bm{u}_{h0} \cdot \tilde{\bm{u}}) - \tilde{\rho}'\hat{\bm{e}}_{z} + \frac{1}{Re}\nabla^{2}\tilde{\bm{u}},\label{nsl1}\\
@@ -504,7 +503,7 @@ As stated above, the Lamb-Chaplygin dipole is oriented vertically. As a result w
 \begin{align} 
 [\tilde{\bm{u}},\tilde{p},\tilde{\rho}'](x,y,z,t) = [\bm{u},p,\rho'](x,y,t)e^{ik_{z}z} + \text{c.c.},
 \end{align}
-where c.c. is the complex conjugate. From here we can now take the 2D Fourier transform and and recall the projection operator $\textbf{P}(\textbf{k})$, with components $P_{ij}(\textbf{k})=\delta_{ij} - k_{i}k_{j}/k^{2}$ to eliminate pressure, to obtain a set of equations for the Fourier coefficients 
+where c.c. is the complex conjugate. From here we can now take the 2D Fourier transform and recall the projection operator $\textbf{P}(\textbf{k})$, with components $P_{ij}(\textbf{k})=\delta_{ij} - k_{i}k_{j}/k^{2}$ to eliminate pressure, to obtain a set of equations for the Fourier coefficients 
 \begin{align}
 \frac{\partial \hat{\bm{u}}}{\partial t} = \textbf{P}(\textbf{k})[\widehat{\bm{u}\times \omega_{z0}\hat{\bm{e}}_{z}} + \widehat{\bm{u}_{h0}\times\bm{\omega}}-\hat{\rho}'\hat{\bm{e}}_{z}] - \frac{k^{2}}{Re}\hat{\bm{u}},\label{solve1}\\
 \frac{\partial\hat{\rho}'}{\partial t} = -i\bm{k}_{h}\cdot\widehat{\bm{u}_{h0}\rho'} + \frac{1}{F_{h}^{2}}\hat{w}- \frac{k^{2}}{ScRe}\hat{\rho}',\label{solve2}
@@ -533,6 +532,3 @@ where $T$ is the period of the oscillatory mode. The imaginary growth rate is gi
 
 %To simulate higher Reynolds number, we use a hyperviscosity operator. The $\nu\nabla^{2}$ diffusion term is replaced with a $\nu_{4}\nabla^{4}$ diffusion term. The $\nu_{4}$ coefficient is chosen so that $\nu k_{max}^{2} = \nu_{4}k_{max}^{4}$, where $k$ is the maximum dealiased horizontal wave number. This allows us to define the hyperviscosity Reynolds number $Re_{h}=Re k_{max}^{2}$. The hyperviscosity simulation was run with $F_{h}=0.1$ and $Re=20000$ with the same numerical parameters as the regular viscosity simulation.
 
-\subsection{Nonlinear Boussinesq Scheme}
-
-We now turn to the problem of numerically solving the nonlinear Boussinesq equations. Discuss KE transfer + describe how the code works.
