@@ -1,7 +1,7 @@
 \chapter{Fluids Background}
 \section{Boussinesq approximation}
 
-The Navier-Stokes equations are the mathematical equations that govern the evolution of fluid flow. In the context of the ocean and atmosphere, the Navier-Stokes equations, along with equations for conservation of mass and energy and an equation of state provide a good model of the evolution of fluid flow (e.g. Batchelor\cite{batchelor}). For our purposes, however, these equations are too general and an approximation, called the Boussinesq approximation, can be made which results in a simplified version of the Navier-Stokes equations:  
+The Navier-Stokes equations are the mathematical equations that govern the evolution of fluid flow. In the context of the ocean and atmosphere, the Navier-Stokes equations, along with equations for conservation of mass and energy and an equation of state, provide a good model of the evolution of fluid flow (e.g. Batchelor\cite{batchelor}). For our purposes, however, these equations are too general and an approximation, called the Boussinesq approximation, can be made which results in a simplified version of the Navier-Stokes equations:  
 \begin{align} 
 \frac{\partial \bm{u}}{\partial t} + \bm{u}\cdot \nabla \bm{u} = -\frac{1}{\rho_{0}}\nabla p - \frac{\rho' g}{\rho_{0}}\hat{\bm{e}}_{z} + \nu \nabla^{2}\bm{u} \label{boussinesq1},\\
 \nabla \cdot \bm{u} =0 \label{boussinesq2},\\
@@ -96,7 +96,7 @@ Thus, to proceed, a simplifying approach must be derived. In order to do this, c
 \end{align}
 Now let us plug (\ref{linear_def}) into the Navier-Stokes equations and expand, dropping the $(\bm{x},t)$ notation,
 \begin{align}
-\frac{\partial \bm{u}_{0}}{\partial t} + \frac{\partial \bm{u}'}{\partial t} + (\bm{u}_{0}+\bm{u}')\cdot\nabla(\bm{u}_{0}+\bm{u}') = -\frac{1}{\rho_{0}}\nabla(p_{0} + p') + \nu\nabla^{2}(\bm{u}_{0} + \bm{u}'),\\\label{expanded_lin_NS}
+\frac{\partial \bm{u}_{0}}{\partial t} + \frac{\partial \bm{u}'}{\partial t} + (\bm{u}_{0}+\bm{u}')\cdot\nabla(\bm{u}_{0}+\bm{u}') = -\frac{1}{\rho_{0}}\nabla(p_{0} + p') + \nu\nabla^{2}(\bm{u}_{0} + \bm{u}'),\label{expanded_lin_NS}\\
 \nabla \cdot \bm{u}_{0} + \nabla \cdot \bm{u}'=0.
 \end{align} Expanding out the advection term yields
 \begin{align}
@@ -153,11 +153,11 @@ So far, we have considered the Navier-Stokes equations directly instead of, the 
 
 To motivate the possible us of the Euler equations, consider the observation that turbulence is very often observed at a high Reynolds number. In the atmosphere for example, the Reynolds number is on the order of $10^{8}-10^{9}$ or higher. Since the inverse of the Reynolds number appears in front of the diffusion term, it seems reasonable to instead ignore the diffusion term since the coefficient is $\mathcal{O}(\Re^{-1}) \ll 1, Re\gg 1$. This would be a mistake. This is because the limit $Re\rightarrow\infty$ is a singular limit. Consider the following simplified model which arises in the study of boundary layers of shear bounded wall flow\cite{benderorszag,acheson_fluid,kundu}. Even though our work does not involve boundaries directly, it cleanly illustrated the problems with setting $\nu=0$ in our equations and trying to draw conclusions from the resulting equations.
 \begin{align}
-\epsilon y'' - y =0 \qquad y(0)=0,\qquad y(1)=1.
+\epsilon y'' - y =0, \qquad y(0)=0,\qquad y(1)=1.
 \end{align}
 If we set $\epsilon=0$ we would obtain the equation 
 \begin{align}
-- y =0 \qquad y(0)=0,y(1)=1.
+- y =0, \qquad y(0)=0,\qquad y(1)=1.
 \end{align}
 which clearly has no solution that satisfies the boundary conditions. If we tried a perturbation expansion of the form $y(x) =\sum_{n=0}y_{n}(x)\epsilon^{n}$ we would get nowhere because the lowest order term does not exist. If we solve the full equation, we see the problem with setting $\epsilon=0$,
 \begin{align}
@@ -177,7 +177,7 @@ Experimental studies  on the elliptical instability by Leweke and Williamson \ci
 
 First Billant and Chomaz investigated the zigzag instability experimentally \cite{bc2000a}. To do this, they investigated a columnar vortex pair created by a pair of flaps in a tank of stratified fluid. We now briefly discuss their experimental procedure since it provides important motivation for the resulting numerical study. 
 
-In order to study the effects of stratification on the evolution of vortices, they first needs to create the vortices. To do this, they used a pair of motor-controlled flaps whose initial angle and closing time could be controlled precisely by a computer. When the flaps were closed, a pair of counter-rotating vortices was produced. They found that the important determining factor in the creation of the vortices was the initial angle of the flaps. If the angle was too small, additional vortices created when the flaps finally stopped closing were being advected by the dipole and causing spurious instability. For large angles fluid that was initially in-between the flaps was being injected in the flow and again causing spurious oscillations. In order to balance out these effects, an angle of $14^{\circ}$ was chosen. Additionally, to enforce the emergence of the zigzag instability, tape was applied to the flaps in order to force certain wavenumbers of the evolving flow (see Figure 8 of \cite{bc2000a} for the importance of forcing).
+In order to study the effects of stratification on the evolution of vortices, they first needs to create the vortices. To do this, they used a pair of motor-controlled flaps whose initial angle and closing time could be controlled precisely by a computer. When the flaps were closed, a pair of counter-rotating vortices was produced. They found that the important determining factor in the creation of the vortices was the initial angle of the flaps. If the angle was too small, additional vortices created when the flaps finally stopped closing were being advected by the dipole and causing spurious instability. For large angles, fluid that was initially in-between the flaps was being injected in the flow and again causing spurious oscillations. In order to balance out these effects, an angle of $14^{\circ}$ was chosen. Additionally, to enforce the emergence of the zigzag instability, tape was applied to the flaps in order to force certain wavenumbers of the evolving flow (see Figure 8 of \cite{bc2000a} for the importance of forcing).
 
 After fixing the separation angle they found that by varying the closing time of the flaps, the velocity of the pair of vortices could be changed. Interestingly, the decay of the vortices, roughly $90$s, was independent of the closing time of the flaps. This variation in the velocity determined the experimental parameters for the experiment. 
 
@@ -221,7 +221,7 @@ Following Billant and Chomaz \cite{bc2000c}, we consider the non-dimensional Bou
 \nabla \cdot \bm{u}=0,\\
 \frac{D\rho'}{Dt} -\frac{w}{F_{h}^{2}} = \frac{1}{ReSc}\nabla^{2} \rho',
 \end{align}
-where we have non-dimensionalised by the characteristic velocity $U$, length $R$, time-scale $R/U$, pressure $\rho_{0}U^{2}$, density $\rho_{0}U^{2}/gR$, and defined $Sc=\nu /D$ as the Schmidt number, where $D$ is the mass diffusivity, $\rho_{0}$ is the background density, and $g$ is the gravitational constant. The Reynolds and horizontal Froude number are as defined above. The buoyancy frequency $N$, and hence the Froude number $F_{h}$, is assumed to be constant. 
+where we have non-dimensionalised by the characteristic velocity $U$, length $R$, time-scale $R/U$, pressure $\rho_{0}U^{2}$, density $\rho_{0}U^{2}/gR$, and defined $Sc=\nu /\kappa$ as the Schmidt number, where $\kappa$ is the molecular diffusivity, $\rho_{0}$ is the background density, and $g$ is the gravitational constant. The Reynolds and horizontal Froude number are as defined above. The buoyancy frequency $N$, and hence the Froude number $F_{h}$, is assumed to be constant. 
 
 In order to investigate the linear growth rate, we proceed as in Section 1.2 and expand the full velocity field as the sum of a basic state and a perturbation state:
 \begin{align}
@@ -274,7 +274,7 @@ Inside the radius $a$, Chaplygin chose the vorticity to be $\omega = n^{2}\psi$ 
 \begin{align}
 \frac{\partial^{2}\psi}{\partial r^{2}} + \frac{1}{r}\frac{\partial \psi}{\partial r} + \frac{1}{r^{2}}\frac{\partial^{2}\psi}{\partial \theta^{2}} =  n^{2}\psi,
 \end{align}
-which we can guess at a solution of the form $\psi(r,\theta) = Z(r)\sin\theta$. Although Chaplygin did not provide specific motivation for choosing this specific vorticity, the above equation has a form that is similar to the irrotational flow outside the dipole and this makes the matching conditions simple. The resulting equation for $Z(r)$ is the well known Bessel equation \cite{meleshko1994} and after working through the algebra, one obtains (\ref{lc_dipole_sf}). Chaplygin also investigated the resulting pressure field produced by the dipole and was able to compute the circulation of the dipole. Unlike Lamb, he also considered a generalisation of the above where the dipole is no longer symmetric about the x-axis. The corresponding vorticity in this case is given by
+which we can guess at a solution of the form $\psi(r,\theta) = Z(r)\sin\theta$. Although Chaplygin did not provide specific motivation for choosing this specific vorticity, the above equation has a form that is similar to the irrotational flow outside the dipole and this makes the matching conditions simple. The resulting equation for $Z(r)$ is the well known Bessel equation \cite{meleshko1994} and after working through the algebra, one obtains (\ref{lc_dipole_sf}). Chaplygin also investigated the resulting pressure field produced by the dipole and was able to compute the circulation of the dipole \cite{meleshko1994}. Unlike Lamb, he also considered a generalisation of the above where the dipole is no longer symmetric about the x-axis. The corresponding vorticity in this case is given by
 \begin{align}
 \omega = n^{2}(\psi - \lambda),
 \end{align}
@@ -289,7 +289,7 @@ For reference, we reproduce the Boussinesq equations here
 \frac{\partial \textbf{u}_{h}'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla'_{h}\textbf{u}_{h}'+u_{z}'\frac{\partial \textbf{u}_{h}'}{\partial z'} &= -\frac{1}{\rho_{0}}\nabla'_{h}p' + \nu \nabla'^{2}\textbf{u}_{h},\\
 \frac{\partial u_{z}'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla'_{h}u_{z}'+u_{z}'\frac{\partial u_{z}'}{\partial z'} &= -\frac{1}{\rho_{0}}\frac{\partial p'}{\partial z'} - \frac{\rho' g}{\rho_{0}} + \nu \nabla'^{2}u_{z},\\
 \nabla'_{h}\cdot\textbf{u}_{h}' + \frac{\partial u_{z}'}{\partial z'} &=0,\\
-\frac{\partial \rho'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla_{h}'\rho' + u_{z}'\frac{\partial \rho'}{\partial z'} + \frac{\partial \rho}{\partial z'}u_{z}'&=D\nabla^{2}\rho ',
+\frac{\partial \rho'}{\partial t'} + \textbf{u}_{h}'\cdot\nabla_{h}'\rho' + u_{z}'\frac{\partial \rho'}{\partial z'} + \frac{\partial \rho}{\partial z'}u_{z}'&=\kappa\nabla^{2}\rho ',
 \end{align}
 where the primed quantities denote the dimensional quantities. 
 
@@ -322,7 +322,7 @@ F_{h}^{2}\left(\frac{\partial u_{z}}{\partial t} + \textbf{u}_{h}\cdot\nabla_{h}
 \end{align} 
 where 
 \begin{align}
-\Re = \frac{UL_{h}}{\nu}, \qquad F_{h} = \frac{U}{L_{h}N},\qquad Sc = \frac{\nu}{D}.
+\Re = \frac{UL_{h}}{\nu}, \qquad F_{h} = \frac{U}{L_{h}N},\qquad Sc = \frac{\nu}{\kappa}.
 \end{align}
 Lilly was the first to write these equations down although he assumed isotropy, i.e. $\delta=1$. 
 
