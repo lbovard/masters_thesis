@@ -9,6 +9,7 @@
 \usepackage{bm}
 \usepackage[pdftex]{graphicx} % For including graphics N.B. pdftex graphics driver 
 \usepackage[pdftex,letterpaper=true,pagebackref=false]{hyperref} % with basic options
+\usepackage{color}
 		% N.B. pagebackref=true provides links back from the References to the body text. This can cause trouble for printing.
 \hypersetup{
     plainpages=false,       % needed if Roman numbers in frontpages
@@ -59,6 +60,9 @@
 \newcommand{\kvec}{\textbf{k}}
 \newcommand{\uhatm}{$\hat{\textbf{u}}$ }
 \newcommand{\kvecm}{$\textbf{k}$ }
+\newcommand{\marek}[1]{{\color{red}#1}}
+\newcommand{\francis}[1]{{\color{blue}#1}}
+
 %======================================================================
 %   L O G I C A L    D O C U M E N T -- the content of your thesis
 %======================================================================
@@ -74,7 +78,7 @@
 %----------------------------------------------------------------------
 % FRONT MATERIAL
 %----------------------------------------------------------------------
-%\input{thesis_preamble}
+\input{thesis_preamble}
 %
 %----------------------------------------------------------------------
 % MAIN BODY
@@ -137,7 +141,8 @@
 % Tip 4: Example of how to get a shorter chapter title for the Table of Contents 
 %====================================================================== 
 
-The following code is the MATLAB code for evaluating the advection-diffusion equation with 2/3s deliasing
+The following code is the MATLAB code for evaluating the advection-diffusion equation with 2/3-rule deliasing
+
 \begin{verbatim}
 %construct the grid and basic parameters
 N=128; dx=2*pi/N; x=dx*(1:N);t=0;dt=dx/10;tf=5;nsteps=ceil(tf/dt);
